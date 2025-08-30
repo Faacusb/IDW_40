@@ -49,6 +49,14 @@ main{
     padding: 20px;
 }
 
+.container{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    margin: 5px 0 5px 5px;
+    width: fit-content;
+}
+
 footer{
     background: #00B4D8;
     color: #333;
