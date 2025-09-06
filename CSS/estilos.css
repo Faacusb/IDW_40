@@ -48,9 +48,9 @@ main{
     max-width: 800px;
     margin: 40px auto 60px auto;
     padding: 20px;
-    height: 670px;
+    height: auto;
 }
-
+/* Estilos seccion de profesionales y obras sociales */
 section{
     display: flex;
     flex-direction: column;
@@ -61,6 +61,7 @@ section{
     margin-bottom: 20px;
    
 }
+
 
 .container{
     width: 100%;
@@ -81,7 +82,32 @@ section{
     height: 200px;
     border-radius: 15px;
 }
+/* Estilo de la seccion Info- clinica */
+.info-clinica{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 800px;
+    justify-content: center;
+    margin-top: 40px;
+    gap: 15px;
+}
 
+.info-clinica div:nth-child(1){
+    width: 60%;
+}
+.info-clinica div:nth-child(2) {
+    width: 40%;
+    
+}
+.info-clinica div:nth-child(2) h2{
+    margin-bottom: 15px;
+}
+
+.info-clinica img {
+    width: 100%;
+    border-radius: 15px;
+}
 
 footer{
     background: #00B4D8;
