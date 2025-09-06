@@ -10,6 +10,7 @@ body{
     font-family: Arial, Helvetica, sans-serif;
     background: #CAF0F8;
     color: #222;
+    
 }
 
 header{
@@ -47,14 +48,65 @@ main{
     max-width: 800px;
     margin: 40px auto 60px auto;
     padding: 20px;
+    height: auto;
 }
-
-.container{
+/* Estilos seccion de profesionales y obras sociales */
+section{
     display: flex;
     flex-direction: column;
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+   
+}
+
+
+.container{
+    width: 100%;
+    display: flex;
     gap: 1em;
-    margin: 5px 0 5px 5px;
-    width: fit-content;
+    margin: 5px 0 5px 0px;
+    justify-content: center;
+}    
+
+.card-obra-s, .card-doctor {
+    width: 30%;
+    max-width: 220px; /* nunca exceder el contenedor */
+    text-align: center;
+}
+
+.card-obra-s img, .card-doctor img {
+    width: 100%; /* ajusta al ancho de la tarjeta */
+    height: 200px;
+    border-radius: 15px;
+}
+/* Estilo de la seccion Info- clinica */
+.info-clinica{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 800px;
+    justify-content: center;
+    margin-top: 40px;
+    gap: 15px;
+}
+
+.info-clinica div:nth-child(1){
+    width: 60%;
+}
+.info-clinica div:nth-child(2) {
+    width: 40%;
+    
+}
+.info-clinica div:nth-child(2) h2{
+    margin-bottom: 15px;
+}
+
+.info-clinica img {
+    width: 100%;
+    border-radius: 15px;
 }
 
 footer{
