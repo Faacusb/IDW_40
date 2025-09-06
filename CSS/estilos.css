@@ -46,9 +46,10 @@ nav ul a:hover{
 }
 main{
     max-width: 800px;
-    margin: 40px auto 60px auto;
-    padding: 20px;
+    margin: 20px auto 30px auto;
+    padding: 10px;
     height: auto;
+    margin-bottom: 10px;
 }
 /* Estilos seccion de profesionales y obras sociales */
 section{
@@ -56,8 +57,8 @@ section{
     flex-direction: column;
     text-align: center;
     width: 100%;
-    max-width: 800px;
-    margin-top: 30px;
+    max-width: 1200px;
+    margin-top: 10px;
     margin-bottom: 20px;
    
 }
@@ -115,4 +116,52 @@ footer{
     text-align: center;
     padding: 15px 0;
     margin-top: 20px;
+}
+
+.contacto .contacto-contenedor {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: flex-start;
+}
+
+.contacto .mapa {
+    width: 520px;      
+    max-width: 520px;  
+    flex: none;        
+}
+
+.contacto .mapa img {
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+    display: block;
+}
+
+.contacto .info {
+    flex: 1 1 200px;
+    max-width: 400px;
+    text-align: left;
+    align-self: flex-start;
+}
+
+.contacto h2 {
+    margin-bottom: 25px;
+}
+
+.contacto .info p {
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.contacto .info ul {
+    margin-top: 10px;
+}
+
+.horarios {
+    margin-top: 60px; 
+    margin-bottom: 77px; 
 }
