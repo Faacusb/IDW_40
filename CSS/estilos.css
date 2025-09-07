@@ -10,6 +10,7 @@ body{
     font-family: Arial, Helvetica, sans-serif;
     background: #CAF0F8;
     color: #222;
+    
 }
 
 header{
@@ -45,16 +46,68 @@ nav ul a:hover{
 }
 main{
     max-width: 800px;
-    margin: 40px auto 60px auto;
-    padding: 20px;
+    margin: 20px auto 30px auto;
+    padding: 10px;
+    height: auto;
+    margin-bottom: 10px;
 }
-
-.container{
+/* Estilos seccion de profesionales y obras sociales */
+section{
     display: flex;
     flex-direction: column;
+    text-align: center;
+    width: 100%;
+    max-width: 1200px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+   
+}
+
+
+.container{
+    width: 100%;
+    display: flex;
     gap: 1em;
-    margin: 5px 0 5px 5px;
-    width: fit-content;
+    margin: 5px 0 5px 0px;
+    justify-content: center;
+}    
+
+.card-obra-s, .card-doctor {
+    width: 30%;
+    max-width: 220px; /* nunca exceder el contenedor */
+    text-align: center;
+}
+
+.card-obra-s img, .card-doctor img {
+    width: 100%; /* ajusta al ancho de la tarjeta */
+    height: 200px;
+    border-radius: 15px;
+}
+/* Estilo de la seccion Info- clinica */
+.info-clinica{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 800px;
+    justify-content: center;
+    margin-top: 40px;
+    gap: 15px;
+}
+
+.info-clinica div:nth-child(1){
+    width: 60%;
+}
+.info-clinica div:nth-child(2) {
+    width: 40%;
+    
+}
+.info-clinica div:nth-child(2) h2{
+    margin-bottom: 15px;
+}
+
+.info-clinica img {
+    width: 100%;
+    border-radius: 15px;
 }
 
 footer{
@@ -63,4 +116,52 @@ footer{
     text-align: center;
     padding: 15px 0;
     margin-top: 20px;
+}
+
+.contacto .contacto-contenedor {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: flex-start;
+}
+
+.contacto .mapa {
+    width: 520px;      
+    max-width: 520px;  
+    flex: none;        
+}
+
+.contacto .mapa img {
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+    display: block;
+}
+
+.contacto .info {
+    flex: 1 1 200px;
+    max-width: 400px;
+    text-align: left;
+    align-self: flex-start;
+}
+
+.contacto h2 {
+    margin-bottom: 25px;
+}
+
+.contacto .info p {
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.contacto .info ul {
+    margin-top: 10px;
+}
+
+.horarios {
+    margin-top: 60px; 
+    margin-bottom: 77px; 
 }
