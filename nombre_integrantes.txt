@@ -1,0 +1,11 @@
+Nombre de integrantes: 
+Mariano Daniel Elean
+Micaela celeste ballejo
+Facundo Ezequiel Alvarez Pilotti
+Walter Alustiza
+
+Repositorio Github:
+https://github.com/Faacusb/IDW_40
+
+
+https://idw-40.vercel.app/
