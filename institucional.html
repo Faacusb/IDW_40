@@ -3,59 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MedicalAssistance</title>
-    <link rel="stylesheet" href="CSS/estilos.css">
+    <title>Catálogo de Profesionales | MedicalAssistance</title> 
+    
+    <link rel="stylesheet" href="CSS/estilos.css"> 
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <style>
+        .card-img-container {
+            height: 250px; /* Altura fija para todas las imágenes */
+            overflow: hidden; 
+            display: flex; 
+            align-items: center;
+            justify-content: center;
+        }
+        .card-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Esto asegura que la imagen cubra el área sin distorsionarse */
+        }
+    </style>
+
 </head>
 <body>
-    <header>
-        <h1>Centro Medico Medical Assistance</h1>
-            <nav>
-                <ul>
-                    <li><a href="index.html">Inicio</a></li>
-                    <li><a href="institucional.html">Institucional</a></li>
-                    <li><a href="contacto.html">Contacto</a></li>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Medical Assistance</a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Inicio</a> 
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="institucional.html">Catálogo</a> 
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contacto.html">Contacto</a>
+                    </li>
                 </ul>
-            </nav>
-    </header>
+            </div>
+        </div>
+    </nav>
+
 
     <main>
-        <section class="institucional">
-            <h2>Nuestra Misión</h2>
-            <p>Proporcionar atención médica integral y de alta calidad, centrada en el bienestar del paciente, la innovación tecnológica y la calidez humana.
-                Nos comprometemos a promover la salud y la prevención en nuestra comunidad.</p>
+        
+        <div class="container my-5">
             
-            <h2>Nuestra Historia</h2>
-            <p> Fundado en 2010 por un grupo de médicos visionarios, el Centro Médico Vida Plena comenzó como una pequeña clínica local.
-                Con los años, expandimos nuestras especialidades y tecnología, manteniendo siempre nuestro compromiso original de ofrecer un servicio de salud cercano y humano..</p>
-        </section>
+            <h2 class="text-center mb-4">Nuestro Staff de Profesionales</h2>
 
-        <section class="contacto">
-            <h2>Aquí tienes los datos para la sección de contacto.
-
-</h2>
-            <p><strong>Dirección:</strong> Paso 1178,C1229 San Cristobal CABA</p>
-            <p><strong>Teléfono:</strong> +54 9 11 72389614</p>
-            <p><strong>Email:</strong> contato@medicalassistance.com.ar
-                                        turnos@medicalassistance.com.ar</p>
-
-            <form action="#" method="post">
-                <h3>Envíanos un mensaje</h3>
-                <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre">
+            <div class="row g-4">
+            
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-img-container">
+                            <img src="img/perez_gaston.jpg" class="card-img-top" alt="Foto del Dr. Perez">
+                        </div>
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Doctor Perez Gaston </h5>
+                            <p class="card-text text-muted">Especialidad Cirugia General </p>
+                            <a href="#" class="btn btn-primary btn-sm">Ver Perfil</a>
+                        </div>
+                    </div>
+                </div>
                 
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-img-container">
+                            <img src="img/gonzales_mariana_lucia.jpg" class="card-img-top" alt="Foto de la Dra. Gonzales">
+                        </div>
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Doctora Gonzales Mariana Lucia </h5>
+                            <p class="card-text text-muted">Especialidad Neumonologia </p>
+                            <a href="#" class="btn btn-primary btn-sm">Ver Perfil</a>
+                        </div>
+                    </div>
+                </div>
                 
-                <label for="mensaje">Mensaje:</label>
-                <textarea id="mensaje" name="mensaje"></textarea>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-img-container">
+                            <img src="img/martinez_roberto_cesar.jpg" class="card-img-top" alt="Foto del Dr. Martinez">
+                        </div>
+                        <div class="card-body text-center">
+                            <h5 class="card-title"> Martinez Roberto Cesar </h5>
+                            <p class="card-text text-muted">Especialidad Cardiologia</p>
+                            <a href="#" class="btn btn-primary btn-sm">Ver Perfil</a>
+                        </div>
+                    </div>
+                </div>
                 
-                <button type="submit">Enviar</button>
-            </form>
-        </section>
-    </main>
+            </div>
+        </div>
+        </main>
 
     <footer>
-        <p>&copy; 2025 Centro Medico Medial Assistance</p>
+        <p>Copyright &copy; 2025 Centro Medico Medial Assistance</p>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
 </body>
 </html>
