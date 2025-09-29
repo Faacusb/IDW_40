@@ -59,7 +59,6 @@ main{
 
 .navbar-nav .nav-link.active {
     color: #0077b6 !important; /* azul activo */
-    text-decoration: underline;
 }
 
 /* Solo el botón del menu */
