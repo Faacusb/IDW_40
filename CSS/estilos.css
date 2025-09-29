@@ -13,18 +13,6 @@ body{
     
 }
 
-header{
-    background: #0077b6;
-    color: #ffffff;
-    padding: 20px 0 10px 0;
-    text-align: center;
-}
-
-header h1{
-    margin: 0 0 10px 0;
-    font-size: 2em;
-}
-
 nav ul {
     display: flex;
     margin: 0 0 5px 0;
@@ -60,61 +48,71 @@ main{
 /* Estilo de la seccion Info- clinica */
 
 
-footer{
-    background: #00B4D8;
-    color: #333;
-    text-align: center;
-    padding: 15px 0;
-    margin-top: 20px;
+.navbar-nav .nav-link {
+    color: #000 !important; /* negro en desktop */
+    font-weight: bold;
 }
 
-.contacto .contacto-contenedor {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    align-items: flex-start;
+.navbar-nav .nav-link:hover {
+    color: #0077b6 !important; /* azul al pasar */
 }
 
-.contacto .mapa {
-    width: 520px;      
-    max-width: 520px;  
-    flex: none;        
+.navbar-nav .nav-link.active {
+    color: #0077b6 !important; /* azul activo */
+    text-decoration: underline;
 }
 
-.contacto .mapa img {
-    width: 90%;
-    height: auto;
-    border-radius: 15px;
-    display: block;
+/* Solo el botón del menu */
+.menu-principal {
+    border: none;
+    background-color: transparent; /* sin fondo */
 }
 
-.contacto .info {
-    flex: 1 1 200px;
-    max-width: 400px;
-    text-align: left;
-    align-self: flex-start;
+/* Solo el icono dentro del menu-toggler */
+.menu-principal .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255,255,255,1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+.navbar-brand {
+    font-size: 1.8rem;
 }
 
 .contacto h2 {
     margin-bottom: 25px;
 }
 
-.contacto .info p {
-    margin-top: 30px;
+.contacto img {
+    border-radius: 15px;
+}
+
+.contacto p {
     margin-bottom: 15px;
 }
 
-.contacto .info ul {
+.contacto ul {
     margin-top: 10px;
 }
 
-.horarios {
-    margin-top: 60px; 
-    height: 254px;
-    /* margin-bottom: 77px;  */
-    /* height: 167px; */
+.horarios h2 {
+    margin-bottom: 20px;
+}
+
+footer {
+    background: #00B4D8;
+    color: #333;
+    text-align: center;
+    padding: 15px 0;
+}
+
+.socials a i {
+    color: #000 !important;      /* color negro */
+    font-size: 2.5rem !important; /* tamaño del icono */
+    transition: transform 0.2s, color 0.2s;
+}
+
+.socials a:hover i {
+    color: #0077b6 !important;
+    transform: scale(1.2);
 }
 
 .institucional{
