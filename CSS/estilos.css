@@ -52,67 +52,13 @@ main{
     margin-bottom: 10px;
 }
 /* Estilos seccion de profesionales y obras sociales */
-/* section{
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    width: 100%;
-    max-width: 1200px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-   
-}
- */
 
-/* .container{
-    width: 100%;
-    display: flex;
-    gap: 1em;
-    margin: 5px 0 5px 0px;
-    justify-content: center;
-}     */
-
-.card-doctor {
-    width: 30%;
-    max-width: 220px; /* nunca exceder el contenedor */
-    text-align: center;
-}
-
-.card-obra-s img, .card-doctor img {
-    width: 100%; /* ajusta al ancho de la tarjeta */
-    height: 200px;
-    border-radius: 15px;
-}
 
 .card-img-top{
     height: 162px;
 }
 /* Estilo de la seccion Info- clinica */
-.info-clinica{
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    max-width: 800px;
-    justify-content: center;
-    margin-top: 40px;
-    gap: 15px;
-}
 
-.info-clinica div:nth-child(1){
-    width: 60%;
-}
-.info-clinica div:nth-child(2) {
-    width: 40%;
-    
-}
-.info-clinica div:nth-child(2) h2{
-    margin-bottom: 15px;
-}
-
-.info-clinica img {
-    width: 100%;
-    border-radius: 15px;
-}
 
 footer{
     background: #00B4D8;
