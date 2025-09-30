@@ -146,3 +146,40 @@ footer {
 .institucional form button {
     width:fit-content;
 }
+
+
+/* --- ESTILOS INSTITUCIONALES Y AJUSTES DE BOOTSTRAP --- */
+
+/* Definición de Variables de Color (Buena práctica para controlar colores)
+El color #0d6efd es el azul por defecto de Bootstrap primary,
+así que lo usamos como nuestra base institucional.
+*/
+:root {
+    --color-clinica-principal: #0d6efd;
+}
+
+/* 1. Limpiar el fondo del cuerpo para un look más profesional */
+body {
+    background-color: #f8f9fa; /* Gris muy claro (similar a Bootstrap bg-light) */
+}
+
+/* 2. Sobreescribir el estilo de la cabecera/footer si es necesario (Asegúrate que el bg-info del footer sea el deseado) */
+.bg-info {
+    background-color: #d1ecf1 !important; /* Si quieres un color más suave para el footer */
+}
+
+
+/* 3. Estilos para la Página Institucional */
+
+/* Asegura que los títulos utilicen el color institucional (text-primary) */
+.container h2, .container h3 {
+    font-weight: 700;
+    /* Si Bootstrap no aplica bien el color primario, usa esta variable: */
+    /* color: var(--color-clinica-principal); */ 
+}
+
+/* Ajustes para el texto de Misión/Historia para mejor lectura */
+.lead {
+    font-size: 1.15rem;
+    line-height: 1.6;
+}
