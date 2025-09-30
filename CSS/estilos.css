@@ -83,6 +83,9 @@ section{
     height: 200px;
     border-radius: 15px;
 }
+.ratio img {
+    object-fit: cover; 
+}
 /* Estilo de la seccion Info- clinica */
 .info-clinica{
     display: flex;
