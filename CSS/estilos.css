@@ -184,55 +184,18 @@ así que lo usamos como nuestra base institucional.
 /* --- Estilos para la Imagen de Fondo Responsiva y Opaca (DEBE IR AL FINAL DEL ARCHIVO) --- */
 
 
-/* 1. Propiedades del Body (Fondo y Responsividad) */
-body {
-    /* **RESPONSIVIDAD** y Ruta de la Imagen (Asegúrate que la ruta sea correcta) */
-    background-image: url('../img/sala-espera.jpg'); /* AJUSTA EL NOMBRE DEL ARCHIVO SI ES NECESARIO */
-    background-size: cover;          
-    background-attachment: fixed;    
-    background-position: center center;
-    background-repeat: no-repeat;
-    
-    /* Nota: Se eliminó la línea 'color: #f8f9fa;' para que el texto sea negro por defecto */
-}
 
-/* 2. CAPA DE OPACIDAD (Oscurece el fondo para mejor legibilidad) */
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    
-    /* Capa negra con 60% de opacidad */
-    background: rgba(0, 0, 0, 0.6); 
-    
-    /* Envía la capa detrás de todo el contenido */
-    z-index: -1; 
-}
-
-/* 3. Ajuste de Títulos (Si es necesario, fuerza el color negro si Bootstrap no lo hace) */
-.institucional h2 {
-    color: #000000; /* Negro puro */
-}
-
-/* Fin del Archivo CSS */
-
-
-/* EL ÚNICO BLOQUE BODY VÁLIDO (al final del archivo) */
-body {
+/* 1. Propiedades del Fondo y Responsividad */
+.fondo-institucional {
     background-image: url('../img/sala-espera.jpg'); /* O el nombre de tu archivo */
     background-size: cover;          
     background-attachment: fixed;    
     background-position: center center;
     background-repeat: no-repeat;
-    
-    /* ¡IMPORTANTE! La línea 'color: #f8f9fa;' NO debe estar aquí */
 }
 
-/* CAPA DE OPACIDAD */
-body::before {
+/* 2. CAPA DE OPACIDAD (También debe usar la clase) */
+.fondo-institucional::before {
     content: '';
     position: fixed;
     top: 0;
