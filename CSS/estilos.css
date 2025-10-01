@@ -183,3 +183,33 @@ body {
     font-size: 1.15rem;
     line-height: 1.6;
 }
+
+/* --- Estilos para la Imagen de Fondo Responsiva y Opaca (DEBE IR AL FINAL DEL ARCHIVO) --- */
+
+body {
+    /* **RESPONSIVIDAD** y Ruta de la Imagen (Asegúrate que la ruta sea correcta) */
+    background-image: url('img/sala de espera.png');
+    background-size: cover;          
+    background-attachment: fixed;    
+    background-position: center center;
+    background-repeat: no-repeat;
+    
+    /* Color de texto claro para que contraste con la capa oscura */
+    color: #f8f9fa; 
+}
+
+/* CAPA DE OPACIDAD */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    /* Capa negra con 60% de opacidad (puedes ajustar el 0.6) */
+    background: rgba(0, 0, 0, 0.6); 
+    
+    /* Envía la capa detrás de todo el contenido */
+    z-index: -1; 
+}
