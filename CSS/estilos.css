@@ -148,21 +148,19 @@ footer {
 }
 
 
+
+
 /* --- ESTILOS INSTITUCIONALES Y AJUSTES DE BOOTSTRAP --- */
 
-/* Definición de Variables de Color (Buena práctica para controlar colores)
-El color #0d6efd es el azul por defecto de Bootstrap primary,
-así que lo usamos como nuestra base institucional.
-*/
+/* Definición de Variables de Color */
 :root {
     --color-clinica-principal: #0d6efd;
 }
 
-
-
-/* 2. Sobreescribir el estilo de la cabecera/footer si es necesario (Asegúrate que el bg-info del footer sea el deseado) */
+/* 2. Sobreescribir el estilo de la cabecera/footer (Footer es bg-info) */
 .bg-info {
-    background-color: #d1ecf1 !important; /* Si quieres un color más suave para el footer */
+    /* Si quieres un color más suave para el footer, de lo contrario, BÓRRALO */
+    background-color: #d1ecf1 !important; 
 }
 
 
@@ -171,8 +169,6 @@ así que lo usamos como nuestra base institucional.
 /* Asegura que los títulos utilicen el color institucional (text-primary) */
 .container h2, .container h3 {
     font-weight: 700;
-    /* Si Bootstrap no aplica bien el color primario, usa esta variable: */
-    /* color: var(--color-clinica-principal); */ 
 }
 
 /* Ajustes para el texto de Misión/Historia para mejor lectura */
@@ -181,27 +177,4 @@ así que lo usamos como nuestra base institucional.
     line-height: 1.6;
 }
 
-/* --- Estilos para la Imagen de Fondo Responsiva y Opaca (DEBE IR AL FINAL DEL ARCHIVO) --- */
-
-
-
-/* 1. Propiedades del Fondo y Responsividad */
-.fondo-institucional {
-    background-image: url('../img/sala-espera.jpg'); /* O el nombre de tu archivo */
-    background-size: cover;          
-    background-attachment: fixed;    
-    background-position: center center;
-    background-repeat: no-repeat;
-}
-
-/* 2. CAPA DE OPACIDAD (También debe usar la clase) */
-.fondo-institucional::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6); 
-    z-index: -1; 
-}
+/* NOTA: No debe haber ningún estilo body{} ni .fondo-institucional{} aquí. */
