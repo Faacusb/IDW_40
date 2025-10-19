@@ -1,127 +1,205 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MedicalAssistance</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="CSS/estilos.css">
-</head>
-<body>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="CSS/estilos.css" />
+  </head>
+  <body>
     <header>
-        <nav class="navbar navbar-expand-lg border-bottom border-dark p-0">
-            <div class="container-fluid flex-column flex-lg-column p-0">  
-            <div class="w-100 bg-primary text-white px-3 py-2 border-bottom border-dark d-flex justify-content-between align-items-center">
-                <a class="navbar-brand fw-bold text-white m-0 mx-auto d-none d-lg-block" href="index.html">Medical Assistance</a>
-                <a class="navbar-brand fw-bold text-white m-0 d-lg-none" href="index.html">Medical Assistance</a>
-                <button class="navbar-toggler menu-principal" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-                <div class="collapse navbar-collapse w-100 bg-white border-bottom border-dark" id="navbarNav">
-                    <ul class="navbar-nav mx-auto gap-3 py-2">
-                        <li class="nav-item"><a class="nav-link fw-bold text-dark active" href="index.html">Inicio</a></li>
-                        <li class="nav-item"><a class="nav-link fw-bold text-dark" href="institucional.html">Institucional</a></li>
-                        <li class="nav-item"><a class="nav-link fw-bold text-dark" href="contacto.html">Contacto</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+      <nav class="navbar navbar-expand-lg border-bottom border-dark p-0">
+        <div class="container-fluid flex-column flex-lg-column p-0">
+          <div
+            class="w-100 bg-primary text-white px-3 py-2 border-bottom border-dark d-flex justify-content-between align-items-center"
+          >
+            <a
+              class="navbar-brand fw-bold text-white m-0 mx-auto d-none d-lg-block"
+              href="index.html"
+              >Medical Assistance</a
+            >
+            <a
+              class="navbar-brand fw-bold text-white m-0 d-lg-none"
+              href="index.html"
+              >Medical Assistance</a
+            >
+            <button
+              class="navbar-toggler menu-principal"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarNav"
+              aria-controls="navbarNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          </div>
+          <div
+            class="collapse navbar-collapse w-100 bg-white border-bottom border-dark"
+            id="navbarNav"
+          >
+            <ul class="navbar-nav mx-auto gap-3 py-2">
+              <li class="nav-item">
+                <a class="nav-link fw-bold text-dark active" href="index.html"
+                  >Inicio</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link fw-bold text-dark" href="institucional.html"
+                  >Institucional</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link fw-bold text-dark" href="contacto.html"
+                  >Contacto</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link fw-bold text-dark" href="altaMedicos.html"
+                  >Alta Medicos</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
     </header>
     <main>
-        <section class="py-4">
-            <div class="container">
-            <h2 class="text-center mb-4">Obras Sociales</h2>
-            <div class="row g-3 justify-content-center">
-               <div class="col-12 col-lg-4">
-        <div class="card h-100 text-center">
-          <img src="img/osde.jpg" class="card-img-top img-fluid" alt="Osde obra social">
-          <div class="card-body">
-            <h3 class="card-title">Osde</h3>
-          </div>
-        </div>
-      </div>
-              <div class="col-12 col-lg-4">
-        <div class="card h-100 text-center">
-          <img src="img/pami.png" class="card-img-top img-fluid" alt="Pami obra social">
-          <div class="card-body">
-            <h3 class="card-title">Pami</h3>
-          </div>
-        </div>
-      </div>
-                
-      <div class="col-12 col-lg-4">
-        <div class="card h-100 text-center">
-          <img src="img/sancor.jpg" class="card-img-top img-fluid" alt="SanCorSalud obra social">
-          <div class="card-body">
-            <h3 class="card-title">SanCor Salud</h3>
-          </div>
-        </div>
-      </div>
-            </div>
-            </div>
-        </div>
-    </div>
-        </section>    
-        <section class="py-4">
-            <div class="container">
-            <h2 class="text-center mb-4">Nuestro Profesionales</h2>
-            <div class="row g-3 justify-content-center">
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card h-100 text-center">
-                    <img src="img/dr.jpg" alt="Doctor Perez">
-                    <div class="card-body">
-                    <h3>Dr. Perez</h3>
-                    <p>Especialidad: Osteopata</p>
-                    <p>Obra Social: Osde</p>
-                    </div>
-                    </div>
+      <section class="py-4">
+        <div class="container">
+          <h2 class="text-center mb-4">Obras Sociales</h2>
+          <div class="row g-3 justify-content-center">
+            <div class="col-12 col-lg-4">
+              <div class="card h-100 text-center">
+                <img
+                  src="img/osde.jpg"
+                  class="card-img-top img-fluid"
+                  alt="OSDE obra social"
+                />
+                <div class="card-body">
+                  <h3 class="card-title">OSDE</h3>
                 </div>
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card h-100 text-center">
-                    <img class="card-img" src="img/doctor-en-uniforme-de-pie-en-blanco.jpg" alt="Doctora Sanchez">
-                    <div class="card-body">
-                    <h3>Dra. Sanchez</h3>
-                    <p>Especialidad: Cardiologia</p>
-                    <p>Obra Social: Pami</p>                
-                    </div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card h-100 text-center">
-                    <img src="img/retrato-medico-masculino-en-hospital.jpg" alt="Doctor Martinez">
-                    <div class="card-body">
-                        <h3>Dr. Martinez</h3>
-                        <p>Especialidad: Nefrologia</p>
-                        <p>Obra Social: Osde</p>
-                    </div>
-                    </div>
-                </div>
+              </div>
             </div>
-        </div>
-        </section>
-        <section class="py-5">
-            <div class="container">
-                <h2 class="text-center mb-5">Pruebas de diagnóstico preciso y eficaz</h2>
-                <div class="row align-items-center g-4">
-                    <div class="col-12 col-md-7">
-                        <img class="img-fluid rounded-3 shadow" src="img/fondo-de-pasillo-vacio.jpg" alt="Pasillo clinica">
-                    </div>
-                    <div class="col-12 col-md-5">
-                        <p>Gracias a un equipo multidisciplinario de profesionales médicos cuidadosamente seleccionados y en continua capacitación, el centro de diagnóstico multidisciplinario ofrece servicios integrales de alta calidad. </p>
-                        <p> servicios de los especialistas se enriquecen con el uso de tecnologías modernas y de vanguardia, brindando una atención eficaz y precisa de forma constante.</p> 
-                        <p> Centro de Diagnóstico Multidisciplinario Medicavour ofrece diversas especializaciones, diseñadas para atender con prontitud todas las necesidades de salud y bienestar de sus pacientes.</p>
 
-                    </div>
-                </div> 
+            <div class="col-12 col-lg-4">
+              <div class="card h-100 text-center">
+                <img
+                  src="img/pami.png"
+                  class="card-img-top img-fluid"
+                  alt="PAMI obra social"
+                />
+                <div class="card-body">
+                  <h3 class="card-title">PAMI</h3>
+                </div>
+              </div>
             </div>
-            <div>
+
+            <div class="col-12 col-lg-4">
+              <div class="card h-100 text-center">
+                <img
+                  src="img/sancor.jpg"
+                  class="card-img-top img-fluid"
+                  alt="SanCor Salud obra social"
+                />
+                <div class="card-body">
+                  <h3 class="card-title">SanCor Salud</h3>
+                </div>
+              </div>
             </div>
-        </section>
-    </main>    
+          </div>
+          <!-- cierra row -->
+        </div>
+        <!-- cierra container -->
+      </section>
+      <section class="py-4">
+        <div class="container">
+          <h2 class="text-center mb-4">Nuestro Profesionales</h2>
+          <div class="row g-3 justify-content-center">
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="card h-100 text-center">
+                <img src="img/dr.jpg" alt="Doctor Perez" />
+                <div class="card-body">
+                  <h3>Dr. Perez</h3>
+                  <p>Especialidad: Osteopata</p>
+                  <p>Obra Social: Osde</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="card h-100 text-center">
+                <img
+                  class="card-img"
+                  src="img/doctor-en-uniforme-de-pie-en-blanco.jpg"
+                  alt="Doctora Sanchez"
+                />
+                <div class="card-body">
+                  <h3>Dra. Sanchez</h3>
+                  <p>Especialidad: Cardiologia</p>
+                  <p>Obra Social: Pami</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="card h-100 text-center">
+                <img
+                  src="img/retrato-medico-masculino-en-hospital.jpg"
+                  alt="Doctor Martinez"
+                />
+                <div class="card-body">
+                  <h3>Dr. Martinez</h3>
+                  <p>Especialidad: Nefrologia</p>
+                  <p>Obra Social: Osde</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="py-5">
+        <div class="container">
+          <h2 class="text-center mb-5">
+            Pruebas de diagnóstico preciso y eficaz
+          </h2>
+          <div class="row align-items-center g-4">
+            <div class="col-12 col-md-7">
+              <img
+                class="img-fluid rounded-3 shadow"
+                src="img/fondo-de-pasillo-vacio.jpg"
+                alt="Pasillo clinica"
+              />
+            </div>
+            <div class="col-12 col-md-5">
+              <p>
+                Gracias a un equipo multidisciplinario de profesionales médicos
+                cuidadosamente seleccionados y en continua capacitación, el
+                centro de diagnóstico multidisciplinario ofrece servicios
+                integrales de alta calidad.
+              </p>
+              <p>
+                servicios de los especialistas se enriquecen con el uso de
+                tecnologías modernas y de vanguardia, brindando una atención
+                eficaz y precisa de forma constante.
+              </p>
+              <p>
+                Centro de Diagnóstico Multidisciplinario Medicavour ofrece
+                diversas especializaciones, diseñadas para atender con prontitud
+                todas las necesidades de salud y bienestar de sus pacientes.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </section>
+    </main>
     <footer class="bg-info text-dark text-center py-3">
-        <p class="mb-0">Copyright &copy; 2025 Centro Medico Medical Assistance</p>
+      <p class="mb-0">Copyright &copy; 2025 Centro Medico Medical Assistance</p>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+  </body>
 </html>
