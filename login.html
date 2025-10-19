@@ -68,10 +68,57 @@
     </div>
   </div>
 
-  <!-- Scripts Bootstrap y JavaScript para login -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Datos de usuarios 
-    const usuarios = [
-      { usuario: 'admin', password: 'admin123', rol: 'admin' },
-      { usuario: 'user', password:
+    <!-- Scripts Bootstrap y JavaScript para login -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Datos de usuarios 
+      const usuarios = [
+        { usuario: 'admin', password: 'admin123', rol: 'admin' },
+        { usuario: 'user', password: 'user123', rol: 'user' }
+      ];
+  
+      function autenticar(usuario, password) {
+        return usuarios.find(u => u.usuario === usuario && u.password === password);
+      }
+  
+      // Formulario principal
+      const loginForm = document.getElementById('loginForm');
+      if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const usuario = document.getElementById('usuario').value.trim();
+          const password = document.getElementById('password').value;
+          const user = autenticar(usuario, password);
+          if (user) {
+            alert('Inicio de sesión exitoso. Rol: ' + user.rol);
+            // Por ejemplo, redirigir:
+            // location.href = 'index.html';
+          } else {
+            alert('Usuario o contraseña incorrectos.');
+          }
+          loginForm.reset();
+        });
+      }
+  
+      // Modal login
+      const modalLoginForm = document.getElementById('modalLoginForm');
+      if (modalLoginForm) {
+        modalLoginForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const usuario = document.getElementById('modalUsuario').value.trim();
+          const password = document.getElementById('modalPassword').value;
+          const user = autenticar(usuario, password);
+          if (user) {
+            alert('Inicio de sesión exitoso. Rol: ' + user.rol);
+            const modalEl = document.getElementById('modalLogin');
+            const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+            modal.hide();
+          } else {
+            alert('Usuario o contraseña incorrectos.');
+          }
+          modalLoginForm.reset();
+        });
+      }
+    </script>
+  </body>
+  </html>
