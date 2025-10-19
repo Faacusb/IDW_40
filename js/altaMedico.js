@@ -10,6 +10,8 @@ function obtenerProximoId() {
   return ultimoId;
 }
 
+let medicos = JSON.parse(localStorage.getItem("medicos")) || [];
+
 function altaMedicos(event) {
   event.preventDefault();
 
@@ -28,7 +30,7 @@ function altaMedicos(event) {
     obrasocial: obrasocial,
   };
 
-  const medicos = JSON.parse(localStorage.getItem("medicos")) || [];
+  
   medicos.push(nuevoMed);
   localStorage.setItem("medicos", JSON.stringify(medicos));
 
