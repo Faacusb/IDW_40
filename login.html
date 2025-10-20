@@ -92,7 +92,7 @@
           const user = autenticar(usuario, password);
           if (user && user.rol === 'admin') {
             localStorage.setItem('adminAutenticado', 'true');
-            location.href = 'altamedicos.html';} 
+            location.href = 'altaMedicos.html';} 
             else if (user && user.rol !== 'admin') {
             location.href = 'turnos.html';} 
             else {
@@ -115,7 +115,7 @@
 
       if (user && user.rol === 'admin') {
         localStorage.setItem('adminAutenticado', 'true');
-        location.href = 'altamedicos.html';} 
+        location.href = 'altaMedicos.html';} 
         else if (user && user.rol !== 'admin') {
         location.href = 'turnos.html';} 
         else {
