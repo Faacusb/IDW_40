@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Medical Assistance</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="CSS/estilos.css">
+</head>
+<body>
+ <header>
+        <nav class="navbar navbar-expand-lg border-bottom border-dark p-0">
+            <div class="container-fluid flex-column flex-lg-column p-0">  
+            <div class="w-100 bg-primary text-white px-3 py-2 border-bottom border-dark d-flex justify-content-between align-items-center">
+                <a class="navbar-brand fw-bold text-white m-0 mx-auto d-none d-lg-block" href="index.html">Medical Assistance</a>
+                <a class="navbar-brand fw-bold text-white m-0 d-lg-none" href="index.html">Medical Assistance</a>
+                <button class="navbar-toggler menu-principal" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+                <div class="collapse navbar-collapse w-100 bg-white border-bottom border-dark" id="navbarNav">
+                    <ul class="navbar-nav mx-auto gap-3 py-2">
+                        <li class="nav-item"><a class="nav-link fw-bold text-dark" href="index.html">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link fw-bold text-dark" href="institucional.html">Institucional</a></li>
+                        <li class="nav-item"><a class="nav-link fw-bold text-dark" href="contacto.html">Contacto</a></li>
+                        <li class="nav-item"><a class="nav-link fw-bold text-dark active" href="login.html">Login</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+  <!-- Contenido principal: formulario centrado -->
+  <main>
+    <div class="login-container">
+      <h2>Iniciar Sesión</h2>
+      <form id="loginForm">
+        <div class="mb-3">
+          <label for="usuario" class="form-label fw-bold">Usuario</label>
+          <input type="text" class="form-control" id="usuario" required>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label fw-bold">Contraseña</label>
+          <input type="password" class="form-control" id="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+      </form>
+    </div>
+  </main>
+
+  <!-- Modal de login (en el header) -->
+  <div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="modalLoginLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-4" style="background-color:#E0F7FA;">
+        <h2 class="text-center mb-3 text-primary">Iniciar Sesión</h2>
+        <form id="modalLoginForm">
+          <div class="mb-3">
+            <label for="modalUsuario" class="form-label fw-bold">Usuario</label>
+            <input type="text" class="form-control" id="modalUsuario" required>
+          </div>
+          <div class="mb-3">
+            <label for="modalPassword" class="form-label fw-bold">Contraseña</label>
+            <input type="password" class="form-control" id="modalPassword" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+    <!-- Scripts Bootstrap y JavaScript para login -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Datos de usuarios 
+      const usuarios = [
+        { usuario: 'admin', password: 'admin123', rol: 'admin' },
+        { usuario: 'user', password: 'user123', rol: 'user' }
+      ];
+  
+      function autenticar(usuario, password) {
+        return usuarios.find(u => u.usuario === usuario && u.password === password);
+      }
+  
+      // Formulario principal
+      const loginForm = document.getElementById('loginForm');
+      if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const usuario = document.getElementById('usuario').value.trim();
+          const password = document.getElementById('password').value;
+          const user = autenticar(usuario, password);
+          if (user) {
+            alert('Inicio de sesión exitoso. Rol: ' + user.rol);
+            // Por ejemplo, redirigir:
+            // location.href = 'index.html';
+          } else {
+            alert('Usuario o contraseña incorrectos.');
+          }
+          loginForm.reset();
+        });
+      }
+  
+      // Modal login
+      const modalLoginForm = document.getElementById('modalLoginForm');
+      if (modalLoginForm) {
+        modalLoginForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const usuario = document.getElementById('modalUsuario').value.trim();
+          const password = document.getElementById('modalPassword').value;
+          const user = autenticar(usuario, password);
+          if (user) {
+            alert('Inicio de sesión exitoso. Rol: ' + user.rol);
+            const modalEl = document.getElementById('modalLogin');
+            const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+            modal.hide();
+          } else {
+            alert('Usuario o contraseña incorrectos.');
+          }
+          modalLoginForm.reset();
+        });
+      }
+    </script>
+  </body>
+  </html>
