@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "nombre": "Dr. Pérez",
+    "especialidad": "Osteopatía",
+    "obrasocial": "OSDE",
+    "telefono": "1134567890",
+    "email": "juanperez@hospital.com",
+    "imagen": "../img/dr.jpg"
+  },
+  {
+    "id": 2,
+    "nombre": "Dra. Sánchez",
+    "especialidad": "Cardiología",
+    "obrasocial": "PAMI",
+    "telefono": "1123456789",
+    "email": "anagomez@hospital.com",
+    "imagen": "../img/doctor-en-uniforme-de-pie-en-blanco.jpg"
+  },
+  {
+    "id": 3,
+    "nombre": "Dr. Martínez",
+    "especialidad": "Nefrología",
+    "obrasocial": "OSDE",
+    "telefono": "1144455566",
+    "email": "carlosdiaz@hospital.com",
+    "imagen": "../img/retrato-medico-masculino-en-hospital.jpg"
+  }
+]
