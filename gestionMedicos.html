@@ -59,9 +59,34 @@
         </div>
       </nav>
     </header>
-    <main class="container my-5">
-      <h2 class="text-center mb-4">Gestión de Médicos</h2>
-      <div id="listaMedicosAdmin" class="row g-3 justify-content-center"></div>
+    <main  class="container my-5">
+    <section class="py-4 bg-light rounded shadow-sm px-4">
+        <h2 class="text-center mb-4">Gestión y Listado de Médicos</h2>
+        
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Especialidad</th>
+                        <th scope="col">Obra Social</th>
+                        <th scope="col">Teléfono</th>
+                        <th scope="col">Email</th>
+                        <th scope="col" class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="medicosTablaCuerpo">
+                    </tbody>
+            </table>
+        </div>
+
+        <div id="detallesMedico" class="mt-4 p-3 border rounded" style="display: none;">
+            <h4>Detalles del Médico</h4>
+            </div>
+
+    </section>
+</main>
     </main>
     <footer class="bg-info text-dark text-center py-3">
       <p class="mb-0">Copyright &copy; 2025 Centro Medico Medical Assistance</p>
@@ -69,5 +94,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/altaMedico.js"></script>
     <script src="js/gestionMedicos.js"></script>
-  </body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        
+        <script src="js/altaMedico.js"></script> 
+        
+        <script src="js/gestionMedicos.js"></script> 
+    </body> 
 </html>
+
+
+
