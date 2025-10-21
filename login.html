@@ -90,10 +90,15 @@
           const usuario = document.getElementById('usuario').value.trim();
           const password = document.getElementById('password').value;
           const user = autenticar(usuario, password);
+          // Limpiar sesiones anteriores
+          localStorage.removeItem('adminAutenticado');
+          localStorage.removeItem('usuarioAutenticado');
           if (user && user.rol === 'admin') {
             localStorage.setItem('adminAutenticado', 'true');
+            localStorage.setItem('usuarioAutenticado', user.usuario);
             location.href = 'altaMedicos.html';} 
             else if (user && user.rol !== 'admin') {
+            localStorage.setItem('usuarioAutenticado', user.usuario);
             location.href = 'turnos.html';} 
             else {
             alert('Usuario o contraseña incorrectos.');
