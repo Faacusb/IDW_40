@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editar Médico - Medical Assistance</title>
+  <!-- Tema Material Style CSS basado en Bootstrap  v5.3.2 -->
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@materialstyle/materialstyle@3.1.1/dist/css/materialstyle.min.css"
+    crossorigin="anonymous">
+  <!-- iconos de bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <!-- Estilos propios -->
+  <link rel="stylesheet" href="CSS/estilos.css" />
+</head>
+
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg border-bottom border-dark p-0">
+      <div class="container-fluid flex-column flex-lg-column p-0">
+        <div class="w-100 bg-primary text-white px-3 py-2 border-bottom border-dark d-flex justify-content-between align-items-center">
+          <a class="navbar-brand fw-bold text-white m-0 mx-auto d-none d-lg-block" href="index.html">Medical Assistance</a>
+          <a class="navbar-brand fw-bold text-white m-0 d-lg-none" href="dashboard.html">Medical Assistance</a>
+          <button class="navbar-toggler menu-principal" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+        <div class="collapse navbar-collapse w-100 bg-white border-bottom border-dark" id="navbarNav">
+          <ul class="navbar-nav mx-auto gap-3 py-2">
+            <li class="nav-item">
+              <a class="nav-link fw-bold text-dark" href="dashboard.html">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fw-bold text-dark" href="gestionMedicos.html">Listado de Medicos</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main class="container my-5">
+    <section class="py-4 bg-light rounded shadow-sm px-4">
+      <h2 class="text-center mb-4">Editar Médico</h2>
+      <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+          <form id="editarMedicoFormulario" autocomplete="off" novalidate>
+            <!-- Reutiliza el mismo markup del alta -->
+            <div class="form-floating-with-icon mb-3">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="nombre_edit" required placeholder="Ingrese nombre completo" />
+                <label for="nombre_edit">Nombre Completo:</label>
+              </div>
+              <span class="prepend">
+                <i class="bi bi-file-person"></i>
+              </span>
+              <div class="invalid-feedback">Este campo no puede estar vacio</div>
+            </div>
+
+            <div class="form-floating-with-icon mb-3">
+              <div class="form-floating">
+                <select id="especialidad_edit" class="form-select" required>
+                  <option value="">Seleccione Especialidad</option>
+                  <option value="Cardiología">Cardiología</option>
+                  <option value="Pediatría">Pediatría</option>
+                  <option value="Neurología">Neurología</option>
+                  <option value="Dermatología">Dermatología</option>
+                  <option value="Ginecología">Ginecología</option>
+                  <option value="Traumatología">Traumatología</option>
+                  <option value="Medico">Medico Clinico</option>
+                  <option value="Oftalmología">Oftalmología</option>
+                  <option value="Otorrinolaringología">Otorrinolaringología</option>
+                </select>
+                <label for="especialidad_edit" class="form-label">Especialidad:</label>
+              </div>
+              <span class="prepend">
+                <i class="bi bi-briefcase"></i>
+              </span>
+              <div class="invalid-feedback">Debe seleccionar una Especialidad</div>
+            </div>
+
+            <div class="form-floating-with-icon mb-3">
+              <div class="form-floating">
+                <input type="tel" class="form-control" id="telefono_edit" placeholder="Ingrese Teléfono" required />
+                <label for="telefono_edit">Teléfono:</label>
+              </div>
+              <span class="prepend">
+                <i class="bi bi-telephone"></i>
+              </span>
+              <div class="invalid-feedback">Ingrese un telefono valido</div>
+            </div>
+
+            <div class="form-floating-with-icon mb-3">
+              <div class="form-floating">
+                <select id="obrasocial_edit" class="form-select" required>
+                  <option value="">Seleccione Obra Social</option>
+                  <option value="OSDE">OSDE</option>
+                  <option value="PAMI">PAMI</option>
+                  <option value="SanCor Salud">SanCor Salud</option>
+                </select>
+                <label for="obrasocial_edit">Obra Social:</label>
+              </div>
+              <span class="prepend">
+                <i class="bi bi-file-medical"></i>
+              </span>
+              <div class="invalid-feedback">Debe seleccionar una Obra Social</div>
+            </div>
+
+            <div class="form-floating-with-icon mb-3">
+              <div class="form-floating">
+                <input type="email" class="form-control" id="email_edit" placeholder="Ingrese Email" required />
+                <label for="email_edit">Email:</label>
+              </div>
+              <span class="prepend">
+                <i class="bi bi-envelope-at"></i>
+              </span>
+              <div class="invalid-feedback">Debe ingresar un email valido</div>
+            </div>
+
+            <div class="form-floating-with-icon mb-3">
+              <div class="form-floating">
+                <input type="file" class="form-control" id="imagenMedico_edit" accept="image/*" />
+                <label for="imagenMedico_edit" class="form-label fw-bold">Foto del médico</label>
+              </div>
+              <span class="prepend">
+                <i class="bi bi-person-bounding-box"></i>
+              </span>
+              <ul class="list-group" id="muestraImagen_edit">
+              </ul>
+              <div class="invalid-feedback">Debe adjuntar una foto</div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <a class="btn btn-outline-secondary rounded-pill" href="gestionMedicos.html">Cancelar</a>
+              <button type="submit" class="btn btn-primary rounded-pill">
+                <i class="bi bi-save m-1"></i>
+                Guardar cambios
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="bg-info text-dark text-center py-3">
+    <p class="mb-0">Copyright &copy; 2025 Centro Medico Medical Assistance</p>
+  </footer>
+  <!-- Popper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+
+  <!-- MDC Ripple JS (Only for Ripple effects) -->
+  <script src="https://cdn.jsdelivr.net/npm/@material/ripple@14.0.0/dist/mdc.ripple.min.js"
+    integrity="sha384-9QANVmWxL3S8VRs8x1Q+bF1Zzogpy7P/Qw1+y5qHLdC1ig0EuoHg9VbB1SXyecdZ"
+    crossorigin="anonymous"></script>
+
+  <!-- Material Style JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@materialstyle/materialstyle@3.1.1/dist/js/materialstyle.min.js"
+    integrity="sha384-rqhP61M9WSmzd7+ssgyoWP2I+R68vVHx7o+UmmIs6/Nxe8Lt1DoF6+0CKptZIXC0"
+    crossorigin="anonymous"></script>
+
+  <script src="js/meterial-style.js"></script>
+
+  <script src="js/editarMedico.js"></script>
+
+  <script>
+    // Verificación de autenticación de administrador
+    const adminAutenticado = localStorage.getItem('adminAutenticado');
+
+    if (adminAutenticado !== 'true') {
+      // Si no está autenticado, redirigir al login
+      alert('Debe iniciar sesión como administrador para acceder a esta página.');
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+
+</html>
