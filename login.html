@@ -96,7 +96,7 @@
           if (user && user.rol === 'admin') {
             localStorage.setItem('adminAutenticado', 'true');
             localStorage.setItem('usuarioAutenticado', user.usuario);
-            location.href = 'altaMedicos.html';} 
+            location.href = 'dashboard.html';} 
             else if (user && user.rol !== 'admin') {
             localStorage.setItem('usuarioAutenticado', user.usuario);
             location.href = 'turnos.html';} 
@@ -120,7 +120,7 @@
 
       if (user && user.rol === 'admin') {
         localStorage.setItem('adminAutenticado', 'true');
-        location.href = 'altaMedicos.html';} 
+        location.href = 'dashboard.html';} 
         else if (user && user.rol !== 'admin') {
         location.href = 'turnos.html';} 
         else {

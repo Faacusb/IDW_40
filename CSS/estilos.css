@@ -295,6 +295,88 @@ input:focus {
     .drawer{ width: 100%; }
 }
 
+/* Dashboard styles */
+.card-header { background: transparent; border-bottom: none; padding: 0.75rem 1rem; }
+.card-body { padding: 1rem; }
+.card-actions i { font-size: 1.05rem; color: #0d6efd; }
+.card-actions i:hover { color: #084298; }
+
+#listaEspecialidades, #listaObras, #cardObrasSociales {
+    max-height: 320px;
+    overflow: auto;
+    scrollbar-width: thin;
+}
+
+#listaEspecialidades .list-group, 
+#listObras .list-group {
+    border-bottom: none;
+}
+
+#listaEspecialidades .list-group-item:last-child, 
+#listObras .list-group-item:last-child {
+    border-bottom-right-radius: none;
+    border-bottom-left-radius: none;
+    border-bottom: none;
+}
+
+#listaEspecialidades .list-group-item:first-child, 
+#listObras .list-group-item:first-child {
+    border-top-right-radius: none;
+    border-top-left-radius: none;
+    border-top: none;
+}
+
+#cardObrasSociales li { padding: 0.25rem 0; }
+
+.card-body .h4 { font-size: 1.75rem; }
+
+.list-group-item i { font-size: 1.05rem; }
+.list-group-item { display: flex; align-items: center; gap: 0.75rem; }
+
+.list-group-item .bi-pencil-square, .list-group-item .bi-info-circle-fill { font-size: 1rem; }
+
+.card { border-radius: 8px; }
+
+/* Scoped styles para widgets del dashboard */
+.dashboard-widget { overflow: hidden; }
+.dashboard-widget .widget-icon { color: var(--color-clinica-principal); }
+.dashboard-widget .card-footer { background: transparent; border-top: 1px solid #f1f5f9; }
+
+/* widget-especialidades específico */
+.widget-especialidades .widget-icon { font-size: 2.4rem; opacity: 0.95; }
+.widget-especialidades #btnRefreshEspecialidades { border-radius: 6px; padding: .25rem .5rem; }
+.widget-especialidades .list-group { margin-bottom: 0; }
+
+/* Nuevo: estilos uniformes para los 3 widgets pedidos */
+.widget { border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; height: 100%; }
+.widget-header { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1rem; border-bottom: 1px solid #f1f5f9; }
+.widget-header h6 { margin: 0; font-weight: 600; }
+.widget-actions button { background: transparent; border: none; color: var(--color-clinica-principal); font-size: 1.05rem; cursor: pointer; }
+.widget-body { padding: 0.9rem 1rem; flex: 1 1 auto; display: flex; flex-direction: column; }
+.widget-counter { margin-bottom: 0.6rem; }
+.widget-counter .h2, .widget-counter .h3 { font-weight: 700; }
+.widget-divider { height: 1px; background: #f1f5f9; margin: 0.25rem 0; }
+.list-compact { overflow: auto; flex: 1 1 auto; padding: 0; margin: 0; }
+.list-compact li { padding: 0.6rem 0.5rem; display: flex; align-items: center; gap: 0.75rem; border-bottom: 1px solid rgba(0,0,0,0.03); }
+.list-compact li .meta { display: flex; flex-direction: column; font-size: 0.95rem; }
+.list-compact li .meta small { color: #6c757d; font-size: 0.85rem; }
+.list-compact li .end-action { margin-left: auto; color: #0d6efd; cursor: pointer; }
+.widget-footer { padding: 0.6rem; border-top: 1px solid #f1f5f9; }
+.widget-footer .btn { width: 100%; }
+
+/* scroll thin para webkit */
+.list-compact::-webkit-scrollbar { width: 8px; }
+.list-compact::-webkit-scrollbar-track { background: transparent; }
+.list-compact::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 8px; }
+.list-compact { scrollbar-width: thin; }
+
+/* avatar pequeño en listado */
+.avatar-sm img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+
+
+/* Aislar reglas para iconos de header solo dentro de dashboard */
+.card-header .card-actions i, .card-header .card-actions button { color: #0d6efd; }
+
 /* Estilos para contenido profesional del drawer */
 .drawer-body .foto-medico {
     width: 120px;
