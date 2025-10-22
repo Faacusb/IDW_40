@@ -9,6 +9,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="CSS/estilos.css" />
+    <link rel="icon" type="image/png" href="img/logo-mini.png" />
   </head>
   <body>
     <header>
@@ -18,15 +19,19 @@
             class="w-100 bg-primary text-white px-3 py-2 border-bottom border-dark d-flex justify-content-between align-items-center"
           >
             <a
-              class="navbar-brand fw-bold text-white m-0 mx-auto d-none d-lg-block"
-              href="index.html"
-              >Medical Assistance</a
+            class="navbar-brand fw-bold text-white m-0 mx-auto d-none d-lg-block d-flex align-items-center gap-2"
+            href="index.html"
             >
+            <img src="img/logo.svg" alt="Logo" height="40" />
+            <span>Medical Assistance</span>
+            </a>
             <a
-              class="navbar-brand fw-bold text-white m-0 d-lg-none"
-              href="index.html"
-              >Medical Assistance</a
+            class="navbar-brand fw-bold text-white m-0 d-lg-none d-flex align-items-center gap-2"
+            href="index.html"
             >
+            <img src="img/logo.svg" alt="Logo" height="30" />
+            <span>Medical Assistance</span>
+            </a>
             <button
               class="navbar-toggler menu-principal"
               type="button"
@@ -70,6 +75,18 @@
       </nav>
     </header>
     <main>
+      <section class="container-fluid bg-light py-5">
+        <div class="row align-items-center">
+          <div class="col-md-6 p-5">
+            <h1 class="fw-bold mb-3">Su médico. Su horario. Gestión directa.</h1>
+            <p class="mb-4"> Pedí tu turno en un par de clicks y sin tantas vueltas. </p>
+            <a class="btn btn-dark rounded-pill px-4 py-2">SACAR TURNO</a> <!-- Botón sin funcionalidad, por ahora :p -->
+          </div>
+          <div class="col-md-6 p-0"> 
+            <img src="img/doctora.jpg" alt="Doctora" class="img-fluid w-100" style="object-fit: cover; height: 100%; min-height: 400px;"/>
+          </div>
+        </div>
+      </section>
       <section class="py-4">
         <div class="container">
           <h2 class="text-center mb-4">Obras Sociales</h2>
@@ -77,9 +94,10 @@
             <div class="col-12 col-lg-4">
               <div class="card h-100 text-center">
                 <img
-                  src="img/osde.jpg"
-                  class="card-img-top img-fluid"
+                  src="img/osde-logo.svg"
+                  class="card-img-top img-fluid p-3"
                   alt="OSDE obra social"
+                  style="object-fit: contain; height: 250px;"
                 />
                 <div class="card-body">
                   <h3 class="card-title">OSDE</h3>
@@ -90,9 +108,10 @@
             <div class="col-12 col-lg-4">
               <div class="card h-100 text-center">
                 <img
-                  src="img/pami.png"
-                  class="card-img-top img-fluid"
+                  src="img/pami-logo.svg"
+                  class="card-img-top img-fluid p-3"
                   alt="PAMI obra social"
+                  style="object-fit: contain; height: 250px;"
                 />
                 <div class="card-body">
                   <h3 class="card-title">PAMI</h3>
@@ -103,9 +122,10 @@
             <div class="col-12 col-lg-4">
               <div class="card h-100 text-center">
                 <img
-                  src="img/sancor.jpg"
-                  class="card-img-top img-fluid"
+                  src="img/sancor-logo.svg"
+                  class="card-img-top img-fluid p-3"
                   alt="SanCor Salud obra social"
+                  style="object-fit: contain; height: 250px;"
                 />
                 <div class="card-body">
                   <h3 class="card-title">SanCor Salud</h3>
