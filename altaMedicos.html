@@ -23,7 +23,7 @@
           class="w-100 bg-primary text-white px-3 py-2 border-bottom border-dark d-flex justify-content-between align-items-center">
           <a class="navbar-brand fw-bold text-white m-0 mx-auto d-none d-lg-block" href="index.html">Medical
             Assistance</a>
-          <a class="navbar-brand fw-bold text-white m-0 d-lg-none" href="index.html">Medical Assistance</a>
+          <a class="navbar-brand fw-bold text-white m-0 d-lg-none" href="dashboard.html">Medical Assistance</a>
           <button class="navbar-toggler menu-principal" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -32,10 +32,13 @@
         <div class="collapse navbar-collapse w-100 bg-white border-bottom border-dark" id="navbarNav">
           <ul class="navbar-nav mx-auto gap-3 py-2">
             <li class="nav-item">
-              <a class="nav-link fw-bold text-dark active" href="index.html">Inicio</a>
+              <a class="nav-link fw-bold text-dark" href="dashboard.html">Inicio</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link fw-bold text-dark" href="gestionMedicos.html">Gestion de Medicos</a>
+              <a class="nav-link fw-bold text-dark" href="gestionMedicos.html">Listado de Medicos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fw-bold text-dark active" href="altaMedicos.html">Alta de Medicos</a>
             </li>
           </ul>
         </div>
@@ -134,12 +137,12 @@
             </div>
 
             <div class="d-flex justify-content-between">
-              <button type="reset" class="btn px-4 btn-outline-secondary rounded-pill">
+              <button type="reset" class="btn btn-outline-secondary rounded-pill">
                 Restablecer campos
                 <span class="ripple-surface"></span>
               </button>
 
-              <button type="submit" class="btn px-4 btn-primary rounded-pill">
+              <button type="submit" class="btn btn-primary rounded-pill">
                 <i class="bi bi-person-plus m-1"></i>
                 Registrar Médico
                 <span class="ripple-surface"></span>
