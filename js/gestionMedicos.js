@@ -2,11 +2,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const medicosTablaCuerpo = document.getElementById("medicosTablaCuerpo");
     const detallesMedicoDiv = document.getElementById("detallesMedico");
 
-    
+    const drawer = document.getElementById('drawerDetalles');
+    const drawerBackdrop = document.getElementById('drawerBackdrop');
+    const drawerContenido = document.getElementById('drawerContenido');
+    const drawerCerrar = document.getElementById('drawerCerrar');
+
+
     function cargarMedicos() {
-        
+
         let medicos = JSON.parse(localStorage.getItem("medicos")) || [];
-        medicosTablaCuerpo.innerHTML = ""; 
+        medicosTablaCuerpo.innerHTML = "";
 
         if (medicos.length === 0) {
             medicosTablaCuerpo.innerHTML = '<tr><td colspan="7" class="text-center">No hay médicos registrados.</td></tr>';
@@ -14,15 +19,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         medicos.forEach(medico => {
-            
+
             const fila = medicosTablaCuerpo.insertRow();
-            
-            
+
             fila.insertCell().textContent = medico.id;
             fila.insertCell().textContent = medico.nombre;
             fila.insertCell().textContent = medico.especialidad;
             fila.insertCell().textContent = medico.obrasocial;
-            
+
             fila.insertCell().textContent = medico.telefono || 'N/A';
             fila.insertCell().textContent = medico.email || 'N/A';
 
@@ -46,41 +50,120 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    
-    function mostrarDetalles(medico) {
-        detallesMedicoDiv.style.display = 'block';
-        detallesMedicoDiv.innerHTML = `
-            <h4>Detalles de ${medico.nombre} (ID: ${medico.id})</h4>
-            <p><strong>Especialidad:</strong> ${medico.especialidad}</p>
-            <p><strong>Obra Social:</strong> ${medico.obrasocial}</p>
-            <p><strong>Teléfono:</strong> ${medico.telefono || 'N/A'}</p>
-            <p><strong>Email:</strong> ${medico.email || 'N/A'}</p>
-            ${medico.imagen ? `<img src="${medico.imagen}" alt="Foto" class="img-thumbnail" style="max-width: 100px;">` : ''}
-            <hr>
-            <p class="text-muted">Aquí podrías añadir la lógica para editar estos campos.</p>
-        `;
+
+    // --- Drawer ---
+    function openDrawer() {
+        if (!drawer || !drawerBackdrop) return;
+        drawerBackdrop.style.display = 'block';
+        drawer.classList.add('open');
+        drawer.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
     }
 
-    
+    function closeDrawer() {
+        if (!drawer || !drawerBackdrop) return;
+        drawerBackdrop.style.display = 'none';
+        drawer.classList.remove('open');
+        drawer.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    function mostrarDetalles(medico) {
+        if (detallesMedicoDiv) detallesMedicoDiv.style.display = 'none';
+        // Construir contenido: foto arriba, luego info con iconos
+        const fotoHtml = medico.imagen ? `<img src="${medico.imagen}" alt="Foto de ${medico.nombre}" class="foto-medico">` : `<div class="foto-medico" style="background:#eee;display:block"></div>`;
+
+        const infoHtml = `
+            <div class="info-list">
+                <div class="info-row">
+                    <div class="info-icon"><i class="bi bi-person-fill"></i></div>
+                    <div class="info-text"><strong>${medico.nombre}</strong><div class="text-muted">ID: ${medico.id}</div></div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-icon"><i class="bi bi-briefcase-fill"></i></div>
+                    <div class="info-text">${medico.especialidad || 'N/A'}</div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-icon"><i class="bi bi-building"></i></div>
+                    <div class="info-text">${medico.obrasocial || 'N/A'}</div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-icon"><i class="bi bi-telephone-fill"></i></div>
+                    <div class="info-text">${medico.telefono || 'N/A'}</div>
+                    <div class="info-action"><a class="btn-action-link" href="tel:${medico.telefono}" title="Llamar"><i class="bi bi-telephone"></i></a></div>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-icon"><i class="bi bi-envelope-fill"></i></div>
+                    <div class="info-text">${medico.email || 'N/A'}</div>
+                    <div class="info-action"><a class="btn-action-link" href="mailto:${medico.email}" title="Enviar correo"><i class="bi bi-envelope"></i></a></div>
+                </div>
+            </div>
+        `;
+
+        const html = `
+            ${fotoHtml}
+            ${infoHtml}
+            <hr>
+        `;
+
+        if (drawerContenido) drawerContenido.innerHTML = html;
+        // set actions for footer buttons (open in new tab, close handled elsewhere)
+        const openBtn = document.getElementById('drawerOpenNew');
+        if (openBtn) {
+            openBtn.onclick = () => {
+                const url = `medico.html?id=${encodeURIComponent(medico.id)}`;
+                window.open(url, '_blank');
+            };
+        }
+
+        const delBtn = document.getElementById('drawerEliminar');
+        if (delBtn) {
+            delBtn.onclick = () => {
+                if (confirm(`¿Eliminar al médico ${medico.nombre} (ID ${medico.id})?`)) {
+                    let medicos = JSON.parse(localStorage.getItem('medicos')) || [];
+                    medicos = medicos.filter(m => m.id !== medico.id);
+                    localStorage.setItem('medicos', JSON.stringify(medicos));
+                    closeDrawer();
+                    cargarMedicos();
+                    alert('Médico eliminado');
+                }
+            };
+        }
+
+        const closeFooter = document.getElementById('drawerCloseFooter');
+        if (closeFooter) closeFooter.onclick = closeDrawer;
+
+        openDrawer();
+    }
+
+    if (drawerBackdrop) drawerBackdrop.addEventListener('click', closeDrawer);
+    if (drawerCerrar) drawerCerrar.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
+
+
     function eliminarMedico(id) {
         if (confirm(`¿Estás seguro de que quieres eliminar al médico con ID ${id}?`)) {
             let medicos = JSON.parse(localStorage.getItem("medicos")) || [];
-            
-            
+
+
             medicos = medicos.filter(medico => medico.id !== id);
 
-            
+
             localStorage.setItem("medicos", JSON.stringify(medicos));
 
-            
+
             cargarMedicos();
-            
-            
+
+
             detallesMedicoDiv.style.display = 'none';
             alert(`Médico con ID ${id} eliminado correctamente.`);
         }
     }
 
-    
+
     cargarMedicos();
 });
