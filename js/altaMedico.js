@@ -2,6 +2,8 @@ const altaMedicoFormulario = document.getElementById("altaMedicoFormulario");
 const inputNombre = document.getElementById("nombre");
 const inputEspecialidad = document.getElementById("especialidad");
 const inputObraSocial = document.getElementById("obrasocial");
+const inputTelefono = document.getElementById("telefono"); 
+const inputEmail = document.getElementById("email");
 const inputImagen = document.getElementById('imagenMedico');
 const muestraImagen = document.getElementById('muestraImagen');
 
@@ -44,8 +46,10 @@ function altaMedicos(event) {
   let nombreMed = inputNombre.value.trim();
   let especialidad = inputEspecialidad.value.trim();
   let obrasocial = inputObraSocial.value.trim();
+  let telefono = inputTelefono.value.trim();
+  let email = inputEmail.value.trim();
 
-  if (!nombreMed || !especialidad || !obrasocial) {
+  if (!nombreMed || !especialidad || !obrasocial|| !telefono || !email) {
     alert("Por favor completa los campos!");
     return;
   }
@@ -54,6 +58,8 @@ function altaMedicos(event) {
     nombre: nombreMed,
     especialidad: especialidad,
     obrasocial: obrasocial,
+    telefono: telefono,
+    email: email,
     imagen:imagenBase64 || ''
   };
 
@@ -65,6 +71,8 @@ function altaMedicos(event) {
       `Nombre: ${nombreMed}\n` +
       `Especialidad: ${especialidad}\n` +
       `Obra Social: ${obrasocial}\n`
+      `Teléfono: ${telefono}\n` + 
+      `Email: ${email}\n`        
   );
   altaMedicoFormulario.reset();
   muestraImagen.style.display = 'none';

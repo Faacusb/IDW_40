@@ -45,6 +45,9 @@ main{
 .card-img-top{
     height: 162px;
 }
+.ratio img {
+    object-fit: cover; 
+}
 /* Estilo de la seccion Info- clinica */
 
 
@@ -174,36 +177,36 @@ footer {
 
 .login-content {
   background: #CFE2F3; /* tono celeste suave */
-  padding-bottom: 50px; 
+    padding-bottom: 50px; 
 }
 
 .login-container {
-  max-width: 400px;
-  margin: 80px auto;
-  padding: 30px;
+    max-width: 400px;
+    margin: 80px auto;
+    padding: 30px;
   background-color: #E0F7FA; /* azul muy suave */
-  border-radius: 15px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
 }
 
 .login-container h2 {
-  text-align: center;
-  margin-bottom: 20px;
+    text-align: center;
+    margin-bottom: 20px;
   color: #039BE5; /* azul intenso */
 }
 
 .btn-primary {
-  background-color: #039BE5;
-  border: none;
+    background-color: #039BE5;
+    border: none;
 }
 
 /* Cambia el color del input focus */
 input:focus {
-  border-color: #0288D1;
-  box-shadow: 0 0 10px #0288D1;
+    border-color: #0288D1;
+    box-shadow: 0 0 10px #0288D1;
 }
 
 /* Fondo del modal de login */
 #modalLogin .modal-content {
-  background-color: #E0F7FA;
+    background-color: #E0F7FA;
 }
