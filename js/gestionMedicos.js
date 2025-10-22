@@ -13,6 +13,28 @@ document.addEventListener("DOMContentLoaded", () => {
         let medicos = JSON.parse(localStorage.getItem("medicos")) || [];
         medicosTablaCuerpo.innerHTML = "";
 
+        // Aplicar filtros desde dashboard si existen (localStorage o query params)
+        const filtroEspLS = localStorage.getItem('dashboardFiltroEspecialidad');
+        const filtroObraLS = localStorage.getItem('dashboardFiltroObra');
+        // query params
+        const urlParams = new URLSearchParams(window.location.search);
+        // aceptar ambas variantes por compatibilidad: filtrar.obrasocial y filtrar.obra-social
+        const filtroEspQ = urlParams.get('filtrar.especialidad') || urlParams.get('filtro.especialidad');
+        const filtroObraQ = urlParams.get('filtrar.obrasocial') || urlParams.get('filtrar.obra-social') || urlParams.get('filtro.obrasocial') || urlParams.get('filtro.obra-social');
+
+        const filtroEsp = filtroEspQ || filtroEspLS;
+        const filtroObra = filtroObraQ || filtroObraLS;
+
+        if (filtroEsp) {
+            medicos = medicos.filter(m => (m.especialidad || m.especialidad === 0) && m.especialidad === filtroEsp);
+            // limpiar filtro LS para no persistir
+            if (filtroEspLS) localStorage.removeItem('dashboardFiltroEspecialidad');
+        }
+        if (filtroObra) {
+            medicos = medicos.filter(m => ((m.obrasocial || m.obraSocial) && (m.obrasocial === filtroObra || m.obraSocial === filtroObra)));
+            if (filtroObraLS) localStorage.removeItem('dashboardFiltroObra');
+        }
+
         if (medicos.length === 0) {
             medicosTablaCuerpo.innerHTML = '<tr><td colspan="7" class="text-center">No hay médicos registrados.</td></tr>';
             return;
@@ -40,6 +62,13 @@ document.addEventListener("DOMContentLoaded", () => {
             botonMostrar.classList.add('btn', 'btn-sm', 'btn-info', 'me-2');
             botonMostrar.addEventListener('click', () => mostrarDetalles(medico));
             celdaAcciones.appendChild(botonMostrar);
+
+            // Botón Editar: abre la página de edición
+            const botonEditar = document.createElement('button');
+            botonEditar.textContent = 'Editar';
+            botonEditar.classList.add('btn', 'btn-sm', 'btn-warning', 'me-2');
+            botonEditar.addEventListener('click', () => { window.location.href = `editarMedico.html?id=${encodeURIComponent(medico.id)}`; });
+            celdaAcciones.appendChild(botonEditar);
 
             // Botón Eliminar
             const botonEliminar = document.createElement('button');
@@ -117,6 +146,13 @@ document.addEventListener("DOMContentLoaded", () => {
             openBtn.onclick = () => {
                 const url = `medico.html?id=${encodeURIComponent(medico.id)}`;
                 window.open(url, '_blank');
+            };
+        }
+
+        const editDrawerBtn = document.getElementById('drawerEdit');
+        if (editDrawerBtn) {
+            editDrawerBtn.onclick = () => {
+                window.location.href = `editarMedico.html?id=${encodeURIComponent(medico.id)}`;
             };
         }
 
