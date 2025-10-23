@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const medicos = await loadMedicos();
 
   // Constantes base
-  const ALL_ESPECIALIDADES = ['Cardiología','Pediatría','Neurología','Dermatología','Ginecología','Traumatología','Medico','Oftalmología','Otorrinolaringología'];
+  const ALL_ESPECIALIDADES = ['Cardiología','Pediatría','Neurología','Dermatología','Ginecología','Traumatología','Medico','Oftalmología','Otorrinolaringología', 'Osteopatía', 'Nefrología'];
   const ALL_OBRAS = ['OSDE','PAMI','SanCor Salud'];
 
   // Renderizadores
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function renderEspecialidades(med) {
     const counts = {};
-    med.forEach(x => { const k = x.especialidad || 'Sin especificar'; counts[k] = (counts[k] || 0) + 1; });
+    med.forEach(x => { const k = x.especialidad || x.Especialidad || x.especialidadMedico || 'Sin especificar'; counts[k] = (counts[k] || 0) + 1; });
     const entries = ALL_ESPECIALIDADES.map(name => ({ nombre: name, count: counts[name] || 0 }));
     entries.sort((a,b) => b.count - a.count);
 
