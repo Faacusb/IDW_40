@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
 
         if (drawerContenido) drawerContenido.innerHTML = html;
-        // set actions for footer buttons (open in new tab, close handled elsewhere)
+        // establecer acciones para los botones de pie de página (abrir en una nueva pestaña, cerrar en otra parte)
         const openBtn = document.getElementById('drawerOpenNew');
         if (openBtn) {
             openBtn.onclick = () => {

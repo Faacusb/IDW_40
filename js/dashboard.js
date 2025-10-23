@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  // Helpers
+  // Medicos
   async function loadMedicos() {
     let m = JSON.parse(localStorage.getItem('medicos')) || [];
     if (!m || m.length === 0) {
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderEspecialidades(medicos);
   renderObras(medicos);
 
-  // wiring botones
+  // botones
   const btnGoMed = document.getElementById('btnGoListadoFromMedicos');
   if (btnGoMed) btnGoMed.addEventListener('click', () => goToListado());
   const btnGoEsp = document.getElementById('btnGoListadoFromEspecialidades');
