@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Turnos - Medical Assistance</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="CSS/estilos.css">
+    <link rel="icon" type="image/png" href="img/logo-mini.png" />
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+    <nav class="navbar navbar-expand-lg border-bottom border-dark p-0">
+        <div class="container-fluid flex-column flex-lg-column p-0">
+        <div class="w-100 bg-primary text-white px-3 py-2 border-bottom border-dark d-flex justify-content-between align-items-center">
+            <a class="navbar-brand fw-bold text-white m-0 mx-auto d-none d-lg-block d-flex align-items-center gap-2" href="index.html">
+            <img src="img/logo.svg" alt="Logo" height="40" />
+            <span>Medical Assistance</span>
+            </a>
+            <a class="navbar-brand fw-bold text-white m-0 d-lg-none d-flex align-items-center gap-2" href="index.html">
+            <img src="img/logo.svg" alt="Logo" height="30" />
+            <span>Medical Assistance</span>
+            </a>
+        </div>
+        <div class="collapse navbar-collapse w-100 bg-white border-bottom border-dark" id="navbarNav">
+            <ul class="navbar-nav mx-auto gap-3 py-2">
+            <li class="nav-item"><a class="nav-link fw-bold text-dark" href="index.html">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link fw-bold text-dark" href="institucional.html">Institucional</a></li>
+            <li class="nav-item"><a class="nav-link fw-bold text-dark" href="contacto.html">Contacto</a></li>
+            <li class="nav-item"><a class="nav-link fw-bold text-dark active" href="turnos.html">Turnos</a></li>
+            </ul>
+        </div>
+        </div>
+    </nav>
+    </header>
+
+    <!-- este es el contenido principal -->
+    <main class="container py-5">
+    <h1 class="text-center text-primary mb-4 fw-bold">Gestión de Turnos</h1>
+
+    <!-- este es el formulario para pedir turno -->
+    <section class="mb-5 p-4 border rounded shadow-sm bg-light">
+        <h3 class="text-secondary mb-3">Solicitar Turno</h3>
+        <form id="formTurno">
+        <input type="hidden" id="turnoId" /> <!-- Campo oculto para edición -->
+        <div class="row g-3">
+            <div class="col-md-4">
+            <label for="nombre" class="form-label fw-bold">Nombre</label>
+            <input type="text" id="nombre" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+            <label for="especialidad" class="form-label fw-bold">Especialidad</label>
+            <select id="especialidad" class="form-select" required>
+                <option value="">Seleccionar...</option>
+                <option value="Cardiología">Cardiología</option>
+                <option value="Pediatría">Pediatría</option>
+                <option value="Dermatología">Dermatología</option>
+                <option value="Clínica Médica">Clínica Médica</option>
+            </select>
+            </div>
+            <div class="col-md-2">
+            <label for="fecha" class="form-label fw-bold">Fecha</label>
+            <input type="date" id="fecha" class="form-control" required>
+            </div>
+            <div class="col-md-2">
+            <label for="hora" class="form-label fw-bold">Hora</label>
+            <input type="time" id="hora" class="form-control" required>
+            </div>
+        </div>
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary" id="btnGuardar">Guardar Turno</button>
+            <button type="button" class="btn btn-secondary d-none" id="btnCancelar">Cancelar Edición</button>
+        </div>
+        </form>
+    </section>
+
+    <!-- esta es la tabla de turnos -->
+    <section>
+        <h3 class="text-secondary mb-3">Mis Turnos</h3>
+        <table class="table table-bordered table-striped" id="tablaTurnos">
+        <thead class="table-primary">
+            <tr>
+            <th>Nombre</th>
+            <th>Especialidad</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        </table>
+    </section>
+    </main>
+
+    <footer class="bg-info text-dark text-center py-3">
+    <p class="mb-0">Copyright &copy; 2025 Centro Médico Medical Assistance</p>
+    </footer>
+
+    <script>
+    const form = document.getElementById("formTurno");
+    const tabla = document.querySelector("#tablaTurnos tbody");
+    const btnGuardar = document.getElementById("btnGuardar");
+    const btnCancelar = document.getElementById("btnCancelar");
+
+    document.addEventListener("DOMContentLoaded", mostrarTurnos);
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const id = document.getElementById("turnoId").value;
+        const nombre = document.getElementById("nombre").value.trim();
+        const especialidad = document.getElementById("especialidad").value;
+        const fecha = document.getElementById("fecha").value;
+        const hora = document.getElementById("hora").value;
+
+        if (!nombre || !especialidad || !fecha || !hora) {
+        alert("Por favor, complete todos los campos.");
+        return;
+        }
+
+        let turnos = JSON.parse(localStorage.getItem("turnos")) || [];
+
+        if (id) {
+        // Si hay un ID, editar turno existente
+        turnos = turnos.map(t => t.id == id ? { id, nombre, especialidad, fecha, hora } : t);
+        alert("Turno actualizado correctamente ✅");
+        btnGuardar.textContent = "Guardar Turno";
+        btnCancelar.classList.add("d-none");
+        } else {
+        // Si no hay ID, agregar nuevo turno
+        const nuevoTurno = { id: Date.now(), nombre, especialidad, fecha, hora };
+        turnos.push(nuevoTurno);
+        alert("Turno guardado correctamente ✅");
+        }
+
+        localStorage.setItem("turnos", JSON.stringify(turnos));
+        form.reset();
+        document.getElementById("turnoId").value = "";
+        mostrarTurnos();
+    });
+
+    btnCancelar.addEventListener("click", () => {
+        form.reset();
+        document.getElementById("turnoId").value = "";
+        btnGuardar.textContent = "Guardar Turno";
+        btnCancelar.classList.add("d-none");
+    });
+
+    function mostrarTurnos() {
+        const turnos = JSON.parse(localStorage.getItem("turnos")) || [];
+        tabla.innerHTML = "";
+
+        turnos.forEach(t => {
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+            <td>${t.nombre}</td>
+            <td>${t.especialidad}</td>
+            <td>${t.fecha}</td>
+            <td>${t.hora}</td>
+            <td>
+            <button class="btn btn-sm btn-warning me-2" onclick="editarTurno(${t.id})">Editar</button>
+            <button class="btn btn-sm btn-danger" onclick="eliminarTurno(${t.id})">Eliminar</button>
+            </td>
+        `;
+        tabla.appendChild(fila);
+        });
+    }
+
+    function eliminarTurno(id) {
+        const turnos = JSON.parse(localStorage.getItem("turnos")) || [];
+        const nuevosTurnos = turnos.filter(t => t.id !== id);
+        localStorage.setItem("turnos", JSON.stringify(nuevosTurnos));
+        mostrarTurnos();
+    }
+
+    function editarTurno(id) {
+        const turnos = JSON.parse(localStorage.getItem("turnos")) || [];
+        const turno = turnos.find(t => t.id === id);
+        if (!turno) return;
+
+        document.getElementById("turnoId").value = turno.id;
+        document.getElementById("nombre").value = turno.nombre;
+        document.getElementById("especialidad").value = turno.especialidad;
+        document.getElementById("fecha").value = turno.fecha;
+        document.getElementById("hora").value = turno.hora;
+
+        
+        btnGuardar.textContent = "Actualizar Turno";
+        btnCancelar.classList.remove("d-none");
+    }
+    </script>
+</body>
+</html>
+
