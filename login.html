@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="CSS/estilos.css">
 </head>
 <body>
- <header>
+    <header>
         <nav class="navbar navbar-expand-lg border-bottom border-dark p-0">
             <div class="container-fluid flex-column flex-lg-column p-0">  
             <div class="w-100 bg-primary text-white px-3 py-2 border-bottom border-dark d-flex justify-content-between align-items-center">
@@ -68,68 +68,78 @@
     </div>
   </div>
 
-    <!-- Scripts Bootstrap y JavaScript para login -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-      // Datos de usuarios 
-      const usuarios = [
-        { usuario: 'admin', password: 'admin123', rol: 'admin' },
-        { usuario: 'user', password: 'user123', rol: 'user' },
-        { usuario: 'mariano', password: 'nano123', rol: 'user' }
-      ];
-  
-      function autenticar(usuario, password) {
-        return usuarios.find(u => u.usuario === usuario && u.password === password);
-      }
-  
-      // Formulario principal
-      const loginForm = document.getElementById('loginForm');
-      if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
-          e.preventDefault();
-          const usuario = document.getElementById('usuario').value.trim();
-          const password = document.getElementById('password').value;
-          const user = autenticar(usuario, password);
-          // Limpiar sesiones anteriores
-          localStorage.removeItem('adminAutenticado');
-          localStorage.removeItem('usuarioAutenticado');
-          if (user && user.rol === 'admin') {
-            localStorage.setItem('adminAutenticado', 'true');
-            localStorage.setItem('usuarioAutenticado', user.usuario);
-            location.href = 'altaMedicos.html';} 
-            else if (user && user.rol !== 'admin') {
-            localStorage.setItem('usuarioAutenticado', user.usuario);
-            location.href = 'turnos.html';} 
-            else {
-            alert('Usuario o contraseña incorrectos.');
-            }
+  <!-- Scripts Bootstrap y JavaScript para login -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-          loginForm.reset();
+  <script>
+    // Datos de usuarios preexistentes
+    const usuarios = [
+      { usuario: 'admin', password: 'admin123', rol: 'admin' },
+      { usuario: 'user', password: 'user123', rol: 'user' },
+      { usuario: 'mariano', password: 'nano123', rol: 'user' }
+    ];
+
+    function autenticar(usuario, password) {
+      return usuarios.find(u => u.usuario === usuario && u.password === password);
+    }
+
+    // Formulario principal
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+      loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const usuario = document.getElementById('usuario').value.trim();
+        const password = document.getElementById('password').value;
+        const user = autenticar(usuario, password);
+
+        // Limpiar sesiones anteriores
+        localStorage.removeItem('adminAutenticado');
+        localStorage.removeItem('usuarioAutenticado');
+
+        if (user && user.rol === 'admin') {
+          localStorage.setItem('adminAutenticado', 'true');       
+          localStorage.setItem('usuarioAutenticado', user.usuario); 
+          location.href = 'altaMedicos.html';
+        } 
+        else if (user && user.rol !== 'admin') {
+          localStorage.setItem('usuarioAutenticado', user.usuario); 
+          location.href = 'turnos.html';
+        } 
+        else {
+          alert('Usuario o contraseña incorrectos.');
+        }
+
+        loginForm.reset();
       });
     }
 
-  
-      // Modal login
-      const modalLoginForm = document.getElementById('modalLoginForm');
-      if (modalLoginForm) {
+    // Modal login
+    const modalLoginForm = document.getElementById('modalLoginForm');
+    if (modalLoginForm) {
       modalLoginForm.addEventListener('submit', function(e) {
         e.preventDefault();
         const usuario = document.getElementById('modalUsuario').value.trim();
         const password = document.getElementById('modalPassword').value;
         const user = autenticar(usuario, password);
 
-      if (user && user.rol === 'admin') {
-        localStorage.setItem('adminAutenticado', 'true');
-        location.href = 'altaMedicos.html';} 
+        if (user && user.rol === 'admin') {
+          localStorage.setItem('adminAutenticado', 'true');       
+          localStorage.setItem('usuarioAutenticado', user.usuario); 
+          location.href = 'altaMedicos.html';
+        } 
         else if (user && user.rol !== 'admin') {
-        location.href = 'turnos.html';} 
+          localStorage.setItem('usuarioAutenticado', user.usuario); 
+          location.href = 'turnos.html';
+        } 
         else {
-        alert('Usuario o contraseña incorrectos.');}
+          alert('Usuario o contraseña incorrectos.');
+        }
 
-      modalLoginForm.reset();
+        modalLoginForm.reset();
       });
     }
+  </script>
 
-    </script>
-  </body>
-  </html>
+</body>
+</html>
+
