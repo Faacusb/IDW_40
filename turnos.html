@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Turnos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Gestión de Turnos</h1>
+
+    <!-- Formulario para agregar o modificar turnos -->
+    <section>
+        <h2>Registrar turno</h2>
+        <form id="turnoForm">
+            <input type="hidden" id="turnoId">
+            <label>Nombre del paciente:</label>
+            <input type="text" id="nombre" required><br>
+            <label>Fecha:</label>
+            <input type="date" id="fecha" required><br>
+            <label>Hora:</label>
+            <input type="time" id="hora" required><br>
+            <label>Especialidad:</label>
+            <input type="text" id="especialidad" required><br>
+            <button type="submit">Guardar Turno</button>
+        </form>
+    </section>
+
+    <!-- Listado de turnos -->
+    <section>
+        <h2>Listado de Turnos</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Paciente</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Especialidad</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tablaTurnos"></tbody>
+        </table>
+    </section>
+
+    <script>
+        // Si no existen turnos guardados, crear arreglo vacío
+        if (!localStorage.getItem('turnos')) {
+            localStorage.setItem('turnos', JSON.stringify([]));
+        }
+
+        const form = document.getElementById('turnoForm');
+        const tabla = document.getElementById('tablaTurnos');
+
+        // Mostrar los turnos guardados
+        function mostrarTurnos() {
+            const turnos = JSON.parse(localStorage.getItem('turnos')) || [];
+            tabla.innerHTML = '';
+            turnos.forEach((turno, index) => {
+                tabla.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${turno.nombre}</td>
+                        <td>${turno.fecha}</td>
+                        <td>${turno.hora}</td>
+                        <td>${turno.especialidad}</td>
+                        <td>
+                            <button onclick="editarTurno(${index})">Editar</button>
+                            <button onclick="eliminarTurno(${index})">Eliminar</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        mostrarTurnos();
+
+        // Guardar o editar turno
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const turnos = JSON.parse(localStorage.getItem('turnos')) || [];
+
+            const nuevoTurno = {
+                nombre: document.getElementById('nombre').value,
+                fecha: document.getElementById('fecha').value,
+                hora: document.getElementById('hora').value,
+                especialidad: document.getElementById('especialidad').value
+            };
+
+            const id = document.getElementById('turnoId').value;
+            if (id) {
+                turnos[id] = nuevoTurno; // Editar
+                document.getElementById('turnoId').value = '';
+            } else {
+                turnos.push(nuevoTurno); // Crear nuevo
+            }
+
+            localStorage.setItem('turnos', JSON.stringify(turnos));
+            form.reset();
+            mostrarTurnos();
+        });
+
+        // Editar turno
+        function editarTurno(index) {
+            const turnos = JSON.parse(localStorage.getItem('turnos')) || [];
+            const turno = turnos[index];
+            document.getElementById('turnoId').value = index;
+            document.getElementById('nombre').value = turno.nombre;
+            document.getElementById('fecha').value = turno.fecha;
+            document.getElementById('hora').value = turno.hora;
+            document.getElementById('especialidad').value = turno.especialidad;
+        }
+
+        // Eliminar turno
+        function eliminarTurno(index) {
+            const turnos = JSON.parse(localStorage.getItem('turnos')) || [];
+            if (confirm("¿Seguro que querés eliminar este turno?")) {
+                turnos.splice(index, 1);
+                localStorage.setItem('turnos', JSON.stringify(turnos));
+                mostrarTurnos();
+            }
+        }
+    </script>
+    <script src="turnos.js"></script>
+
+</body>
+</html>
+
