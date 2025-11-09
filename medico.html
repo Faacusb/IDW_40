@@ -94,16 +94,6 @@
       `;
     }
   </script>
-  
-  <script>
-    // Verificación de autenticación de administrador
-    const adminAutenticado = localStorage.getItem('adminAutenticado');
-
-    if (adminAutenticado !== 'true') {
-      // Si no está autenticado, redirigir al login
-      alert('Debe iniciar sesión como administrador para acceder a esta página.');
-      window.location.href = 'login.html';
-    }
-  </script>
+  <script src="js/autenticacion.js"></script>
 </body>
 </html>
