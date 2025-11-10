@@ -19,12 +19,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function goToListado(filters = {}) {
-  const base =
-    window.location.hostname.includes("github.io")
-      ? "https://faacusb.github.io/IDW_40/gestionMedicos.html"
-      : "/gestionMedicos.html";
+  const currentDir = window.location.pathname.replace(/[^/]+$/, "");
+  const targetPath = currentDir + "gestionMedicos.html";
 
-  const url = new URL(base);
+  const url = new URL(targetPath, window.location.origin);
+
   Object.keys(filters).forEach((k) => {
     const param =
       k === "obrasocial"
@@ -36,8 +35,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         : k;
     url.searchParams.set(param, filters[k]);
   });
-
+  
   window.location.href = url.href;
+}
+
 
   const medicos = await loadMedicos();
 
