@@ -115,17 +115,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@materialstyle/materialstyle@3.1.1/dist/js/materialstyle.min.js"></script>
   <script src="js/gestionMedicos.js"></script>
-  
-  <script>
-    // Verificación de autenticación de administrador
-    const adminAutenticado = localStorage.getItem('adminAutenticado');
-
-    if (adminAutenticado !== 'true') {
-      // Si no está autenticado, redirigir al login
-      alert('Debe iniciar sesión como administrador para acceder a esta página.');
-      window.location.href = 'login.html';
-    }
-  </script>
+  <script src="js/autenticacion.js"></script>
   <script src="js/dark-mode.js"></script> 
 </body>
 

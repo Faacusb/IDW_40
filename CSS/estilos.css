@@ -203,6 +203,7 @@ footer {
     --info-icon-bg: #f1f5f9;
     --btn-action-link-color: #0d6efd;
     --nav-hover: #E0E0E0;
+    --turn-hover: #0d6efd20;
 
     /* sombras de diferentes tonos */
     --shadow-color-faint: rgba(0,0,0,0.03); 
@@ -535,5 +536,24 @@ input:checked + .slider::after {
     --login-header: #36a6e0;
     --component-bg-light: rgb(33,37,41);
     --texto: #fff;
-    --nav-link-color: #fff;
+    --nav-link-color: #fff; 
+    }
+
+/* Turnos */
+.dia {
+    cursor: pointer;
+    border-radius: 8px;
+    padding: 8px;
+    transition: all 0.2s ease;
+}
+
+.dia:hover {
+    background-color: var(--turn-hover); 
+    transform: scale(1.05);
+}
+
+.dia.activo {
+    background-color: var(--btn-action-link-color);
+    color: var(--texto-w);
+    font-weight: 600;
 }

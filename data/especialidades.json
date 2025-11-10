@@ -1,0 +1,12 @@
+[
+  { "id": 1, "nombre": "Clínica Médica" },
+  { "id": 2, "nombre": "Cardiología" },
+  { "id": 3, "nombre": "Pediatría" },
+  { "id": 4, "nombre": "Neurología" },
+  { "id": 5, "nombre": "Dermatología" },
+  { "id": 6, "nombre": "Ginecología" },
+  { "id": 7, "nombre": "Traumatología" },
+  { "id": 8, "nombre": "Oftalmología" },
+  { "id": 9, "nombre": "Otorrinolaringología" },
+  { "id": 10, "nombre": "Nefrología" }
+]

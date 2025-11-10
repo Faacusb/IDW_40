@@ -65,7 +65,12 @@
                 >
               </li>
               <li class="nav-item">
-                <a class="nav-link fw-bold texto" href="login.html"
+                <a class="nav-link fw-bold text-dark" href="turnos.html"
+                  >Turnos</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link fw-bold text-dark" href="login.html"
                   >Login</a
                 >
               </li>
@@ -195,5 +200,43 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/mostrarMedicos.js"></script>
     <script src="js/dark-mode.js"></script>
+    <script src="js/autenticacion.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const token = sessionStorage.getItem('accessToken');
+      const navList = document.querySelector('#navbarNav .navbar-nav');
+      
+      // Verificar si hay sesión activa, si es asi muestra el logout sino muestra login
+      let user = null;
+      if (token) {
+        user = await validateAndFetchUserData();
+      }
+
+      const lastItem = navList.lastElementChild;
+      if (lastItem && lastItem.querySelector('a[href="login.html"]')) {
+        lastItem.remove();
+      }
+      const li = document.createElement('li');
+      li.classList.add('nav-item');
+
+      if (user) {
+        li.innerHTML = `
+          <a class="nav-link fw-bold text-dark" href="#" id="logoutLink">Logout (${user.username})</a>
+        `;
+        navList.appendChild(li);
+
+        document.getElementById('logoutLink').addEventListener('click', (e) => {
+          e.preventDefault();
+          clearSession();
+          window.location.href = 'index.html';
+        });
+      } else {
+        li.innerHTML = `
+          <a class="nav-link fw-bold text-dark" href="login.html">Login</a>
+        `;
+        navList.appendChild(li);
+      }
+    });
+    </script>
   </body>
 </html>
