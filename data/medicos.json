@@ -1,29 +1,34 @@
 [
   {
     "id": 1,
-    "nombre": "Dr. Pérez",
-    "especialidad": "Osteopatía",
-    "obrasocial": "OSDE",
-    "telefono": "1134567890",
-    "email": "juanperez@hospital.com",
-    "imagen": "../img/dr.jpg"
+    "matriculaProfesional": 1001,
+    "apellido": "Pérez",
+    "nombre": "Laura",
+    "especialidad": 1,
+    "descripcion": "Médica clínica con amplia experiencia.",
+    "obrasSociales": [1, 2],
+    "fotografia": "img/doctora.jpg",
+    "valorConsulta": 8500
   },
   {
     "id": 2,
-    "nombre": "Dra. Sánchez",
-    "especialidad": "Cardiología",
-    "obrasocial": "PAMI",
-    "telefono": "1123456789",
-    "email": "anagomez@hospital.com",
-    "imagen": "../img/doctor-en-uniforme-de-pie-en-blanco.jpg"
+    "matriculaProfesional": 1002,
+    "apellido": "García",
+    "nombre": "Carlos",
+    "especialidad": 2,
+    "descripcion": "Especialista en cardiología.",
+    "obrasSociales": [1, 3],
+    "fotografia": "img/dr.jpg",
+    "valorConsulta": 9200
   },
-  {
-    "id": 3,
-    "nombre": "Dr. Martínez",
-    "especialidad": "Nefrología",
-    "obrasocial": "OSDE",
-    "telefono": "1144455566",
-    "email": "carlosdiaz@hospital.com",
-    "imagen": "../img/retrato-medico-masculino-en-hospital.jpg"
-  }
+  { "id": 3,
+    "matriculaProfesional": 1003,
+    "apellido": "García",
+    "nombre": "Carlos",
+    "especialidad": 4,
+    "descripcion": "Especialista en Neurologia.",
+    "obrasSociales": [1, 3],
+    "fotografia": "img/dr.jpg",
+    "valorConsulta": 7000
+}
 ]
