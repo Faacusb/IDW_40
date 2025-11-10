@@ -8,6 +8,8 @@
     "descripcion": "Médica clínica con amplia experiencia.",
     "obrasSociales": [1, 2],
     "fotografia": "img/doctora.jpg",
+    "telefono": 1139239432,
+    "email": "perezLaura@gmail.com",
     "valorConsulta": 8500
   },
   {
@@ -19,16 +21,20 @@
     "descripcion": "Especialista en cardiología.",
     "obrasSociales": [1, 3],
     "fotografia": "img/dr.jpg",
+    "telefono": 1132465433,
+    "email": "CarlosGar@hotmail.com",
     "valorConsulta": 9200
   },
   { "id": 3,
     "matriculaProfesional": 1003,
-    "apellido": "García",
-    "nombre": "Carlos",
+    "apellido": "Mariano",
+    "nombre": "Closs",
     "especialidad": 4,
     "descripcion": "Especialista en Neurologia.",
     "obrasSociales": [1, 3],
     "fotografia": "img/dr.jpg",
+    "telefono": 1122536577,
+    "email": "ClossMariano@hotmail.com",
     "valorConsulta": 7000
 }
 ]
