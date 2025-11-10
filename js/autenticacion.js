@@ -146,30 +146,43 @@ async function handleLogin(e, form) {
       const redirectPath = sessionStorage.getItem(STORAGE_KEY_REDIRECT);
       sessionStorage.removeItem(STORAGE_KEY_REDIRECT);
 
-      const defaultPath = userData.role === 'admin'
-        ? `${BASE_PATH}dashboard.html`
-        : `${BASE_PATH}turnos.html`;
+    const defaultPath = userData.role === 'admin'
+  ? `${BASE_PATH}dashboard.html`
+  : `${BASE_PATH}turnos.html`;
 
-      let targetPath = defaultPath;
+let targetPath = defaultPath;
 
-      if (redirectPath) {
-        const url = new URL(redirectPath, window.location.origin);
-        const pathConfig = PATHS[url.pathname];
-        if (pathConfig && pathConfig.auth) {
-          if (pathConfig.roles && !pathConfig.roles.includes(userData.role)) {
-            targetPath = defaultPath;
-          } else {
-            targetPath = redirectPath;
-          }
-        } else {
-          targetPath = redirectPath;
-        }
-      }
+if (redirectPath) {
+  // Quita las barras iniciales (ej: "/dashboard.html" → "dashboard.html")
+  let cleanPath = redirectPath.replace(/^\/+/, '');
 
-      location.href = targetPath;
+  // Si estamos en GitHub Pages y la ruta no tiene el subpath, lo agregamos
+  if (!cleanPath.startsWith('IDW_40/') && BASE_PATH.includes('IDW_40')) {
+    cleanPath = `IDW_40/${cleanPath}`;
+  }
+
+  // Reconstruimos la ruta completa
+  const fixedPath = `/${cleanPath}`;
+  const url = new URL(fixedPath, window.location.origin);
+  const pathConfig = PATHS[url.pathname];
+
+  if (pathConfig && pathConfig.auth) {
+    if (pathConfig.roles && !pathConfig.roles.includes(userData.role)) {
+      targetPath = defaultPath;
     } else {
-      throw new Error('Error al obtener datos del usuario.');
+      targetPath = fixedPath;
     }
+  } else {
+    targetPath = fixedPath;
+  }
+}
+
+// ✅ Redirige correctamente, tanto local como en GitHub Pages
+location.href = targetPath;
+} else {
+  throw new Error('Error al obtener datos del usuario.');
+}
+
   } catch (err) {
     console.error('Error durante login:', err);
     displayAlert(err.message);
