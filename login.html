@@ -25,12 +25,19 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
             </div>
-                <div class="collapse navbar-collapse w-100 bg-white border-bottom border-dark" id="navbarNav">
+                <div class="collapse navbar-collapse w-100 bg border-bottom" id="navbarNav">
                     <ul class="navbar-nav mx-auto gap-3 py-2">
                         <li class="nav-item"><a class="nav-link fw-bold text-dark" href="index.html">Inicio</a></li>
                         <li class="nav-item"><a class="nav-link fw-bold text-dark" href="institucional.html">Institucional</a></li>
                         <li class="nav-item"><a class="nav-link fw-bold text-dark" href="contacto.html">Contacto</a></li>
                         <li class="nav-item"><a class="nav-link fw-bold text-dark active" href="login.html">Login</a></li>
+                        <!-- botón modo oscuro -->
+                        <li class="nav-item d-flex align-items-center ms-lg-3">
+                        <label class="switch" for="dark-mode-toggle">
+                        <input type="checkbox" id="dark-mode-toggle" />
+                        <span class="slider"></span>
+                        </label>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -138,5 +145,6 @@
     }
 
     </script>
+    <script src="js/dark-mode.js"></script>
   </body>
   </html>
