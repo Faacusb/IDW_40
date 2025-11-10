@@ -19,21 +19,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function goToListado(filters = {}) {
-    const url = new URL(
-      window.location.origin + BASE_PATH + "gestionMedicos.html"
-    );
-    Object.keys(filters).forEach((k) => {
-      const param =
-        k === "obrasocial"
-          ? "filtrar.obrasocial"
-          : k === "especialidad"
-          ? "filtrar.especialidad"
-          : k === "medico"
-          ? "filtrar.medico"
-          : k;
-      url.searchParams.set(param, filters[k]);
-    });
-    window.location.href = url.pathname + url.search;
+  const url = new URL(`${BASE_PATH}gestionMedicos.html`, window.location.origin);
+  Object.keys(filters).forEach((k) => {
+    const param =
+      k === "obrasocial"
+        ? "filtrar.obrasocial"
+        : k === "especialidad"
+        ? "filtrar.especialidad"
+        : k === "medico"
+        ? "filtrar.medico"
+        : k;
+    url.searchParams.set(param, filters[k]);
+  });
+  window.location.href = url.href;
   }
 
   const medicos = await loadMedicos();
