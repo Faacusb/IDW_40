@@ -19,7 +19,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function goToListado(filters = {}) {
-  const url = new URL(`${BASE_PATH}gestionMedicos.html`, window.location.origin);
+  const base =
+    window.location.hostname.includes("github.io")
+      ? "https://faacusb.github.io/IDW_40/gestionMedicos.html"
+      : "/gestionMedicos.html";
+
+  const url = new URL(base);
   Object.keys(filters).forEach((k) => {
     const param =
       k === "obrasocial"
@@ -31,8 +36,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         : k;
     url.searchParams.set(param, filters[k]);
   });
+
   window.location.href = url.href;
-  }
 
   const medicos = await loadMedicos();
 
