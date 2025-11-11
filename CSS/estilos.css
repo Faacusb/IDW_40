@@ -196,6 +196,7 @@ footer {
 }
 .preview-info p { margin: 0; font-size: 14px }
 
+
 /* Popover/modal ligero para previsualizar imagen */
 .img-popover-backdrop {
     position: fixed;
@@ -249,6 +250,10 @@ input:focus {
 
 .is-invalid .invalid-feedback {
     display: block;
+}
+
+.form-floating>textarea.form-control:focus, .form-floating>textarea.form-control:not(:placeholder-shown) {
+    padding: 2rem var(--prepend-width,.75rem);
 }
 
 /* Drawer lateral para detalles */
