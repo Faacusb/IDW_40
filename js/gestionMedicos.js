@@ -1,3 +1,5 @@
+const medicosTablaCuerpo = document.getElementById("medicosTablaCuerpo");
+
 document.addEventListener("DOMContentLoaded", async () => {
   async function loadJSON(path) {
     try {
@@ -16,53 +18,56 @@ document.addEventListener("DOMContentLoaded", async () => {
     loadJSON("data/obrasSociales.json"),
   ]);
 
-  const medicosLocales = JSON.parse(localStorage.getItem("medicos")) || [];
-
-  const medicos = [...medicosBase];
-  medicosLocales.forEach((m) => {
-    if (!medicos.some((x) => x.id === m.id)) medicos.push(m);
-  });
-
   const mapEspecialidades = {};
-  especialidades.forEach((e) => (mapEspecialidades[e.id] = e.nombre));
-
   const mapObras = {};
-  obrasSociales.forEach((o) => (mapObras[o.id] = o.nombre));
+   
+  function cargarMedicos() {
+    const medicosLocales = JSON.parse(localStorage.getItem("medicos")) || [];
 
-  const params = new URLSearchParams(window.location.search);
-  const filtroEspecialidad = params.get("filtrar.especialidad");
-  const filtroObraSocial = params.get("filtrar.obrasocial");
-
-  let medicosFiltrados = [...medicos];
-
-  if (filtroEspecialidad) {
-    medicosFiltrados = medicosFiltrados.filter((m) => {
-      const nombreEsp = mapEspecialidades[Number(m.especialidad)] || "";
-      return (
-        nombreEsp.toLowerCase() === filtroEspecialidad.toLowerCase() ||
-        m.especialidad == filtroEspecialidad
-      );
+    const medicos = [...medicosBase];
+    medicosLocales.forEach((m) => {
+      if (!medicos.some((x) => x.id === m.id)) medicos.push(m);
     });
-  }
 
-  if (filtroObraSocial) {
-    medicosFiltrados = medicosFiltrados.filter((m) => {
-      const obras = Array.isArray(m.obrasSociales)
-        ? m.obrasSociales.map((id) => mapObras[Number(id)])
-        : [mapObras[Number(m.obraSocial)] || m.obraSocial];
-      return obras.some(
-        (o) => o && o.toLowerCase() === filtroObraSocial.toLowerCase()
-      );
-    });
+    especialidades.forEach((e) => (mapEspecialidades[e.id] = e.nombre));
+    obrasSociales.forEach((o) => (mapObras[o.id] = o.nombre));
+
+    const params = new URLSearchParams(window.location.search);
+    const filtroEspecialidad = params.get("filtrar.especialidad");
+    const filtroObraSocial = params.get("filtrar.obrasocial");
+
+    let medicosFiltrados = [...medicos];
+
+    if (filtroEspecialidad) {
+      medicosFiltrados = medicosFiltrados.filter((m) => {
+        const nombreEsp = mapEspecialidades[Number(m.especialidad)] || "";
+        return (
+          nombreEsp.toLowerCase() === filtroEspecialidad.toLowerCase() ||
+          m.especialidad == filtroEspecialidad
+        );
+      });
+    }
+
+    if (filtroObraSocial) {
+      medicosFiltrados = medicosFiltrados.filter((m) => {
+        const obras = Array.isArray(m.obrasSociales)
+          ? m.obrasSociales.map((id) => mapObras[Number(id)])
+          : [mapObras[Number(m.obraSocial)] || m.obraSocial];
+        return obras.some(
+          (o) => o && o.toLowerCase() === filtroObraSocial.toLowerCase()
+        );
+      });
+    }
+
+    if (medicos.length === 0) {
+      medicosTablaCuerpo.innerHTML = '<tr><td colspan="7" class="text-center">No hay médicos registrados.</td></tr>';
+      return;
+    }
+
+    renderTabla(medicosFiltrados);
   }
 
   function renderTabla(medicos) {
-    const tbody =
-      document.querySelector("#tablaMedicos tbody") ||
-      document.getElementById("medicosTablaCuerpo");
-    if (!tbody) return;
-    tbody.innerHTML = "";
-
     medicos.forEach((m) => {
       const nombreCompleto =
         m.nombreCompleto ||
@@ -84,23 +89,53 @@ document.addEventListener("DOMContentLoaded", async () => {
       const telefono = m.telefono || m.tel || "N/A";
       const email = m.email || m.correo || "N/A";
 
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${m.id || "-"}</td>
-        <td>${nombreCompleto}</td>
-        <td>${especialidadNombre}</td>
-        <td>${obrasNombres}</td>
-        <td>${telefono}</td>
-        <td>${email}</td>
-        <td class="text-center">
-          <button class="btn btn-info btn-sm">Mostrar</button>
-          <button class="btn btn-warning btn-sm">Editar</button>
-          <button class="btn btn-danger btn-sm">Eliminar</button>
-        </td>
-      `;
-      tbody.appendChild(row);
+      const fila = medicosTablaCuerpo.insertRow();
+
+      fila.insertCell().textContent = m.id;
+      fila.insertCell().textContent = nombreCompleto;
+      fila.insertCell().textContent = especialidadNombre;
+      fila.insertCell().textContent = obrasNombres;
+      fila.insertCell().textContent = telefono;
+      fila.insertCell().textContent = email;
+
+      // Crea la celda de acciones (botones)
+      const celdaAcciones = fila.insertCell();
+      celdaAcciones.classList.add('text-center');
+
+      // Botón Mostrar para ver detalles 
+      const botonMostrar = document.createElement('button');
+      botonMostrar.textContent = 'Mostrar';
+      botonMostrar.classList.add('btn', 'btn-sm', 'btn-info', 'me-2');
+      botonMostrar.addEventListener('click', () => mostrarDetalles(m));
+      celdaAcciones.appendChild(botonMostrar);
+
+      // Botón Editar: abre la página de edición
+      const botonEditar = document.createElement('button');
+      botonEditar.textContent = 'Editar';
+      botonEditar.classList.add('btn', 'btn-sm', 'btn-warning', 'me-2');
+      botonEditar.addEventListener('click', () => { window.location.href = `editarMedico.html?id=${encodeURIComponent(m.id)}`; });
+      celdaAcciones.appendChild(botonEditar);
+
+      // Botón Eliminar
+      const botonEliminar = document.createElement('button');
+      botonEliminar.textContent = 'Eliminar';
+      botonEliminar.classList.add('btn', 'btn-sm', 'btn-danger');
+      botonEliminar.addEventListener('click', () => eliminarMedico(m.id));
+      celdaAcciones.appendChild(botonEliminar);
     });
   }
 
-  renderTabla(medicosFiltrados);
+  function eliminarMedico(id) {
+    if (confirm(`¿Estás seguro de que quieres eliminar al médico con ID ${id}?`)) {
+      let medicos = JSON.parse(localStorage.getItem("medicos")) || [];
+      medicos = medicos.filter(medico => m.id !== id);
+      localStorage.setItem("medicos", JSON.stringify(medicos));
+      cargarMedicos();
+
+      detallesMedicoDiv.style.display = 'none';
+      alert(`Médico con ID ${id} eliminado correctamente.`);
+    }
+  }
+
+  cargarMedicos();
 });
