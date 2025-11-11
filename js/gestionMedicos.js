@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", async () => {
-
   async function loadJSON(path) {
     try {
       const res = await fetch(path);
@@ -18,7 +17,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   ]);
 
   const medicosLocales = JSON.parse(localStorage.getItem("medicos")) || [];
-
 
   const medicos = [...medicosBase];
   medicosLocales.forEach((m) => {
@@ -66,7 +64,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     tbody.innerHTML = "";
 
     medicos.forEach((m) => {
-      
       const nombreCompleto =
         m.nombreCompleto ||
         `${m.nombre || ""} ${m.apellido || ""}`.trim() ||
@@ -76,8 +73,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         mapEspecialidades[Number(m.especialidad)] || m.especialidad || "N/A";
 
       const obrasNombres = Array.isArray(m.obrasSociales)
-        ? m.obrasSociales.map((id) => mapObras[Number(id)] || id).join(", ")
-        : mapObras[Number(m.obraSocial)] || m.obraSocial || "N/A";
+        ? m.obrasSociales
+            .map((id) => mapObras[Number(id)] || mapObras[id] || id)
+            .join(", ")
+        : mapObras[Number(m.obraSocial)] ||
+          mapObras[m.obraSocial] ||
+          m.obraSocial ||
+          "N/A";
 
       const telefono = m.telefono || m.tel || "N/A";
       const email = m.email || m.correo || "N/A";
