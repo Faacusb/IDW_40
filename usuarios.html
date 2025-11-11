@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel Administración - Usuarios | MedicalAssistance</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="CSS/estilos.css" />
+    <link rel="icon" type="image/png" href="img/logo-mini.png" />
+  </head>
+
+  <body>
+    <!-- NAVBAR -->
+    <header>
+      <nav class="navbar navbar-expand-lg border-bottom border-dark p-0">
+        <div class="container-fluid flex-column flex-lg-column p-0">
+          <div
+            class="w-100 bg-primary text-white px-3 py-2 border-bottom border-dark d-flex justify-content-between align-items-center"
+          >
+            <a
+              class="navbar-brand fw-bold text-white m-0 mx-auto d-none d-lg-block d-flex align-items-center gap-2"
+              href="index.html"
+            >
+              <img src="img/logo.svg" alt="Logo" height="40" />
+              <span>Medical Assistance</span>
+            </a>
+            <a
+              class="navbar-brand fw-bold text-white m-0 d-lg-none d-flex align-items-center gap-2"
+              href="index.html"
+            >
+              <img src="img/logo.svg" alt="Logo" height="30" />
+              <span>Medical Assistance</span>
+            </a>
+            <button
+              class="navbar-toggler menu-principal"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarNav"
+              aria-controls="navbarNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          </div>
+          <div
+            class="collapse navbar-collapse w-100 bg-white border-bottom border-dark"
+            id="navbarNav"
+          >
+            <ul class="navbar-nav mx-auto gap-3 py-2">
+              <li class="nav-item">
+                <a class="nav-link fw-bold text-dark" href="index.html"
+                  >Inicio</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link fw-bold text-dark" href="institucional.html"
+                  >Institucional</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link fw-bold text-dark" href="contacto.html"
+                  >Contacto</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link fw-bold text-dark" href="turnos.html"
+                  >Turnos</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link fw-bold text-dark" href="login.html"
+                  >Login</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="bg-light py-5">
+      <div class="container">
+        <div class="text-center mb-4">
+          <h1 class="fw-bold">Usuarios Registrados</h1>
+          </div>
+
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <!-- Controles -->
+            <div
+              class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3"
+            >
+              <div class="d-flex gap-2 align-items-center">
+                <input
+                  id="search"
+                  type="search"
+                  class="form-control"
+                  placeholder="Buscar por nombre o username..."
+                  style="min-width: 250px"
+                />
+                <select id="perPage" class="form-select w-auto">
+                  <option value="10">10</option>
+                  <option value="20" selected>20</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
+              <div class="d-flex gap-2">
+                <button id="refresh" class="btn btn-outline-primary btn-sm">
+                  Refrescar
+                </button>
+                <button id="exportCsv" class="btn btn-dark btn-sm">
+                  Exportar CSV
+                </button>
+              </div>
+            </div>
+
+            <!-- Tabla -->
+            <div class="table-responsive">
+              <table
+                class="table table-striped align-middle text-center"
+                id="usersTable"
+              >
+                <thead class="table-primary">
+                  <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Username</th>
+                    <th>Edad</th>
+                    <th>Género</th>
+                    <th>Empresa</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="6" class="text-muted">Cargando usuarios...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Paginación -->
+            <div
+              class="d-flex justify-content-between align-items-center mt-3 flex-wrap"
+            >
+              <div class="btn-group">
+                <button id="prev" class="btn btn-outline-secondary btn-sm">
+                  &laquo; Anterior
+                </button>
+                <button id="next" class="btn btn-outline-secondary btn-sm">
+                  Siguiente &raquo;
+                </button>
+              </div>
+              <span id="pageInfo" class="text-muted small"
+                >Página 0 / 0</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div id="status" class="text-center mt-3 text-muted small">
+          Cargando datos...
+        </div>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-info text-dark text-center py-3 mt-4">
+      <p class="mb-0">
+        Copyright &copy; 2025 Centro Médico Medical Assistance
+      </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      (() => {
+        const API = "https://dummyjson.com/users";
+        const SAFE_FIELDS = ["id", "firstName", "lastName", "username", "age", "gender", "company"];
+        let users = [];
+        let filtered = [];
+        let page = 1;
+        let perPage = parseInt(document.getElementById("perPage").value, 10);
+
+        const $tbody = document.querySelector("#usersTable tbody");
+        const $search = document.getElementById("search");
+        const $perPage = document.getElementById("perPage");
+        const $prev = document.getElementById("prev");
+        const $next = document.getElementById("next");
+        const $pageInfo = document.getElementById("pageInfo");
+        const $refresh = document.getElementById("refresh");
+        const $exportCsv = document.getElementById("exportCsv");
+        const $status = document.getElementById("status");
+
+        async function loadUsers() {
+          $status.textContent = "Cargando usuarios...";
+          try {
+            const res = await fetch(API + "?limit=100");
+            if (!res.ok) throw new Error("Error al obtener datos");
+            const data = await res.json();
+            users = (data.users || []).map(u => sanitizeUser(u));
+            filtered = users.slice();
+            page = 1;
+            render();
+            $status.textContent = `Cargados ${users.length} usuarios (solo datos no sensibles).`;
+          } catch (err) {
+            console.error(err);
+            $status.textContent = "Error al cargar usuarios: " + err.message;
+          }
+        }
+
+        function sanitizeUser(u) {
+          const out = {};
+          SAFE_FIELDS.forEach(k => {
+            if (k === "company") out.company = u.company?.name || "";
+            else out[k] = u[k] ?? "";
+          });
+          return out;
+        }
+
+        function render() {
+          const q = $search.value.trim().toLowerCase();
+          filtered = users.filter(u =>
+            (u.firstName + " " + u.lastName + " " + u.username).toLowerCase().includes(q)
+          );
+
+          perPage = parseInt($perPage.value, 10);
+          const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
+          if (page > totalPages) page = totalPages;
+          const start = (page - 1) * perPage;
+          const pageItems = filtered.slice(start, start + perPage);
+
+          $tbody.innerHTML = "";
+          if (pageItems.length === 0) {
+            $tbody.innerHTML = '<tr><td colspan="6" class="text-muted">No se encontraron usuarios.</td></tr>';
+          } else {
+            for (const u of pageItems) {
+              const tr = document.createElement("tr");
+              tr.innerHTML = `
+                <td>${u.id}</td>
+                <td>${u.firstName} ${u.lastName}</td>
+                <td>${u.username}</td>
+                <td>${u.age}</td>
+                <td>${u.gender}</td>
+                <td>${u.company}</td>
+              `;
+              $tbody.appendChild(tr);
+            }
+          }
+          $pageInfo.textContent = `Página ${page} / ${totalPages} — ${pageItems.length} de ${filtered.length}`;
+        }
+
+        function debounce(fn, ms = 250) {
+          let t;
+          return (...args) => {
+            clearTimeout(t);
+            t = setTimeout(() => fn(...args), ms);
+          };
+        }
+
+        function exportCsv() {
+          const rows = [["id", "firstName", "lastName", "username", "age", "gender", "company"]];
+          for (const u of filtered)
+            rows.push([u.id, u.firstName, u.lastName, u.username, u.age, u.gender, u.company]);
+          const csv = rows.map(r => r.map(c => `"${String(c).replaceAll('"', '""')}"`).join(",")).join("\n");
+          const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = "usuarios_sin_datos_sensibles.csv";
+          a.click();
+          URL.revokeObjectURL(a.href);
+        }
+
+        $search.addEventListener("input", debounce(() => { page = 1; render(); }));
+        $perPage.addEventListener("change", () => { page = 1; render(); });
+        $prev.addEventListener("click", () => { if (page > 1) { page--; render(); } });
+        $next.addEventListener("click", () => {
+          const total = Math.max(1, Math.ceil(filtered.length / perPage));
+          if (page < total) { page++; render(); }
+        });
+        $refresh.addEventListener("click", loadUsers);
+        $exportCsv.addEventListener("click", exportCsv);
+
+        loadUsers();
+      })();
+    </script>
+  </body>
+</html>
