@@ -410,3 +410,18 @@ input:focus {
   color: white;
   font-weight: 600;
 }
+
+
+body.pagina-obras-sociales {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+body.pagina-obras-sociales .container {
+  flex: 1;
+}
+
+body.pagina-obras-sociales footer {
+  margin-top: auto;
+}
