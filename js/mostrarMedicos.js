@@ -117,9 +117,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   
       const valor = med.valorConsulta != null ? fmtPeso.format(med.valorConsulta) : "—";
 
-    
-      const telefono = med.telefono || "—";
-      const email = med.email || "—";
 
       const col = document.createElement("div");
       col.className = "col-12 col-md-6 col-lg-4";
