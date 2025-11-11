@@ -83,6 +83,10 @@ main{
     background-color: var(--botones);
 }
 
+.imp {
+    background-color: var(--footer-bg);
+}
+
 .navbar-brand {
     font-size: 1.8rem;
 }
