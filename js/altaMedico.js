@@ -191,7 +191,7 @@ function altaMedicos(event) {
     id: obtenerProximoId(),
     nombre: nombreMed,
     especialidad: especialidad,
-    obrasocial: obrasocial,
+    obrasSociales: [obrasocial],
     telefono: telefono,
     email: email,
     imagen: imagenBase64 || ''
