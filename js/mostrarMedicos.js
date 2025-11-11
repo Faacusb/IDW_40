@@ -135,10 +135,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             <p class="mb-1"><strong>Descripción:</strong> ${descripcion}</p>
             <p class="mb-1"><strong>Obras Sociales:</strong> ${obrasTxt}</p>
             <p class="mb-1"><strong>Valor de consulta:</strong> ${valor}</p>
-
-            <hr class="my-3">
-            <p class="mb-1"><strong>Teléfono:</strong> ${telefono}</p>
-            <p class="mb-0"><strong>Email:</strong> ${email}</p>
           </div>
         </div>
       `;
