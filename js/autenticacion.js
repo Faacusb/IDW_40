@@ -13,14 +13,18 @@ const PATHS = {
   [`${BASE_PATH}`]: { public: true },
   [`${BASE_PATH}index.html`]: { public: true },
   [`${BASE_PATH}turnos.html`]: { auth: true },
-  [`${BASE_PATH}dashboard.html`]: { auth: true, roles: ['admin'] }
+  [`${BASE_PATH}dashboard.html`]: { auth: true, roles: ['admin'] },
+  [`${BASE_PATH}medico.html`]: { auth: true, roles: ['admin'] },
+  [`${BASE_PATH}altaMedicos.html`]: { auth: true, roles: ['admin'] },
+  [`${BASE_PATH}gestionMedicos.html`]: { auth: true, roles: ['admin'] },
+  [`${BASE_PATH}editarMedico.html`]: { auth: true, roles: ['admin'] },
 };
 
-function encodeBase64(obj) {
+ function encodeBase64(obj) {
   return btoa(JSON.stringify(obj));
 }
 
-function decodeBase64(str) {
+ function decodeBase64(str) {
   try {
     return JSON.parse(atob(str));
   } catch (e) {
@@ -46,7 +50,7 @@ async function validateAndFetchUserData() {
     return null;
   }
 
-  if (storedDataB64 && storedExp && Date.now() < parseInt(storedExp, 10)) {
+  if (storedDataB64 && storedExp && (Date.now() < parseInt(storedExp, 10))) {
     return decodeBase64(storedDataB64);
   }
 
@@ -85,41 +89,88 @@ function clearSession() {
   sessionStorage.clear();
 }
 
-// --- UI AUXILIARES ---
 function toggleLoadingState(form, isLoading) {
-  const btn = form.querySelector('button[type="submit"]');
+  const submitButton = form.querySelector('button[type="submit"]');
   const spinner = form.querySelector('.spinner-border');
-  if (btn) {
-    btn.disabled = isLoading;
-    if (spinner) spinner.style.display = isLoading ? 'inline-block' : 'none';
+
+  if (submitButton) {
+    submitButton.disabled = isLoading;
+    if (spinner) {
+      spinner.style.display = isLoading ? 'inline-block' : 'none';
+    }
   }
 }
 
 function displayAlert(message, type = 'danger') {
-  const alertId = 'alert-' + Date.now();
-  const html = `
-    <div id="${alertId}" class="alert alert-${type} alert-dismissible fade show fixed-bottom-alert"
-         style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
-         z-index:1050;width:90%;max-width:500px;">
-      <strong>Error de Login:</strong> ${message}
-      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>`;
-  document.body.insertAdjacentHTML('beforeend', html);
+  const alertId = 'customAlert-' + Date.now();
+  const alertHtml = `
+        <div id="${alertId}" class="alert alert-${type} alert-dismissible fade show fixed-bottom-alert" role="alert" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1050; width: 90%; max-width: 500px;">
+            <strong>Error de Login:</strong> ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    `;
+  document.body.insertAdjacentHTML('beforeend', alertHtml);
+
+  const alertElement = document.getElementById(alertId);
+  if (alertElement && typeof materialstyle !== 'undefined' && materialstyle.Alert) {
+    const bsAlert = new materialstyle.Alert(alertElement);
+  }
+
   setTimeout(() => {
-    const el = document.getElementById(alertId);
-    if (el) el.remove();
+    if (alertElement) {
+      const bsAlert = materialstyle.Alert.getOrCreateInstance(alertElement);
+      bsAlert.close();
+    }
   }, 5000);
 }
 
+
 function showAccessDeniedModal(message, redirectToLogin) {
-  alert(message);
-  if (redirectToLogin) {
-    sessionStorage.setItem(STORAGE_KEY_REDIRECT, window.location.pathname + window.location.search);
-    window.location.href = `${BASE_PATH}login.html`;
+  let modalElement = document.getElementById('authModal');
+  if (!modalElement) {
+    const modalHtml = `
+            <div class="modal fade" id="authModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="authModalLabel">Acceso Denegado</h5>
+                  </div>
+                  <div class="modal-body"></div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="authModalConfirmBtn">Aceptar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+        `;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    modalElement = document.getElementById('authModal');
+  }
+
+  document.querySelector('#authModal .modal-body').innerHTML = message;
+
+  if (typeof materialstyle !== 'undefined' && materialstyle.Modal) {
+    const modal = new materialstyle.Modal(modalElement);
+
+    const confirmButton = document.getElementById('authModalConfirmBtn');
+    confirmButton.onclick = () => {
+      modal.hide();
+      if (redirectToLogin) {
+        sessionStorage.setItem(STORAGE_KEY_REDIRECT, window.location.pathname + window.location.search);
+        window.location.href = 'login.html';
+      }
+    };
+
+    modal.show();
+  } else {
+    window.alert(message);
+    if (redirectToLogin) {
+      sessionStorage.setItem(STORAGE_KEY_REDIRECT, window.location.pathname + window.location.search);
+      window.location.href = `${BASE_PATH}login.html`;
+    }
   }
 }
 
-// --- LOGIN ---
 async function handleLogin(e, form) {
   e.preventDefault();
 
@@ -137,8 +188,8 @@ async function handleLogin(e, form) {
       throw new Error(err.message || 'Usuario o contraseña incorrectos.');
     }
 
-    const data = await response.json();
-    sessionStorage.setItem(STORAGE_KEY_TOKEN, data.accessToken);
+    const responseData = await response.json();
+    sessionStorage.setItem(STORAGE_KEY_TOKEN, responseData.accessToken);
 
     const userData = await validateAndFetchUserData();
 
@@ -146,46 +197,45 @@ async function handleLogin(e, form) {
       const redirectPath = sessionStorage.getItem(STORAGE_KEY_REDIRECT);
       sessionStorage.removeItem(STORAGE_KEY_REDIRECT);
 
-    const defaultPath = userData.role === 'admin'
-  ? `${BASE_PATH}dashboard.html`
-  : `${BASE_PATH}turnos.html`;
+      const defaultPath = userData.role === 'admin'
+        ? `${BASE_PATH}dashboard.html`
+        : `${BASE_PATH}turnos.html`;
 
-let targetPath = defaultPath;
+      let targetPath = defaultPath;
 
-if (redirectPath) {
-  // Quita las barras iniciales (ej: "/dashboard.html" → "dashboard.html")
-  let cleanPath = redirectPath.replace(/^\/+/, '');
+      if (redirectPath) {
+        // Quita las barras iniciales (ej: "/dashboard.html" → "dashboard.html")
+        let cleanPath = redirectPath.replace(/^\/+/, '');
 
-  // Si estamos en GitHub Pages y la ruta no tiene el subpath, lo agregamos
-  if (!cleanPath.startsWith('IDW_40/') && BASE_PATH.includes('IDW_40')) {
-    cleanPath = `IDW_40/${cleanPath}`;
-  }
+        // Si estamos en GitHub Pages y la ruta no tiene el subpath, lo agregamos
+        if (!cleanPath.startsWith('IDW_40/') && BASE_PATH.includes('IDW_40')) {
+          cleanPath = `IDW_40/${cleanPath}`;
+        }
 
-  // Reconstruimos la ruta completa
-  const fixedPath = `/${cleanPath}`;
-  const url = new URL(fixedPath, window.location.origin);
-  const pathConfig = PATHS[url.pathname];
+        // Reconstruimos la ruta completa
+        const fixedPath = `/${cleanPath}`;
+        const url = new URL(fixedPath, window.location.origin);
+        const pathConfig = PATHS[url.pathname];
 
-  if (pathConfig && pathConfig.auth) {
-    if (pathConfig.roles && !pathConfig.roles.includes(userData.role)) {
-      targetPath = defaultPath;
+        if (pathConfig && pathConfig.auth) {
+          if (pathConfig.roles && !pathConfig.roles.includes(userData.role)) {
+            targetPath = defaultPath;
+          } else {
+            targetPath = fixedPath;
+          }
+        } else {
+          targetPath = fixedPath;
+        }
+      }
+
+      location.href = targetPath;
     } else {
-      targetPath = fixedPath;
+      throw new Error('Error al recuperar los datos completos del usuario después del login.');
     }
-  } else {
-    targetPath = fixedPath;
-  }
-}
 
-// ✅ Redirige correctamente, tanto local como en GitHub Pages
-location.href = targetPath;
-} else {
-  throw new Error('Error al obtener datos del usuario.');
-}
-
-  } catch (err) {
-    console.error('Error durante login:', err);
-    displayAlert(err.message);
+  } catch (error) {
+    console.error('Error durante login:', error);
+    displayAlert(error.message);
     clearSession();
   } finally {
     toggleLoadingState(form, false);
@@ -204,18 +254,56 @@ document.addEventListener('DOMContentLoaded', async () => {
   const pathConfig = PATHS[path] || { public: true };
   const isLoginPage = path.includes('login.html');
 
-  if (pathConfig.public) return;
+  if (!pathConfig.public) {
+    const user = await validateAndFetchUserData();
 
-  const user = await validateAndFetchUserData();
+    if (!user) {
+      if (isLoginPage) return;
 
-  if (!user) {
-    if (isLoginPage) return;
-    showAccessDeniedModal('Su sesión ha expirado o no ha iniciado sesión.', true);
-    return;
+      showAccessDeniedModal('Su sesión ha expirado o no ha iniciado sesión.', true);
+      return;
+    }
+
+    if (pathConfig.roles && !pathConfig.roles.includes(user.role)) {
+      showAccessDeniedModal(`Acceso denegado. Solo ${pathConfig.roles.join(', ')} pueden acceder.`, false);
+      window.location.href = `${BASE_PATH}turnos.html`;
+      return;
+    }
   }
 
-  if (pathConfig.roles && !pathConfig.roles.includes(user.role)) {
-    showAccessDeniedModal(`Acceso denegado. Solo ${pathConfig.roles.join(', ')} pueden acceder.`, false);
-    window.location.href = `${BASE_PATH}turnos.html`;
+  // Lógica de navegación dinámica (Login/Logout)
+  const token = sessionStorage.getItem(STORAGE_KEY_TOKEN);
+  const navList = document.querySelector('#navbarNav .navbar-nav');
+
+  let user = null;
+  if (token) {
+    user = await validateAndFetchUserData();
+  }
+
+  const existingLogin = navList.querySelector('a[href="login.html"]');
+  if (existingLogin) existingLogin.closest('li').remove();
+
+  const existingLogout = document.getElementById('logoutLink');
+  if (existingLogout) existingLogout.closest('li').remove();
+
+  const liAuth = document.createElement('li');
+  liAuth.classList.add('nav-item');
+
+  if (user) {
+    liAuth.innerHTML = `
+        <a class="nav-link fw-bold text-dark" href="#" id="logoutLink">Cerrar sesión (${user.username})</a>
+      `;
+    navList.appendChild(liAuth);
+
+    document.getElementById('logoutLink').addEventListener('click', (e) => {
+      e.preventDefault();
+      clearSession();
+      window.location.href = 'index.html';
+    });
+  } else {
+    liAuth.innerHTML = `
+        <a class="nav-link fw-bold text-dark ${window.location.pathname.includes("login.html") ? 'active' : ''}" href="login.html">Iniciar sesión</a>
+      `;
+    navList.appendChild(liAuth);
   }
 });
