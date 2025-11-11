@@ -194,7 +194,7 @@ function altaMedicos(event) {
     obrasSociales: [obrasocial],
     telefono: telefono,
     email: email,
-    imagen: imagenBase64 || ''
+    fotografia: imagenBase64 || ''
   };
 
   medicos.push(nuevoMed);
