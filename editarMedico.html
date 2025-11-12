@@ -12,14 +12,17 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <!-- Estilos propios -->
   <link rel="stylesheet" href="CSS/estilos.css" />
+  <link rel="icon" type="image/png" href="img/logo-mini.png" />
 </head>
 
 <body>
   <header>
     <nav class="navbar navbar-expand-lg border-bottom border-dark p-0">
       <div class="container-fluid flex-column flex-lg-column p-0">
-        <div class="w-100 bg-primary text-white px-3 py-2 border-bottom border-dark d-flex justify-content-between align-items-center">
-          <a class="navbar-brand fw-bold text-white m-0 mx-auto d-none d-lg-block" href="index.html">Medical Assistance</a>
+        <div
+          class="w-100 bg-primary text-white px-3 py-2 border-bottom border-dark d-flex justify-content-between align-items-center">
+          <a class="navbar-brand fw-bold text-white m-0 mx-auto d-none d-lg-block" href="index.html">Medical
+            Assistance</a>
           <a class="navbar-brand fw-bold text-white m-0 d-lg-none" href="dashboard.html">Medical Assistance</a>
           <button class="navbar-toggler menu-principal" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,6 +37,9 @@
             <li class="nav-item">
               <a class="nav-link fw-bold text-dark" href="gestionMedicos.html">Listado de Medicos</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link fw-bold text-dark" href="usuarios.html">Usuarios</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -47,7 +53,8 @@
           <form id="editarMedicoFormulario" autocomplete="off" novalidate>
             <div class="form-floating-with-icon mb-3">
               <div class="form-floating">
-                <input type="text" class="form-control" id="nombre_edit" required placeholder="Ingrese nombre completo" />
+                <input type="text" class="form-control" id="nombre_edit" required
+                  placeholder="Ingrese nombre completo" />
                 <label for="nombre_edit">Nombre Completo:</label>
               </div>
               <span class="prepend">
