@@ -157,15 +157,12 @@ async function handleLogin(e, form) {
 let targetPath = defaultPath;
 
 if (redirectPath) {
-  // Quita las barras iniciales (ej: "/usuarios.html" → "usuarios.html")
   let cleanPath = redirectPath.replace(/^\/+/, '');
 
-  // Si estamos en GitHub Pages y la ruta no tiene el subpath, lo agregamos
   if (!cleanPath.startsWith('IDW_40/') && BASE_PATH.includes('IDW_40')) {
     cleanPath = `IDW_40/${cleanPath}`;
   }
 
-  // Reconstruimos la ruta completa
   const fixedPath = `/${cleanPath}`;
   const url = new URL(fixedPath, window.location.origin);
   const pathConfig = PATHS[url.pathname];
@@ -181,7 +178,6 @@ if (redirectPath) {
   }
 }
 
-// ✅ Redirige correctamente, tanto local como en GitHub Pages
 location.href = targetPath;
 } else {
   throw new Error('Error al obtener datos del usuario.');

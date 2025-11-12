@@ -109,7 +109,6 @@
                 </div>
               </div>
             </div>
-
             <div class="col-12 col-lg-4">
               <div class="card h-100 text-center">
                 <img
@@ -123,7 +122,6 @@
                 </div>
               </div>
             </div>
-
             <div class="col-12 col-lg-4">
               <div class="card h-100 text-center">
                 <img
@@ -150,7 +148,6 @@
           </div>
         </div>
       </section>
-
       <section class="py-5">
         <div class="container">
           <h2 class="text-center mb-5">
@@ -197,8 +194,7 @@
     document.addEventListener('DOMContentLoaded', async () => {
       const token = sessionStorage.getItem('accessToken');
       const navList = document.querySelector('#navbarNav .navbar-nav');
-      
-      // Verificar si hay sesión activa, si es asi muestra el logout sino muestra login
+
       let user = null;
       if (token) {
         user = await validateAndFetchUserData();

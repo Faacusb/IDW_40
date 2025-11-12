@@ -129,123 +129,152 @@
     <script src="https://cdn.jsdelivr.net/npm/@materialstyle/materialstyle@3.1.1/dist/js/materialstyle.min.js"></script>
     <!-- Script funcional -->
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const tabla = document.getElementById('tablaObrasSociales');
-        const btnAgregar = document.getElementById('btnAgregar');
-        const idInput = document.getElementById('idObraSocial');
-        const nombreInput = document.getElementById('nombreObraSocial');
-        const tituloModal = document.getElementById('tituloModal');
-        const guardarBtn = document.getElementById('guardarBtn');
+document.addEventListener('DOMContentLoaded', () => {
+  const tabla = document.getElementById('tablaObrasSociales');
+  const btnAgregar = document.getElementById('btnAgregar');
+  const idInput = document.getElementById('idObraSocial');
+  const nombreInput = document.getElementById('nombreObraSocial');
+  const tituloModal = document.getElementById('tituloModal');
+  const guardarBtn = document.getElementById('guardarBtn');
 
-        let modal;
-        try {
-          modal = new bootstrap.Modal(document.getElementById('modalObraSocial'));
-        } catch (e) {
-          console.error('No se pudo inicializar el modal:', e);
-        }
+  let modal;
+  try {
+    modal = new bootstrap.Modal(document.getElementById('modalObraSocial'));
+  } catch (e) {
+    console.error('No se pudo inicializar el modal:', e);
+  }
 
-        function cargarLocalStorage() {
-          const raw = localStorage.getItem('obrasSociales');
-          if (!raw) return [];
-          try {
-            const parsed = JSON.parse(raw);
-            return Array.isArray(parsed) ? parsed : [];
-          } catch {
-            return [];
-          }
-        }
+  function cargarLocalStorage() {
+    const raw = localStorage.getItem('obrasSociales');
+    if (!raw) return [];
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
 
-        let obrasSociales = cargarLocalStorage();
+  function cargarEliminadas() {
+    const raw = localStorage.getItem('obrasSocialesEliminadas');
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
 
-        function renderizarTabla() {
-          tabla.innerHTML = '';
-          [...obrasSociales].sort((a, b) => a.id - b.id).forEach(obra => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td>${obra.id}</td>
-              <td>${obra.nombre}</td>
-              <td>
-                <button class="btn btn-sm btn-warning me-2">Editar</button>
-                <button class="btn btn-sm btn-danger">Eliminar</button>
-              </td>
-            `;
-            tr.querySelector('.btn-warning').addEventListener('click', () => abrirEditar(obra.id));
-            tr.querySelector('.btn-danger').addEventListener('click', () => eliminarObraSocial(obra.id));
-            tabla.appendChild(tr);
-          });
-        }
+  let obrasSociales = cargarLocalStorage();
+  let eliminadas = cargarEliminadas();
 
-        function sugerirId() {
-          return obrasSociales.length ? Math.max(...obrasSociales.map(e => e.id)) + 1 : 1;
-        }
+  function renderizarTabla() {
+    tabla.innerHTML = '';
+    [...obrasSociales].sort((a, b) => a.id - b.id).forEach(obra => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${obra.id}</td>
+        <td>${obra.nombre}</td>
+        <td>
+          <button class="btn btn-sm btn-warning me-2">Editar</button>
+          <button class="btn btn-sm btn-danger">Eliminar</button>
+        </td>
+      `;
+      tr.querySelector('.btn-warning').addEventListener('click', () => abrirEditar(obra.id));
+      tr.querySelector('.btn-danger').addEventListener('click', () => eliminarObraSocial(obra.id));
+      tabla.appendChild(tr);
+    });
+  }
 
-        function abrirNueva() {
-          idInput.value = sugerirId();
-          nombreInput.value = '';
-          tituloModal.textContent = 'Agregar Obra Social';
-          modal.show();
-          idInput.focus();
-        }
+  function sugerirId() {
+  const todas = [
+    ...obrasSociales.map(e => e.id),
+    ...(JSON.parse(localStorage.getItem('obrasSocialesEliminadas')) || []).map(e => Number(e.id ?? e))
+  ];
+  return todas.length ? Math.max(...todas) + 1 : 1;
+}
 
-        function abrirEditar(id) {
-          const obra = obrasSociales.find(e => e.id === id);
-          if (!obra) return alert('Obra Social no encontrada.');
-          idInput.value = obra.id;
-          nombreInput.value = obra.nombre;
-          tituloModal.textContent = 'Editar Obra Social';
-          modal.show();
-          nombreInput.focus();
-        }
 
-        function guardarObraSocial() {
-          const id = parseInt(idInput.value);
-          const nombre = nombreInput.value.trim();
-          if (!Number.isInteger(id) || id < 1) return alert('ID inválido.');
-          if (!nombre) return alert('El nombre no puede estar vacío.');
+  function abrirNueva() {
+    idInput.value = sugerirId();
+    nombreInput.value = '';
+    tituloModal.textContent = 'Agregar Obra Social';
+    modal.show();
+    idInput.focus();
+  }
 
-          const index = obrasSociales.findIndex(e => e.id === id);
-          if (index !== -1) {
-            const confirmar = confirm(`El ID ${id} ya existe. ¿Desea sobrescribirlo?`);
-            if (!confirmar) return;
-            obrasSociales[index] = { id, nombre };
-          } else {
-            obrasSociales.push({ id, nombre });
-          }
-          salvarYRefrescar();
-          modal.hide();
-        }
+  function abrirEditar(id) {
+    const obra = obrasSociales.find(e => e.id === id);
+    if (!obra) return alert('Obra Social no encontrada.');
+    idInput.value = obra.id;
+    nombreInput.value = obra.nombre;
+    tituloModal.textContent = 'Editar Obra Social';
+    modal.show();
+    nombreInput.focus();
+  }
 
-        function eliminarObraSocial(id) {
-          const obra = obrasSociales.find(e => e.id === id);
-          if (!obra) return;
-          if (!confirm(`¿Eliminar "${obra.nombre}" (ID ${obra.id})?`)) return;
-          obrasSociales = obrasSociales.filter(e => e.id !== id);
-          salvarYRefrescar();
-        }
+  function guardarObraSocial() {
+    const id = parseInt(idInput.value);
+    const nombre = nombreInput.value.trim();
+    if (!Number.isInteger(id) || id < 1) return alert('ID inválido.');
+    if (!nombre) return alert('El nombre no puede estar vacío.');
 
-        function salvarYRefrescar() {
+    const index = obrasSociales.findIndex(e => e.id === id);
+    if (index !== -1) {
+      const confirmar = confirm(`El ID ${id} ya existe. ¿Desea sobrescribirlo?`);
+      if (!confirmar) return;
+      obrasSociales[index] = { id, nombre };
+    } else {
+      obrasSociales.push({ id, nombre });
+    }
+
+    eliminadas = eliminadas.filter(e => Number(e.id ?? e) !== id);
+
+    salvarYRefrescar();
+    modal.hide();
+  }
+
+  function eliminarObraSocial(id) {
+    const obra = obrasSociales.find(e => e.id === id);
+    if (!obra) return;
+    if (!confirm(`¿Eliminar "${obra.nombre}" (ID ${obra.id})?`)) return;
+
+    if (!eliminadas.some(e => Number(e.id ?? e) === id)) {
+      eliminadas.push(id);
+    }
+
+    obrasSociales = obrasSociales.filter(e => e.id !== id);
+
+    salvarYRefrescar();
+  }
+
+  function salvarYRefrescar() {
+    localStorage.setItem('obrasSociales', JSON.stringify(obrasSociales));
+    localStorage.setItem('obrasSocialesEliminadas', JSON.stringify(eliminadas));
+    renderizarTabla();
+  }
+
+  btnAgregar.addEventListener('click', abrirNueva);
+  guardarBtn.addEventListener('click', guardarObraSocial);
+
+  if (!obrasSociales.length && !eliminadas.length) {
+
+    fetch('data/obrasSociales.json')
+      .then(r => r.ok ? r.json() : [])
+      .then(data => {
+        if (Array.isArray(data)) {
+          obrasSociales = data.map(d => ({ id: +d.id, nombre: String(d.nombre) }));
           localStorage.setItem('obrasSociales', JSON.stringify(obrasSociales));
-          renderizarTabla();
         }
+        renderizarTabla();
+      })
+      .catch(renderizarTabla);
+  } else {
+    renderizarTabla();
+  }
 
-        btnAgregar.addEventListener('click', abrirNueva);
-        guardarBtn.addEventListener('click', guardarObraSocial);
+});
+</script>
 
-        if (!obrasSociales.length) {
-          fetch('obras_sociales.json')
-            .then(r => r.ok ? r.json() : [])
-            .then(data => {
-              if (Array.isArray(data)) {
-                obrasSociales = data.map(d => ({ id: +d.id, nombre: String(d.nombre) }));
-                localStorage.setItem('obrasSociales', JSON.stringify(obrasSociales));
-              }
-              renderizarTabla();
-            })
-            .catch(renderizarTabla);
-        } else {
-          renderizarTabla();
-        }
-      });
-    </script>
   </body>
 </html>

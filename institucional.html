@@ -38,17 +38,13 @@
             </div>
         </nav>
     </header>
-
     <main class="py-5">
         <section class="container mb-5 py-4">
             <h1 class="text-center text-primary fw-bold mb-5">Nuestra Institución</h1>
-            
             <div class="row align-items-center g-5">
-                
                 <div class="col-12 col-md-6">
                     <img class="img-fluid rounded-3 shadow" src="img/medico _saludando.jpg" alt="medico saludando ">
                 </div>
-                
                 <div class="col-12 col-md-6"> 
                     <div>
                         <h2 class="text-primary mb-3 fw-bold">Nuestra Misión</h2>
@@ -63,37 +59,30 @@
                 </div> 
             </div>
         </section>
-
         <section class="container py-5 bg-light rounded shadow-sm">
             <h3 class="text-center mb-4 text-secondary fw-bold">Envíanos un mensaje</h3>
-            
             <form action="#" method="post" class="mx-auto" style="max-width: 600px;">
                 <div class="mb-3">
                     <label for="nombre" class="form-label fw-bold">Nombre:</label>
                     <input type="text" id="nombre" name="nombre" class="form-control" required>
                 </div>
-                
                 <div class="mb-3">
                     <label for="email" class="form-label fw-bold">Email:</label>
                     <input type="email" id="email" name="email" class="form-control" required>
                 </div>
-                
                 <div class="mb-3">
                     <label for="mensaje" class="form-label fw-bold">Mensaje:</label>
                     <textarea id="mensaje" name="mensaje" class="form-control" rows="4" required></textarea>
                 </div>
-                
                 <div class="d-grid">
                     <button type="submit" class="btn btn-primary btn-lg">Enviar</button>
                 </div>
             </form>
         </section>
     </main>
-    
     <footer class="bg-info text-dark text-center py-3">
         <p class="mb-0">Copyright &copy; 2025 Centro Medico Medical Assistance</p>
     </footer>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/autenticacion.js"></script>
     <script>
@@ -101,7 +90,6 @@
       const token = sessionStorage.getItem('accessToken');
       const navList = document.querySelector('#navbarNav .navbar-nav');
       
-      // Verificar si hay sesión activa, si es asi muestra el logout sino muestra login
       let user = null;
       if (token) {
         user = await validateAndFetchUserData();

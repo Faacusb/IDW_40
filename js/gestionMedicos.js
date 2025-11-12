@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+
   const [medicosBase, especialidades, obrasSociales] = await Promise.all([
     loadJSON("data/medicos.json"),
     loadJSON("data/especialidades.json"),
@@ -18,9 +19,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const medicosLocales = JSON.parse(localStorage.getItem("medicos")) || [];
 
-  const medicos = [...medicosBase];
-  medicosLocales.forEach((m) => {
-    if (!medicos.some((x) => x.id === m.id)) medicos.push(m);
+  const medicos = medicosBase.map((m) => {
+    const local = medicosLocales.find((ml) => ml.id === m.id);
+    return local ? local : m;
+  });
+
+  medicosLocales.forEach((ml) => {
+    if (!medicos.some((m) => m.id === ml.id)) {
+      medicos.push(ml);
+    }
   });
 
   const mapEspecialidades = {};
@@ -55,6 +62,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       );
     });
   }
+
+  const eliminados = JSON.parse(localStorage.getItem("medicosEliminados")) || [];
+  const medicosFiltradosFinal = medicosFiltrados.filter(
+    (m) => !eliminados.includes(m.id)
+  );
 
   function renderTabla(medicos) {
     const tbody =
@@ -93,15 +105,66 @@ document.addEventListener("DOMContentLoaded", async () => {
         <td>${telefono}</td>
         <td>${email}</td>
         <td class="text-center">
-          <button class="btn btn-info btn-sm">Mostrar</button>
-          <button class="btn btn-warning btn-sm">Editar</button>
-          <button class="btn btn-danger btn-sm">Eliminar</button>
+          <button class="btn btn-warning btn-sm editar-btn" data-id="${m.id}">
+            <i class="bi bi-pencil-square"></i> Editar
+          </button>
+          <button class="btn btn-danger btn-sm eliminar-btn" data-id="${m.id}">
+            <i class="bi bi-trash3"></i> Eliminar
+          </button>
         </td>
       `;
       tbody.appendChild(row);
     });
   }
 
-  renderTabla(medicosFiltrados);
-});
+  setTimeout(() => renderTabla(medicosFiltradosFinal), 50);
 
+  document.addEventListener("click", (e) => {
+    const btnEditar = e.target.closest(".editar-btn");
+    const btnEliminar = e.target.closest(".eliminar-btn");
+
+    if (btnEliminar) {
+      const id = parseInt(btnEliminar.dataset.id);
+      eliminarMedico(id);
+    }
+
+    if (btnEditar) {
+      const id = parseInt(btnEditar.dataset.id);
+      editarMedico(id);
+    }
+  });
+
+  function eliminarMedico(id) {
+    if (!confirm("¿Seguro que querés eliminar este médico?")) return;
+
+    const eliminados = JSON.parse(localStorage.getItem("medicosEliminados")) || [];
+    if (!eliminados.includes(id)) eliminados.push(id);
+    localStorage.setItem("medicosEliminados", JSON.stringify(eliminados));
+
+    let medicos = JSON.parse(localStorage.getItem("medicos")) || [];
+    medicos = medicos.filter((m) => m.id !== id);
+    localStorage.setItem("medicos", JSON.stringify(medicos));
+
+    const fila = document.querySelector(`button[data-id="${id}"]`)?.closest("tr");
+    if (fila) fila.remove();
+
+    alert("✅ Médico eliminado correctamente.");
+  }
+
+  function editarMedico(id) {
+
+    const medicosLS = JSON.parse(localStorage.getItem("medicos")) || [];
+    const medico =
+      medicosLS.find((m) => m.id === id) ||
+      medicos.find((m) => m.id === id);
+
+    if (!medico) {
+      alert("No se encontró el médico.");
+      return;
+    }
+
+    localStorage.setItem("medicoAEditar", JSON.stringify(medico));
+
+    window.location.href = "altaMedicos.html";
+  }
+});

@@ -23,9 +23,9 @@
     window.location.href = 'gestionMedicos.html';
   }
 
-  // poblar campos
+
   inputNombre.value = medico.nombre || '';
-  // set select value; si la opción no existe, crearla para que se muestre
+
   function setSelectValue(selectEl, val) {
     if (!selectEl) return;
     if (!val) { selectEl.value = ''; return; }
@@ -45,7 +45,6 @@
   inputEmail.value = medico.email || '';
 
   if (medico.imagen) {
-    // mostrar preview con boton de cerrar (similar a altaMedico)
     muestraImagen.innerHTML = '';
     const li = document.createElement('li');
     li.className = 'list-group-item d-flex align-items-center gap-3 preview-list';
@@ -59,7 +58,7 @@
     infoDiv.className = 'flex-grow-1 preview-info';
     const nombreP = document.createElement('p');
     nombreP.className = 'fw-light mb-0';
-    // mostrar nombre de archivo si la ruta lo contiene, sino mostrar 'Imagen'
+
     try{
       const parts = String(medico.imagen).split('/');
       nombreP.textContent = parts[parts.length-1] || 'Imagen';
@@ -82,7 +81,6 @@
     imagenBase64 = medico.imagen;
   }
 
-  // manejar cambio de imagen
   inputImagen?.addEventListener('change', function(e){
     if (!e.target.files || e.target.files.length === 0) return;
     const archivo = e.target.files[0];
@@ -139,13 +137,12 @@
 
   form.addEventListener('submit', function(e){
     e.preventDefault();
-    // validar
+
     if (!form.checkValidity()) {
       form.classList.add('was-validated');
       return;
     }
 
-    // actualizar el medico en localStorage
     for (let i=0;i<medicos.length;i++){
       if (String(medicos[i].id) === String(id)){
         medicos[i].nombre = inputNombre.value.trim();
