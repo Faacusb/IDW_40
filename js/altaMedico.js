@@ -1,4 +1,3 @@
-const altaMedicoFormulario = document.getElementById("altaMedicoFormulario");
 const inputNombre = document.getElementById("nombre");
 const inputApellido = document.getElementById("apellido");
 const inputEspecialidad = document.getElementById("especialidad");
@@ -10,6 +9,176 @@ let imagenBase64 = "";
 const inputMatricula = document.getElementById("matriculaProfesional");
 const inputDescripcion = document.getElementById("descripcion");
 const inputValorConsulta = document.getElementById("valorConsulta");
+
+// 🟢 Esperar al DOM antes de ejecutar todo
+document.addEventListener("DOMContentLoaded", async () => {
+  await cargarEspecialidades();
+  await cargarObrasSociales();
+  cargarMedicoEditar(); // 👈 modo edición si aplica
+});
+
+async function cargarEspecialidades() {
+  try {
+    // 🚫 Evitar cache del navegador (clave en GitHub Pages o al hacer F5)
+    const res = await fetch("data/especialidades.json?v=" + Date.now(), {
+      cache: "no-store",
+    });
+    const base = res.ok ? await res.json() : [];
+
+    const locales = JSON.parse(localStorage.getItem("especialidades")) || [];
+    const eliminadas = (
+      JSON.parse(localStorage.getItem("especialidadesEliminadas")) || []
+    ).map(Number);
+
+    // 🔹 Combinar JSON base + locales, filtrando eliminadas y duplicados
+    let combinadas = base.filter((e) => !eliminadas.includes(Number(e.id)));
+    locales.forEach((esp) => {
+      if (!combinadas.some((e) => Number(e.id) === Number(esp.id))) {
+        combinadas.push(esp);
+      }
+    });
+
+    // 🔹 Renderizar el select
+    const select = document.getElementById("especialidad");
+    if (!select) return;
+    select.innerHTML = `<option value="">Seleccione Especialidad</option>`;
+
+    combinadas
+      .sort((a, b) => a.id - b.id)
+      .forEach((esp) => {
+        const opt = document.createElement("option");
+        opt.value = String(esp.id);
+        opt.textContent = esp.nombre;
+        select.appendChild(opt);
+      });
+
+    // 🔄 🔹 REFRESCAR el estilo visual del select (Material Style)
+    if (window.mdc && mdc.autoInit) {
+      mdc.autoInit();
+    }
+  } catch (err) {
+    console.error("❌ Error general al cargar especialidades:", err);
+  }
+}
+
+// 🔹 Cargar obras sociales (filtrando eliminadas)
+async function cargarObrasSociales() {
+  try {
+    const res = await fetch("data/obrasSociales.json?v=" + Date.now(), {
+      cache: "no-store",
+    });
+    const base = res.ok ? await res.json() : [];
+
+    // ✅ Locales y eliminadas desde localStorage
+    const locales = JSON.parse(localStorage.getItem("obrasSociales")) || [];
+    const eliminadas =
+      JSON.parse(localStorage.getItem("obrasSocialesEliminadas")) || [];
+
+    // 🧠 Asegurar que siempre sean números, incluso si se guardaron como objetos
+    const eliminadasIds = eliminadas.map((e) =>
+      typeof e === "object" ? Number(e.id) : Number(e)
+    );
+
+    // 🔹 Combinar JSON base + locales filtrando eliminadas y duplicados
+    let combinadas = base.filter((o) => !eliminadasIds.includes(Number(o.id)));
+    locales.forEach((o) => {
+      if (
+        !eliminadasIds.includes(Number(o.id)) &&
+        !combinadas.some((x) => Number(x.id) === Number(o.id))
+      ) {
+        combinadas.push(o);
+      }
+    });
+
+    // 🔹 Renderizar
+    const contenedor = document.getElementById("obrasSocialesChecks");
+    if (!contenedor) return;
+
+    contenedor.innerHTML = "";
+    combinadas.forEach((obra) => {
+      const div = document.createElement("div");
+      div.classList.add("form-check");
+      div.innerHTML = `
+        <input class="form-check-input" type="checkbox" value="${obra.id}" id="obra_${obra.id}">
+        <label class="form-check-label" for="obra_${obra.id}">${obra.nombre}</label>
+      `;
+      contenedor.appendChild(div);
+    });
+  } catch (err) {
+    console.error("Error al cargar obras sociales:", err);
+  }
+}
+
+function cargarMedicoEditar() {
+  const medicoEditar = JSON.parse(localStorage.getItem("medicoAEditar"));
+  if (!medicoEditar) return;
+
+  inputNombre.value = medicoEditar.nombre || "";
+  inputApellido.value = medicoEditar.apellido || "";
+  inputEspecialidad.value = medicoEditar.especialidad || "";
+  inputTelefono.value = medicoEditar.telefono || "";
+  inputEmail.value = medicoEditar.email || "";
+  inputMatricula.value = medicoEditar.matriculaProfesional || "";
+  inputDescripcion.value = medicoEditar.descripcion || "";
+  inputValorConsulta.value = medicoEditar.valorConsulta || "";
+  imagenBase64 = medicoEditar.fotografia || "";
+
+  if (Array.isArray(medicoEditar.obrasSociales)) {
+    medicoEditar.obrasSociales.forEach((id) => {
+      const checkbox = document.querySelector(
+        `#obrasSocialesChecks input[value="${id}"]`
+      );
+      if (checkbox) checkbox.checked = true;
+    });
+  }
+
+  if (imagenBase64) {
+    muestraImagen.innerHTML = `
+      <li class="list-group-item d-flex align-items-center gap-3 preview-list">
+        <img src="${imagenBase64}" alt="Foto médico" class="preview-thumb rounded" 
+        style="width:64px; height:64px; object-fit:cover;">
+      </li>`;
+    muestraImagen.style.display = "block";
+  }
+
+  const btnSubmit = altaMedicoFormulario.querySelector('button[type="submit"]');
+  if (btnSubmit)
+    btnSubmit.innerHTML = `<i class="bi bi-pencil-square m-1"></i> Actualizar Médico`;
+
+  altaMedicoFormulario.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    let medicos = JSON.parse(localStorage.getItem("medicos")) || [];
+    const index = medicos.findIndex((m) => m.id === medicoEditar.id);
+
+    if (index !== -1) {
+      medicos[index] = {
+        ...medicoEditar,
+        nombre: inputNombre.value.trim(),
+        apellido: inputApellido.value.trim(),
+        especialidad: inputEspecialidad.value.trim(),
+        telefono: inputTelefono.value.trim(),
+        email: inputEmail.value.trim(),
+        matriculaProfesional: parseInt(inputMatricula.value) || 0,
+        descripcion: inputDescripcion.value.trim(),
+        valorConsulta: parseFloat(inputValorConsulta.value) || 0,
+        obrasSociales: Array.from(
+          document.querySelectorAll(
+            '#obrasSocialesChecks input[type="checkbox"]:checked'
+          )
+        ).map((cb) => parseInt(cb.value)),
+        fotografia: imagenBase64 || "",
+      };
+
+      localStorage.setItem("medicos", JSON.stringify(medicos));
+      localStorage.removeItem("medicoAEditar");
+      alert("Médico actualizado correctamente.");
+      window.location.href = "gestionMedicos.html";
+    } else {
+      alert("No se encontró el médico a editar.");
+    }
+  });
+}
 
 inputImagen.addEventListener("change", function (e) {
   if (!e.target.files || e.target.files.length === 0) {
@@ -25,7 +194,6 @@ inputImagen.addEventListener("change", function (e) {
 
     lector.onload = function (evt) {
       imagenBase64 = evt.target.result;
-
       muestraImagen.innerHTML = "";
       muestraImagen.style.display = "block";
 
@@ -35,97 +203,58 @@ inputImagen.addEventListener("change", function (e) {
 
       const img = document.createElement("img");
       img.src = imagenBase64;
-      img.className = "preview-thumb";
+      img.className = "preview-thumb rounded";
       img.alt = archivo.name;
       img.style.width = "64px";
       img.style.height = "64px";
       img.style.objectFit = "cover";
-      img.classList.add("rounded");
 
       const infoDiv = document.createElement("div");
       infoDiv.className = "flex-grow-1 preview-info";
-
-      const nombreP = document.createElement("p");
-      nombreP.className = "fw-light";
-      nombreP.textContent = archivo.name;
-
-      const tamanoP = document.createElement("p");
-      tamanoP.className = "mb-0 text-muted small";
-      const bytes = archivo.size;
-      let tamañoLegible = "";
-      if (bytes < 1024) {
-        tamañoLegible = bytes + " B";
-      } else if (bytes < 1024 * 1024) {
-        tamañoLegible = (bytes / 1024).toFixed(1) + " KB";
-      } else {
-        tamañoLegible = (bytes / (1024 * 1024)).toFixed(1) + " MB";
-      }
-      tamanoP.textContent = tamañoLegible;
-
-      infoDiv.appendChild(nombreP);
-      infoDiv.appendChild(tamanoP);
+      infoDiv.innerHTML = `
+        <p class="fw-light mb-0">${archivo.name}</p>
+        <p class="text-muted small mb-0">${(archivo.size / 1024).toFixed(
+          1
+        )} KB</p>
+      `;
 
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "btn-close";
-      btn.addEventListener("click", function () {
+      btn.addEventListener("click", () => {
         inputImagen.value = "";
         imagenBase64 = "";
         muestraImagen.innerHTML = "";
         muestraImagen.style.display = "none";
-        const backdrop = document.querySelector(".img-popover-backdrop");
-        if (backdrop) backdrop.remove();
       });
 
-      img.addEventListener("click", function () {
+      img.addEventListener("click", () => {
         if (!imagenBase64) return;
-
-        if (document.querySelector(".img-popover-backdrop")) return;
-
         const backdrop = document.createElement("div");
         backdrop.className = "img-popover-backdrop";
-
         const card = document.createElement("div");
         card.className = "img-popover-card";
 
         const bigImg = document.createElement("img");
         bigImg.src = imagenBase64;
-        bigImg.alt = archivo.name;
-
-        const actions = document.createElement("div");
-        actions.className = "img-popover-actions";
-
         const closeBtn = document.createElement("button");
-        closeBtn.type = "button";
-        closeBtn.className = "btn btn-sm btn-outline-secondary";
         closeBtn.textContent = "Cerrar";
-        closeBtn.addEventListener("click", function () {
-          backdrop.remove();
-        });
+        closeBtn.className = "btn btn-sm btn-outline-secondary";
+        closeBtn.addEventListener("click", () => backdrop.remove());
 
-        actions.appendChild(closeBtn);
         card.appendChild(bigImg);
-        card.appendChild(actions);
+        card.appendChild(closeBtn);
         backdrop.appendChild(card);
-
-        backdrop.addEventListener("click", function (ev) {
+        backdrop.addEventListener("click", (ev) => {
           if (ev.target === backdrop) backdrop.remove();
         });
-
         document.body.appendChild(backdrop);
       });
 
       li.appendChild(img);
       li.appendChild(infoDiv);
       li.appendChild(btn);
-
       muestraImagen.appendChild(li);
-    };
-
-    lector.onerror = function () {
-      imagenBase64 = "";
-      muestraImagen.innerHTML = "";
-      muestraImagen.style.display = "none";
     };
 
     lector.readAsDataURL(archivo);
@@ -134,19 +263,9 @@ inputImagen.addEventListener("change", function (e) {
 
 function obtenerProximoId() {
   let medicos = JSON.parse(localStorage.getItem("medicos")) || [];
-  if (medicos.length === 0) {
-    return 1;
-  }
-  let ultimoId = 0;
-  for (let i = 0; i < medicos.length; i++) {
-    if (medicos[i].id > ultimoId) {
-      ultimoId = medicos[i].id;
-    }
-  }
-  return ultimoId + 1;
+  if (medicos.length === 0) return 1;
+  return Math.max(...medicos.map((m) => m.id)) + 1;
 }
-
-let medicos = JSON.parse(localStorage.getItem("medicos")) || [];
 
 function altaMedicos(event) {
   event.preventDefault();
@@ -160,46 +279,15 @@ function altaMedicos(event) {
   let descripcion = inputDescripcion.value.trim();
   let valorConsulta = parseFloat(inputValorConsulta.value) || 0;
 
-  const obrasSeleccionadas = Array.from(
-    document.querySelectorAll(
-      '#obrasSocialesChecks input[type="checkbox"]:checked'
-    )
-  ).map((cb) => parseInt(cb.value)); // convierte los valores "1","2","3" en números
+  const contenedor = document.getElementById("obrasSocialesChecks");
+  let obrasSeleccionadas = [];
 
-  const obrasError = document.getElementById("obrasError");
-  if (obrasSeleccionadas.length === 0) {
-    obrasError.classList.remove("d-none");
-    obrasError.classList.add("d-block");
-  } else {
-    obrasError.classList.add("d-none");
-    obrasError.classList.remove("d-block");
+  if (contenedor) {
+    const checks = contenedor.querySelectorAll("input[type='checkbox']");
+    checks.forEach((cb) => {
+      if (cb.checked) obrasSeleccionadas.push(parseInt(cb.value));
+    });
   }
-
-  if (!altaMedicoFormulario.checkValidity()) {
-    event.preventDefault();
-    event.stopPropagation();
-  }
-
-  altaMedicoFormulario.classList.add("was-validated");
-
-  var formFloating = altaMedicoFormulario.querySelectorAll(
-    ".form-floating-with-icon"
-  );
-
-  Array.prototype.slice.call(formFloating).forEach(function (formFloating) {
-    var input = formFloating.querySelector(".form-control, .form-select");
-
-    if (input) {
-      toggleValidityClasses(input, formFloating);
-
-      input.addEventListener("keyup", function () {
-        toggleValidityClasses(input, formFloating);
-      });
-      input.addEventListener("change", function () {
-        toggleValidityClasses(input, formFloating);
-      });
-    }
-  });
 
   if (
     !nombreMed ||
@@ -214,6 +302,8 @@ function altaMedicos(event) {
     );
     return;
   }
+
+  let medicos = JSON.parse(localStorage.getItem("medicos")) || [];
 
   const nuevoMed = {
     id: obtenerProximoId(),
@@ -232,50 +322,12 @@ function altaMedicos(event) {
   medicos.push(nuevoMed);
   localStorage.setItem("medicos", JSON.stringify(medicos));
 
-  alert(
-    `Medico registrado:\n\n` +
-      `Nombre: ${nombreMed} ${apellido}\n` +
-      `Especialidad: ${especialidad}\n` +
-      `Obras Sociales: ${obrasSeleccionadas.join(", ")}\n` +
-      `Teléfono: ${telefono}\n` +
-      `Email: ${email}\n`
-  );
+  alert("Médico registrado correctamente.");
+
   altaMedicoFormulario.reset();
-  altaMedicoFormulario.classList.remove("was-validated");
   muestraImagen.innerHTML = "";
   muestraImagen.style.display = "none";
   imagenBase64 = "";
 }
-
-altaMedicoFormulario.addEventListener("reset", function () {
-  setTimeout(function () {
-    imagenBase64 = "";
-    muestraImagen.innerHTML = "";
-    muestraImagen.style.display = "none";
-    document.getElementById("obrasError").classList.add("d-none");
-    document.getElementById("obrasError").classList.remove("d-block");
-  }, 0);
-});
-
-
-document
-  .querySelectorAll('#obrasSocialesChecks input[type="checkbox"]')
-  .forEach((checkbox) => {
-    checkbox.addEventListener("change", () => {
-      const seleccionadas = document.querySelectorAll(
-        '#obrasSocialesChecks input[type="checkbox"]:checked'
-      );
-      const mensajeError = document.getElementById("obrasError");
-
-      if (seleccionadas.length > 0) {
-        mensajeError.classList.add("d-none");
-        mensajeError.classList.remove("d-block");
-      } else {
-        mensajeError.classList.remove("d-none");
-        mensajeError.classList.add("d-block");
-      }
-    });
-  });
-
 
 altaMedicoFormulario.addEventListener("submit", altaMedicos);

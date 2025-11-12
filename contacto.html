@@ -98,7 +98,6 @@
       const token = sessionStorage.getItem('accessToken');
       const navList = document.querySelector('#navbarNav .navbar-nav');
       
-      // Verificar si hay sesión activa, si es asi muestra el logout sino muestra login
       let user = null;
       if (token) {
         user = await validateAndFetchUserData();

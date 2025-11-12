@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const contenedor = document.getElementById("listaMedicos");
 
- 
+
   const fmtPeso = new Intl.NumberFormat("es-AR", {
     style: "currency",
     currency: "ARS",
@@ -110,15 +110,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
      
       const matricula = med.matriculaProfesional ?? med.matricula ?? "—";
-
-    
       const descripcion = med.descripcion || "—";
-
-  
       const valor = med.valorConsulta != null ? fmtPeso.format(med.valorConsulta) : "—";
-
-
       const col = document.createElement("div");
+      
       col.className = "col-12 col-md-6 col-lg-4";
 
       col.innerHTML = `
