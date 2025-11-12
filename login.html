@@ -25,12 +25,19 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
             </div>
-                <div class="collapse navbar-collapse w-100 bg-white border-bottom border-dark" id="navbarNav">
+                <div class="collapse navbar-collapse w-100 bg border-bottom" id="navbarNav">
                     <ul class="navbar-nav mx-auto gap-3 py-2">
                         <li class="nav-item"><a class="nav-link fw-bold text-dark" href="index.html">Inicio</a></li>
                         <li class="nav-item"><a class="nav-link fw-bold text-dark" href="institucional.html">Institucional</a></li>
                         <li class="nav-item"><a class="nav-link fw-bold text-dark" href="contacto.html">Contacto</a></li>
                         <li class="nav-item"><a class="nav-link fw-bold text-dark active" href="login.html">Login</a></li>
+                        <!-- botón modo oscuro -->
+                        <li class="nav-item d-flex align-items-center ms-lg-3">
+                        <label class="switch" for="dark-mode-toggle">
+                        <input type="checkbox" id="dark-mode-toggle" />
+                        <span class="slider"></span>
+                        </label>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -83,7 +90,68 @@
 
     <!-- Scripts Bootstrap y JavaScript para login -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Incluye tu archivo JS al final del body -->
+    <script>
+      // Datos de usuarios 
+      const usuarios = [
+        { usuario: 'admin', password: 'admin123', rol: 'admin' },
+        { usuario: 'user', password: 'user123', rol: 'user' },
+        { usuario: 'mariano', password: 'nano123', rol: 'user' }
+      ];
+  
+      function autenticar(usuario, password) {
+        return usuarios.find(u => u.usuario === usuario && u.password === password);
+      }
+  
+      // Formulario principal
+      const loginForm = document.getElementById('loginForm');
+      if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const usuario = document.getElementById('usuario').value.trim();
+          const password = document.getElementById('password').value;
+          const user = autenticar(usuario, password);
+          // Limpiar sesiones anteriores
+          localStorage.removeItem('adminAutenticado');
+          localStorage.removeItem('usuarioAutenticado');
+          if (user && user.rol === 'admin') {
+            localStorage.setItem('adminAutenticado', 'true');
+            localStorage.setItem('usuarioAutenticado', user.usuario);
+            location.href = 'dashboard.html';} 
+            else if (user && user.rol !== 'admin') {
+            localStorage.setItem('usuarioAutenticado', user.usuario);
+            location.href = 'turnos.html';} 
+            else {
+            alert('Usuario o contraseña incorrectos.');
+            }
+
+          loginForm.reset();
+      });
+    }
+
+  
+      // Modal login
+      const modalLoginForm = document.getElementById('modalLoginForm');
+      if (modalLoginForm) {
+      modalLoginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const usuario = document.getElementById('modalUsuario').value.trim();
+        const password = document.getElementById('modalPassword').value;
+        const user = autenticar(usuario, password);
+
+      if (user && user.rol === 'admin') {
+        localStorage.setItem('adminAutenticado', 'true');
+        location.href = 'dashboard.html';} 
+        else if (user && user.rol !== 'admin') {
+        location.href = 'turnos.html';} 
+        else {
+        alert('Usuario o contraseña incorrectos.');}
+
+      modalLoginForm.reset();
+      });
+    }
+
+    </script>
+    <script src="js/dark-mode.js"></script>
     <script src="js/autenticacion.js"></script>
   </body>
   </html>

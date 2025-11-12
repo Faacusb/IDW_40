@@ -24,7 +24,7 @@
       <nav class="navbar navbar-expand-lg border-bottom border-dark p-0">
         <div class="container-fluid flex-column flex-lg-column p-0">
           <div
-            class="w-100 bg-primary text-white px-3 py-2 border-bottom border-dark d-flex justify-content-between align-items-center"
+            class="w-100 banner px-3 py-2 border-bottom border-dark d-flex justify-content-between align-items-center"
           >
             <a
               class="navbar-brand fw-bold text-white m-0 mx-auto d-none d-lg-block"
@@ -49,7 +49,7 @@
             </button>
           </div>
           <div
-            class="collapse navbar-collapse w-100 bg-white border-bottom border-dark"
+            class="collapse navbar-collapse w-100 bg border-bottom"
             id="navbarNav"
           >
             <ul class="navbar-nav mx-auto gap-3 py-2">
@@ -74,6 +74,12 @@
                 <a class="nav-link fw-bold text-dark" href="index.html"
                   >Log out</a
                 >
+                <!-- botón modo oscuro -->
+              <li class="nav-item d-flex align-items-center ms-lg-3">
+                <label class="switch" for="dark-mode-toggle">
+                  <input type="checkbox" id="dark-mode-toggle" />
+                  <span class="slider"></span>
+                </label>
               </li>
             </ul>
           </div>
@@ -81,7 +87,7 @@
       </nav>
     </header>
     <main class="container my-5">
-      <section class="py-4 bg-light rounded shadow-sm px-4">
+      <section class="py-4 bg rounded shadow-sm px-4">
         <h2 class="text-center mb-4">Alta de Medicos</h2>
         <div class="row justify-content-center">
           <div class="col-md-6 col-lg-5">
@@ -329,7 +335,7 @@
         </div>
       </section>
     </main>
-    <footer class="bg-info text-dark text-center py-3">
+    <footer class="texto text-center py-3">
       <p class="mb-0">Copyright &copy; 2025 Centro Medico Medical Assistance</p>
     </footer>
 
@@ -355,6 +361,6 @@
 
     <script src="js/altaMedico.js"></script>
 
-    <script></script>
+    <script src="js/dark-mode.js"></script>
   </body>
 </html>
