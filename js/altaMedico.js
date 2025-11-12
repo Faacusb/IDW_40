@@ -1,5 +1,6 @@
 const altaMedicoFormulario = document.getElementById("altaMedicoFormulario");
 const inputNombre = document.getElementById("nombre");
+const inputApellido = document.getElementById("apellido");
 const inputEspecialidad = document.getElementById("especialidad");
 const inputTelefono = document.getElementById("telefono");
 const inputEmail = document.getElementById("email");
@@ -151,6 +152,7 @@ function altaMedicos(event) {
   event.preventDefault();
 
   let nombreMed = inputNombre.value.trim();
+  let apellido = inputApellido.value.trim();
   let especialidad = inputEspecialidad.value.trim();
   let telefono = inputTelefono.value.trim();
   let email = inputEmail.value.trim();
@@ -159,18 +161,19 @@ function altaMedicos(event) {
   let valorConsulta = parseFloat(inputValorConsulta.value) || 0;
 
   const obrasSeleccionadas = Array.from(
-  document.querySelectorAll('#obrasSocialesChecks input[type="checkbox"]:checked')
-).map(cb => parseInt(cb.value)); // convierte los valores "1","2","3" en números
+    document.querySelectorAll(
+      '#obrasSocialesChecks input[type="checkbox"]:checked'
+    )
+  ).map((cb) => parseInt(cb.value)); // convierte los valores "1","2","3" en números
 
-const obrasError = document.getElementById("obrasError");
-if (obrasSeleccionadas.length === 0) {
-  obrasError.classList.remove("d-none"); // 🔹 mostrar mensaje
-  obrasError.classList.add("d-block");
-  return; // 🔹 frena el envío
-} else {
-  obrasError.classList.add("d-none"); // 🔹 ocultar mensaje
-  obrasError.classList.remove("d-block");
-}
+  const obrasError = document.getElementById("obrasError");
+  if (obrasSeleccionadas.length === 0) {
+    obrasError.classList.remove("d-none");
+    obrasError.classList.add("d-block");
+  } else {
+    obrasError.classList.add("d-none");
+    obrasError.classList.remove("d-block");
+  }
 
   if (!altaMedicoFormulario.checkValidity()) {
     event.preventDefault();
@@ -200,6 +203,7 @@ if (obrasSeleccionadas.length === 0) {
 
   if (
     !nombreMed ||
+    !apellido ||
     !especialidad ||
     obrasSeleccionadas.length === 0 ||
     !telefono ||
@@ -214,6 +218,7 @@ if (obrasSeleccionadas.length === 0) {
   const nuevoMed = {
     id: obtenerProximoId(),
     nombre: nombreMed,
+    apellido: apellido,
     especialidad: especialidad,
     obrasSociales: obrasSeleccionadas,
     telefono: telefono,
@@ -229,7 +234,7 @@ if (obrasSeleccionadas.length === 0) {
 
   alert(
     `Medico registrado:\n\n` +
-      `Nombre: ${nombreMed}\n` +
+      `Nombre: ${nombreMed} ${apellido}\n` +
       `Especialidad: ${especialidad}\n` +
       `Obras Sociales: ${obrasSeleccionadas.join(", ")}\n` +
       `Teléfono: ${telefono}\n` +
@@ -247,11 +252,12 @@ altaMedicoFormulario.addEventListener("reset", function () {
     imagenBase64 = "";
     muestraImagen.innerHTML = "";
     muestraImagen.style.display = "none";
-    document.getElementById("obrasError").style.display = "none";
+    document.getElementById("obrasError").classList.add("d-none");
+    document.getElementById("obrasError").classList.remove("d-block");
   }, 0);
 });
 
-// Escuchar cambios en los checkboxes de obras sociales
+
 document
   .querySelectorAll('#obrasSocialesChecks input[type="checkbox"]')
   .forEach((checkbox) => {
@@ -260,11 +266,16 @@ document
         '#obrasSocialesChecks input[type="checkbox"]:checked'
       );
       const mensajeError = document.getElementById("obrasError");
-      // Si hay alguna marcada, ocultamos el error
-      mensajeError.style.display = seleccionadas.length > 0 ? "none" : "block";
+
+      if (seleccionadas.length > 0) {
+        mensajeError.classList.add("d-none");
+        mensajeError.classList.remove("d-block");
+      } else {
+        mensajeError.classList.remove("d-none");
+        mensajeError.classList.add("d-block");
+      }
     });
   });
-
 
 
 altaMedicoFormulario.addEventListener("submit", altaMedicos);
