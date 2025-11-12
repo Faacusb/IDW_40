@@ -13,7 +13,11 @@ const PATHS = {
   [`${BASE_PATH}`]: { public: true },
   [`${BASE_PATH}index.html`]: { public: true },
   [`${BASE_PATH}turnos.html`]: { auth: true },
-  [`${BASE_PATH}dashboard.html`]: { auth: true, roles: ['admin'] }
+  [`${BASE_PATH}gestionMedicos.html`]: { auth: true, roles: ['admin'] },
+  [`${BASE_PATH}altaMedicos.html`]: { auth: true, roles: ['admin'] },
+  [`${BASE_PATH}gestion_especialidades.html`]: { auth: true, roles: ['admin'] },
+  [`${BASE_PATH}gestion_obrasocial.html`]: { auth: true, roles: ['admin'] },
+  [`${BASE_PATH}usuarios.html`]: { auth: true, roles: ['admin'] },
 };
 
 function encodeBase64(obj) {
@@ -147,13 +151,13 @@ async function handleLogin(e, form) {
       sessionStorage.removeItem(STORAGE_KEY_REDIRECT);
 
     const defaultPath = userData.role === 'admin'
-  ? `${BASE_PATH}dashboard.html`
+  ? `${BASE_PATH}gestionMedicos.html`
   : `${BASE_PATH}turnos.html`;
 
 let targetPath = defaultPath;
 
 if (redirectPath) {
-  // Quita las barras iniciales (ej: "/dashboard.html" → "dashboard.html")
+  // Quita las barras iniciales (ej: "/usuarios.html" → "usuarios.html")
   let cleanPath = redirectPath.replace(/^\/+/, '');
 
   // Si estamos en GitHub Pages y la ruta no tiene el subpath, lo agregamos

@@ -104,3 +104,4 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   renderTabla(medicosFiltrados);
 });
+
