@@ -223,3 +223,4 @@ document.addEventListener("DOMContentLoaded", async () => {
       window.location.href = `${BASE_PATH}altaMedicos.html`;
     });
 });
+
