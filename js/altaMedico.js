@@ -1,14 +1,12 @@
 const altaMedicoFormulario = document.getElementById("altaMedicoFormulario");
 const inputNombre = document.getElementById("nombre");
 const inputEspecialidad = document.getElementById("especialidad");
+const inputObraSocial = document.getElementById("obrasocial");
 const inputTelefono = document.getElementById("telefono");
 const inputEmail = document.getElementById("email");
 const inputImagen = document.getElementById("imagenMedico");
 const muestraImagen = document.getElementById("muestraImagen");
 let imagenBase64 = "";
-const inputMatricula = document.getElementById("matriculaProfesional");
-const inputDescripcion = document.getElementById("descripcion");
-const inputValorConsulta = document.getElementById("valorConsulta");
 
 inputImagen.addEventListener("change", function (e) {
   if (!e.target.files || e.target.files.length === 0) {
@@ -152,25 +150,9 @@ function altaMedicos(event) {
 
   let nombreMed = inputNombre.value.trim();
   let especialidad = inputEspecialidad.value.trim();
+  let obrasocial = inputObraSocial.value.trim();
   let telefono = inputTelefono.value.trim();
   let email = inputEmail.value.trim();
-  let matricula = parseInt(inputMatricula.value) || 0;
-  let descripcion = inputDescripcion.value.trim();
-  let valorConsulta = parseFloat(inputValorConsulta.value) || 0;
-
-  const obrasSeleccionadas = Array.from(
-  document.querySelectorAll('#obrasSocialesChecks input[type="checkbox"]:checked')
-).map(cb => parseInt(cb.value)); // convierte los valores "1","2","3" en números
-
-const obrasError = document.getElementById("obrasError");
-if (obrasSeleccionadas.length === 0) {
-  obrasError.classList.remove("d-none"); // 🔹 mostrar mensaje
-  obrasError.classList.add("d-block");
-  return; // 🔹 frena el envío
-} else {
-  obrasError.classList.add("d-none"); // 🔹 ocultar mensaje
-  obrasError.classList.remove("d-block");
-}
 
   if (!altaMedicoFormulario.checkValidity()) {
     event.preventDefault();
@@ -198,16 +180,8 @@ if (obrasSeleccionadas.length === 0) {
     }
   });
 
-  if (
-    !nombreMed ||
-    !especialidad ||
-    obrasSeleccionadas.length === 0 ||
-    !telefono ||
-    !email
-  ) {
-    alert(
-      "Por favor completa todos los campos y selecciona al menos una obra social."
-    );
+  if (!nombreMed || !especialidad || !obrasocial || !telefono || !email) {
+    alert("Por favor completa los campos!");
     return;
   }
 
@@ -215,13 +189,13 @@ if (obrasSeleccionadas.length === 0) {
     id: obtenerProximoId(),
     nombre: nombreMed,
     especialidad: especialidad,
-    obrasSociales: obrasSeleccionadas,
+    obrasSociales: [obrasocial],
     telefono: telefono,
     email: email,
-    fotografia: imagenBase64 || "",
-    matriculaProfesional: matricula,
-    descripcion: descripcion,
-    valorConsulta: valorConsulta,
+    fotografia: imagenBase64 || "", 
+    matriculaProfesional: 1234,
+    descripcion: "Breve descripción",
+    valorConsulta: 9000,
   };
 
   medicos.push(nuevoMed);
@@ -231,12 +205,11 @@ if (obrasSeleccionadas.length === 0) {
     `Medico registrado:\n\n` +
       `Nombre: ${nombreMed}\n` +
       `Especialidad: ${especialidad}\n` +
-      `Obras Sociales: ${obrasSeleccionadas.join(", ")}\n` +
+      `Obra Social: ${obrasocial}\n` +
       `Teléfono: ${telefono}\n` +
       `Email: ${email}\n`
   );
   altaMedicoFormulario.reset();
-  altaMedicoFormulario.classList.remove("was-validated");
   muestraImagen.innerHTML = "";
   muestraImagen.style.display = "none";
   imagenBase64 = "";
@@ -247,24 +220,7 @@ altaMedicoFormulario.addEventListener("reset", function () {
     imagenBase64 = "";
     muestraImagen.innerHTML = "";
     muestraImagen.style.display = "none";
-    document.getElementById("obrasError").style.display = "none";
   }, 0);
 });
-
-// Escuchar cambios en los checkboxes de obras sociales
-document
-  .querySelectorAll('#obrasSocialesChecks input[type="checkbox"]')
-  .forEach((checkbox) => {
-    checkbox.addEventListener("change", () => {
-      const seleccionadas = document.querySelectorAll(
-        '#obrasSocialesChecks input[type="checkbox"]:checked'
-      );
-      const mensajeError = document.getElementById("obrasError");
-      // Si hay alguna marcada, ocultamos el error
-      mensajeError.style.display = seleccionadas.length > 0 ? "none" : "block";
-    });
-  });
-
-
 
 altaMedicoFormulario.addEventListener("submit", altaMedicos);

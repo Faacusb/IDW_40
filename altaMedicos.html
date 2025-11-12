@@ -1,366 +1,184 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Alta de Medicos - MedicalAssistance</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@materialstyle/materialstyle@3.1.1/dist/css/materialstyle.min.css"
-      integrity="sha384-TveZ4SBMG9Zwu44Pq5aK2bgL+4CaFRTtx6pSSsxmQKWhIRKoONDSRW+k+NA9A0Gk"
-      crossorigin="anonymous"
-    />
-    <!-- iconos de bootstrap -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-    />
-    <!-- Estilos propios -->
-    <link rel="stylesheet" href="CSS/estilos.css" />
-    <link rel="icon" type="image/png" href="img/logo-mini.png" />
-  </head>
-  <body>
-    <header>
-      <nav class="navbar navbar-expand-lg border-bottom border-dark p-0">
-        <div class="container-fluid flex-column flex-lg-column p-0">
-          <div
-            class="w-100 banner px-3 py-2 border-bottom border-dark d-flex justify-content-between align-items-center"
-          >
-            <a
-              class="navbar-brand fw-bold text-white m-0 mx-auto d-none d-lg-block"
-              href="index.html"
-              >Medical Assistance</a
-            >
-            <a
-              class="navbar-brand fw-bold text-white m-0 d-lg-none"
-              href="dashboard.html"
-              >Medical Assistance</a
-            >
-            <button
-              class="navbar-toggler menu-principal"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarNav"
-              aria-controls="navbarNav"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span class="navbar-toggler-icon"></span>
-            </button>
-          </div>
-          <div
-            class="collapse navbar-collapse w-100 bg border-bottom"
-            id="navbarNav"
-          >
-            <ul class="navbar-nav mx-auto gap-3 py-2">
-              <li class="nav-item">
-                <a class="nav-link fw-bold text-dark" href="dashboard.html"
-                  >Panel de Administración</a
-                >
-              </li>
-              <li class="nav-item">
-                <a class="nav-link fw-bold text-dark" href="gestionMedicos.html"
-                  >Listado de Medicos</a
-                >
-              </li>
-              <li class="nav-item">
-                <a
-                  class="nav-link fw-bold text-dark active"
-                  href="altaMedicos.html"
-                  >Alta de Medicos</a
-                >
-              </li>
-              <li class="nav-item">
-                <a class="nav-link fw-bold text-dark" href="index.html"
-                  >Log out</a
-                >
-                <!-- botón modo oscuro -->
-              <li class="nav-item d-flex align-items-center ms-lg-3">
-                <label class="switch" for="dark-mode-toggle">
-                  <input type="checkbox" id="dark-mode-toggle" />
-                  <span class="slider"></span>
-                </label>
-              </li>
-            </ul>
-          </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alta de Medicos - MedicalAssistance</title>
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@materialstyle/materialstyle@3.1.1/dist/css/materialstyle.min.css"
+    integrity="sha384-TveZ4SBMG9Zwu44Pq5aK2bgL+4CaFRTtx6pSSsxmQKWhIRKoONDSRW+k+NA9A0Gk" crossorigin="anonymous">
+  <!-- iconos de bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <!-- Estilos propios -->
+  <link rel="stylesheet" href="CSS/estilos.css" />
+  <link rel="icon" type="image/png" href="img/logo-mini.png" />
+</head>
+
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg border-bottom border-dark p-0">
+      <div class="container-fluid flex-column flex-lg-column p-0">
+        <div
+          class="w-100 bg-primary text-white px-3 py-2 border-bottom border-dark d-flex justify-content-between align-items-center">
+          <a class="navbar-brand fw-bold text-white m-0 mx-auto d-none d-lg-block" href="index.html">Medical
+            Assistance</a>
+          <a class="navbar-brand fw-bold text-white m-0 d-lg-none" href="dashboard.html">Medical Assistance</a>
+          <button class="navbar-toggler menu-principal" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
         </div>
-      </nav>
-    </header>
-    <main class="container my-5">
-      <section class="py-4 bg rounded shadow-sm px-4">
-        <h2 class="text-center mb-4">Alta de Medicos</h2>
-        <div class="row justify-content-center">
-          <div class="col-md-6 col-lg-5">
-            <form id="altaMedicoFormulario" autocomplete="off" novalidate>
-              <!-- Nombre completo -->
-              <div class="form-floating-with-icon mb-3">
-                <div class="form-floating">
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="nombre"
-                    required
-                    placeholder="Ingrese nombre completo"
-                  />
-                  <label for="nombre">Nombre Completo:</label>
-                </div>
-                <span class="prepend">
-                  <i class="bi bi-file-person"></i>
-                </span>
-                <div class="invalid-feedback">
-                  Este campo no puede estar vacio
-                </div>
-              </div>
-              <!-- Especialidad -->
-              <div class="form-floating-with-icon mb-3">
-                <div class="form-floating">
-                  <select id="especialidad" class="form-select" required>
-                    <option value="">Seleccione Especialidad</option>
-                    <option value="Cardiología">Cardiología</option>
-                    <option value="Pediatría">Pediatría</option>
-                    <option value="Neurología">Neurología</option>
-                    <option value="Dermatología">Dermatología</option>
-                    <option value="Ginecología">Ginecología</option>
-                    <option value="Traumatología">Traumatología</option>
-                    <option value="Medico">Medico Clinico</option>
-                    <option value="Oftalmología">Oftalmología</option>
-                    <option value="Otorrinolaringología">
-                      Otorrinolaringología
-                    </option>
-                  </select>
-                  <label for="especialidad" class="form-label"
-                    >Especialidad:</label
-                  >
-                </div>
-                <span class="prepend">
-                  <i class="bi bi-briefcase"></i>
-                </span>
-                <div class="invalid-feedback">
-                  Debe seleccionar una Especialidad
-                </div>
-              </div>
-              <!-- Teléfono -->
-              <div class="form-floating-with-icon mb-3">
-                <div class="form-floating">
-                  <input
-                    type="tel"
-                    class="form-control"
-                    id="telefono"
-                    placeholder="Ingrese Teléfono"
-                    required
-                  />
-                  <label for="telefono">Teléfono:</label>
-                </div>
-                <span class="prepend">
-                  <i class="bi bi-telephone"></i>
-                </span>
-                <div class="invalid-feedback">Ingrese un telefono valido</div>
-              </div>
-              <!-- Obra social -->
-              <!-- Obras sociales (multiple choice con checkboxes) -->
-              <div class="mb-3">
-                <label class="form-label fw-bold d-block mb-2">
-                  <i class="bi bi-file-medical"></i> Obra/s Sociales que acepta:
-                </label>
-
-                <div id="obrasSocialesChecks" class="d-flex flex-wrap gap-3">
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      value="1"
-                      id="osde"
-                    />
-                    <label class="form-check-label" for="osde">OSDE</label>
-                  </div>
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      value="2"
-                      id="pami"
-                    />
-                    <label class="form-check-label" for="pami">PAMI</label>
-                  </div>
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      value="3"
-                      id="sancor"
-                    />
-                    <label class="form-check-label" for="sancor"
-                      >SanCor Salud</label
-                    >
-                  </div>
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      value="4"
-                      id="swiss"
-                    />
-                    <label class="form-check-label" for="swiss"
-                      >Swiss Medical</label
-                    >
-                  </div>
-                </div>
-
-                <!-- ⚙️ Mensaje de error: ahora empieza oculto -->
-                <div id="obrasError" class="invalid-feedback mt-1 d-none">
-                  Debe seleccionar al menos una obra social.
-                </div>
-              </div>
-
-              <!-- Email -->
-              <div class="form-floating-with-icon mb-3">
-                <div class="form-floating">
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="email"
-                    placeholder="Ingrese Email"
-                    required
-                  />
-                  <label for="email">Email:</label>
-                </div>
-                <span class="prepend">
-                  <i class="bi bi-envelope-at"></i>
-                </span>
-                <div class="invalid-feedback">
-                  Debe ingresar un email valido
-                </div>
-              </div>
-              <!-- Matrícula profesional -->
-              <div class="form-floating-with-icon mb-3">
-                <div class="form-floating">
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="matriculaProfesional"
-                    placeholder="Ingrese la matrícula profesional"
-                    required
-                    min="0"
-                  />
-                  <label for="matriculaProfesional"
-                    >Matrícula profesional:</label
-                  >
-                </div>
-                <span class="prepend">
-                  <i class="bi bi-card-text"></i>
-                </span>
-                <div class="invalid-feedback">
-                  Debe ingresar una matrícula válida.
-                </div>
-              </div>
-
-              <!-- Descripción -->
-              <div class="form-floating-with-icon mb-3">
-                <div class="form-floating">
-                  <textarea
-                    class="form-control"
-                    id="descripcion"
-                    placeholder="Breve descripción del médico"
-                    style="height: 100px"
-                    required
-                  ></textarea>
-                  <label for="descripcion">Descripción:</label>
-                </div>
-                <span class="prepend">
-                  <i class="bi bi-info-circle"></i>
-                </span>
-                <div class="invalid-feedback">
-                  Ingrese una breve descripción.
-                </div>
-              </div>
-
-              <!-- Valor de consulta -->
-              <div class="form-floating-with-icon mb-3">
-                <div class="form-floating">
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="valorConsulta"
-                    placeholder="Ingrese el valor de la consulta"
-                    required
-                    min="0"
-                  />
-                  <label for="valorConsulta"
-                    >Valor de la consulta (en $):</label
-                  >
-                </div>
-                <span class="prepend">
-                  <i class="bi bi-cash-coin"></i>
-                </span>
-                <div class="invalid-feedback">Ingrese un valor válido.</div>
-              </div>
-
-              <!-- Foto del médico -->
-              <div class="form-floating-with-icon mb-3">
-                <div class="form-floating">
-                  <input
-                    type="file"
-                    class="form-control"
-                    id="imagenMedico"
-                    accept="image/*"
-                  />
-                  <label for="imagenMedico" class="form-label fw-bold"
-                    >Foto del médico</label
-                  >
-                </div>
-                <span class="prepend">
-                  <i class="bi bi-person-bounding-box"></i>
-                </span>
-                <ul class="list-group" id="muestraImagen"></ul>
-                <div class="invalid-feedback">Debe adjuntar una foto</div>
-              </div>
-
-              <div class="d-flex justify-content-between">
-                <button
-                  type="reset"
-                  class="btn btn-outline-secondary rounded-pill"
-                >
-                  Restablecer campos
-                  <span class="ripple-surface"></span>
-                </button>
-
-                <button type="submit" class="btn btn-primary rounded-pill">
-                  <i class="bi bi-person-plus m-1"></i>
-                  Registrar Médico
-                  <span class="ripple-surface"></span>
-                </button>
-              </div>
-            </form>
-          </div>
+        <div class="collapse navbar-collapse w-100 bg-white border-bottom border-dark" id="navbarNav">
+          <ul class="navbar-nav mx-auto gap-3 py-2">
+            <li class="nav-item">
+              <a class="nav-link fw-bold text-dark" href="dashboard.html">Panel de Administración</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fw-bold text-dark" href="gestionMedicos.html">Listado de Medicos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fw-bold text-dark active" href="altaMedicos.html">Alta de Medicos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link fw-bold text-dark" href="index.html">Log out</a>
+            </li>
+          </ul>
         </div>
-      </section>
-    </main>
-    <footer class="texto text-center py-3">
-      <p class="mb-0">Copyright &copy; 2025 Centro Medico Medical Assistance</p>
-    </footer>
+      </div>
+    </nav>
+  </header>
+  <main class="container my-5">
+    <section class="py-4 bg-light rounded shadow-sm px-4">
+      <h2 class="text-center mb-4">Alta de Medicos</h2>
+      <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+          <form id="altaMedicoFormulario" autocomplete="off" novalidate>
+            <!-- Nombre completo -->
+            <div class="form-floating-with-icon mb-3">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="nombre" required placeholder="Ingrese nombre completo" />
+                <label for="nombre">Nombre Completo:</label>
+              </div>
+              <span class="prepend">
+                <i class="bi bi-file-person"></i>
+              </span>
+              <div class="invalid-feedback">Este campo no puede estar vacio</div>
+            </div>
+            <!-- Especialidad -->
+            <div class="form-floating-with-icon mb-3">
+              <div class="form-floating">
+                <select id="especialidad" class="form-select" required>
+                  <option value="">Seleccione Especialidad</option>
+                  <option value="Cardiología">Cardiología</option>
+                  <option value="Pediatría">Pediatría</option>
+                  <option value="Neurología">Neurología</option>
+                  <option value="Dermatología">Dermatología</option>
+                  <option value="Ginecología">Ginecología</option>
+                  <option value="Traumatología">Traumatología</option>
+                  <option value="Medico">Medico Clinico</option>
+                  <option value="Oftalmología">Oftalmología</option>
+                  <option value="Otorrinolaringología">Otorrinolaringología</option>
+                </select>
+                <label for="especialidad" class="form-label">Especialidad:</label>
+              </div>
+              <span class="prepend">
+                <i class="bi bi-briefcase"></i>
+              </span>
+              <div class="invalid-feedback">Debe seleccionar una Especialidad</div>
+            </div>
+            <!-- Teléfono -->
+            <div class="form-floating-with-icon mb-3">
+              <div class="form-floating">
+                <input type="tel" class="form-control" id="telefono" placeholder="Ingrese Teléfono" required />
+                <label for="telefono">Teléfono:</label>
+              </div>
+              <span class="prepend">
+                <i class="bi bi-telephone"></i>
+              </span>
+              <div class="invalid-feedback">Ingrese un telefono valido</div>
+            </div>
+            <!-- Obra social -->
+            <div class="form-floating-with-icon mb-3">
+              <div class="form-floating">
+                <select id="obrasocial" class="form-select" required>
+                  <option value="">Seleccione Obra Social</option>
+                  <option value="1">OSDE</option>
+                  <option value="2">PAMI</option>
+                  <option value="3">SanCor Salud</option>
+                  <option value="4">Swiss Medical</option>
+                </select>
+                <label for="obrasocial">Obra Social:</label>
+              </div>
+              <span class="prepend">
+                <i class="bi bi-file-medical"></i>
+              </span>
+              <div class="invalid-feedback">Debe seleccionar una Obra Social</div>
+            </div>
+            <!-- Email -->
+            <div class="form-floating-with-icon mb-3">
+              <div class="form-floating">
+                <input type="email" class="form-control" id="email" placeholder="Ingrese Email" required />
+                <label for="email">Email:</label>
+              </div>
+              <span class="prepend">
+                <i class="bi bi-envelope-at"></i>
+              </span>
+              <div class="invalid-feedback">Debe ingresar un email valido</div>
+            </div>
+            <!-- Foto del médico -->
+            <div class="form-floating-with-icon mb-3">
+              <div class="form-floating">
+                <input type="file" class="form-control" id="imagenMedico" accept="image/*" />
+                <label for="imagenMedico" class="form-label fw-bold">Foto del médico</label>
+              </div>
+              <span class="prepend">
+                <i class="bi bi-person-bounding-box"></i>
+              </span>
+              <ul class="list-group" id="muestraImagen">
+              </ul>
+              <div class="invalid-feedback">Debe adjuntar una foto</div>
+            </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-      crossorigin="anonymous"
-    ></script>
+            <div class="d-flex justify-content-between">
+              <button type="reset" class="btn btn-outline-secondary rounded-pill">
+                Restablecer campos
+                <span class="ripple-surface"></span>
+              </button>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/@material/ripple@14.0.0/dist/mdc.ripple.min.js"
-      integrity="sha384-9QANVmWxL3S8VRs8x1Q+bF1Zzogpy7P/Qw1+y5qHLdC1ig0EuoHg9VbB1SXyecdZ"
-      crossorigin="anonymous"
-    ></script>
+              <button type="submit" class="btn btn-primary rounded-pill">
+                <i class="bi bi-person-plus m-1"></i>
+                Registrar Médico
+                <span class="ripple-surface"></span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="bg-info text-dark text-center py-3">
+    <p class="mb-0">Copyright &copy; 2025 Centro Medico Medical Assistance</p>
+  </footer>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/@materialstyle/materialstyle@3.1.1/dist/js/materialstyle.min.js"
-      integrity="sha384-rqhP61M9WSmzd7+ssgyoWP2I+R68vVHx7o+UmmIs6/Nxe8Lt1DoF6+0CKptZIXC0"
-      crossorigin="anonymous"
-    ></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
 
-    <script src="js/meterial-style.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@material/ripple@14.0.0/dist/mdc.ripple.min.js"
+    integrity="sha384-9QANVmWxL3S8VRs8x1Q+bF1Zzogpy7P/Qw1+y5qHLdC1ig0EuoHg9VbB1SXyecdZ"
+    crossorigin="anonymous"></script>
 
-    <script src="js/altaMedico.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@materialstyle/materialstyle@3.1.1/dist/js/materialstyle.min.js"
+    integrity="sha384-rqhP61M9WSmzd7+ssgyoWP2I+R68vVHx7o+UmmIs6/Nxe8Lt1DoF6+0CKptZIXC0"
+    crossorigin="anonymous"></script>
 
-    <script src="js/dark-mode.js"></script>
-  </body>
+  <script src="js/meterial-style.js"></script>
+
+  <script src="js/altaMedico.js"></script>
+
+  <script>
+
+  </script>
+</body>
+
 </html>
