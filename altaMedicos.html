@@ -87,6 +87,7 @@
           <div class="col-md-6 col-lg-5">
             <form id="altaMedicoFormulario" autocomplete="off" novalidate>
               <!-- Nombre completo -->
+              <!-- Nombre -->
               <div class="form-floating-with-icon mb-3">
                 <div class="form-floating">
                   <input
@@ -94,16 +95,28 @@
                     class="form-control"
                     id="nombre"
                     required
-                    placeholder="Ingrese nombre completo"
+                    placeholder="Ingrese el nombre"
                   />
-                  <label for="nombre">Nombre Completo:</label>
+                  <label for="nombre">Nombre:</label>
                 </div>
-                <span class="prepend">
-                  <i class="bi bi-file-person"></i>
-                </span>
-                <div class="invalid-feedback">
-                  Este campo no puede estar vacio
+                <span class="prepend"><i class="bi bi-person"></i></span>
+                <div class="invalid-feedback">Debe ingresar el nombre</div>
+              </div>
+
+              <!-- Apellido -->
+              <div class="form-floating-with-icon mb-3">
+                <div class="form-floating">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="apellido"
+                    required
+                    placeholder="Ingrese el apellido"
+                  />
+                  <label for="apellido">Apellido:</label>
                 </div>
+                <span class="prepend"><i class="bi bi-person-vcard"></i></span>
+                <div class="invalid-feedback">Debe ingresar el apellido</div>
               </div>
               <!-- Especialidad -->
               <div class="form-floating-with-icon mb-3">
