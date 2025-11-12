@@ -163,3 +163,4 @@
     window.location.href = 'gestionMedicos.html';
   });
 })();
+
