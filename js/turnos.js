@@ -1,55 +1,98 @@
+import { Turno } from "./turno.js";
+
+const CLAVE_TURNOS = "turnosReservados";
+const STORAGE_KEY_USER_DATA = "userData";
+
+// 🗂️ Cargar turnos de ejemplo si no existen en localStorage
+async function cargarTurnosIniciales() {
+  const existentes = JSON.parse(localStorage.getItem(CLAVE_TURNOS)) || [];
+  if (existentes.length > 0) return;
+
+  try {
+    const res = await fetch("data/turnos.json");
+    if (!res.ok) throw new Error("No se pudo cargar turnos.json");
+    const datos = await res.json();
+
+    localStorage.setItem(CLAVE_TURNOS, JSON.stringify(datos));
+    console.log("🩺 Turnos de ejemplo cargados desde JSON.");
+  } catch (error) {
+    console.error("❌ Error al cargar los turnos iniciales:", error);
+  }
+}
+
 const selectMedico = document.getElementById("medicoSelect");
 const divCalendario = document.getElementById("calendario");
 const divTurnos = document.getElementById("turnos");
 const tituloTurnos = document.getElementById("tituloDia");
-
-
-const HORAS = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00"];
-const CLAVE_TURNOS = "turnosReservados";
+const tablaMisReservas = document.getElementById("tablaMisReservas");
 
 let diaElegido = null;
 let medicoElegido = null;
 
-
-async function cargarMedicosSiFaltan() {
-  let medicos = JSON.parse(localStorage.getItem("medicos")) || [];
-
-  if (medicos.length === 0) {
-    try {
-      const res = await fetch("data/medicos.json");
-      const datos = await res.json();
-      localStorage.setItem("medicos", JSON.stringify(datos));
-      medicos = datos;
-    } catch (error) {
-      console.error("Error al cargar médicos:", error);
-    }
+// 🩺 Cargar médicos (localStorage + JSON)
+async function cargarMedicos() {
+  const medicosLocal = JSON.parse(localStorage.getItem("medicos")) || [];
+  let medicosJson = [];
+  try {
+    const res = await fetch("data/medicos.json");
+    medicosJson = await res.json();
+  } catch (error) {
+    console.error("Error cargando JSON de médicos:", error);
   }
 
-  return medicos;
+  const todos = [...medicosJson];
+  medicosLocal.forEach(mLocal => {
+    if (!todos.some(mJson => mJson.id === mLocal.id)) todos.push(mLocal);
+  });
+
+  localStorage.setItem("medicos", JSON.stringify(todos));
+  return todos;
 }
 
+// 🧠 Cargar especialidades
+async function cargarEspecialidadesSiFaltan() {
+  let especialidades = JSON.parse(localStorage.getItem("especialidades")) || [];
+  if (especialidades.length === 0) {
+    try {
+      const res = await fetch("data/especialidades.json");
+      const datos = await res.json();
+      localStorage.setItem("especialidades", JSON.stringify(datos));
+      especialidades = datos;
+    } catch (error) {
+      console.error("Error al cargar especialidades:", error);
+    }
+  }
+  return especialidades;
+}
 
+// 👨‍⚕️ Mostrar médicos en el select
 function mostrarMedicos() {
   const medicos = JSON.parse(localStorage.getItem("medicos")) || [];
+  const especialidades = JSON.parse(localStorage.getItem("especialidades")) || [];
+
   selectMedico.innerHTML = '<option value="">Seleccione un médico...</option>';
 
   medicos.forEach(medico => {
+    const esp = especialidades.find(e => e.id == medico.especialidad);
+    const nombreEsp = esp ? esp.nombre : "Sin especialidad";
     const opcion = document.createElement("option");
-    opcion.value = medico.nombre;
-    opcion.textContent = `${medico.nombre} - ${medico.especialidad}`;
+    opcion.value = medico.id;
+    opcion.textContent = `${medico.nombre} ${medico.apellido} - ${nombreEsp}`;
     selectMedico.appendChild(opcion);
   });
 }
 
+// 🟢 Al seleccionar un médico
 selectMedico.addEventListener("change", () => {
-  medicoElegido = selectMedico.value;
+  const medicos = JSON.parse(localStorage.getItem("medicos")) || [];
+  medicoElegido = medicos.find(m => m.id == selectMedico.value) || null;
   diaElegido = null;
   divTurnos.innerHTML = "";
   tituloTurnos.textContent = "Seleccione un día disponible";
   document.querySelectorAll(".dia").forEach(d => d.classList.remove("activo"));
 });
 
-
+// 📅 Crear calendario para próximos 7 días
 function crearCalendario() {
   const hoy = new Date();
   divCalendario.innerHTML = "";
@@ -69,7 +112,7 @@ function crearCalendario() {
 
     celda.addEventListener("click", () => {
       if (!medicoElegido) {
-        alert("Primero seleccione un médico.");
+        alert("⚠️ Primero seleccione un médico.");
         return;
       }
 
@@ -83,63 +126,133 @@ function crearCalendario() {
   }
 }
 
-function obtenerTurnos() {
-  return JSON.parse(sessionStorage.getItem(CLAVE_TURNOS)) || [];
+// 🔐 Obtener usuario actual desde sessionStorage
+function obtenerUsuarioActual() {
+  const base64 = sessionStorage.getItem(STORAGE_KEY_USER_DATA);
+  if (!base64) return null;
+
+  try {
+    return JSON.parse(atob(base64)); // decodifica Base64
+  } catch {
+    return null;
+  }
 }
 
-function guardarTurnos(turnos) {
-  sessionStorage.setItem(CLAVE_TURNOS, JSON.stringify(turnos));
-}
-
-
+// 🕒 Mostrar turnos disponibles
 function mostrarTurnos() {
   if (!diaElegido || !medicoElegido) return;
+  const turnos = JSON.parse(localStorage.getItem(CLAVE_TURNOS)) || [];
 
   divTurnos.innerHTML = "";
   tituloTurnos.textContent = `Turnos disponibles para ${diaElegido}`;
 
-  HORAS.forEach(hora => {
+  const turnosDisponibles = turnos.filter(
+    t => t.medicoId === medicoElegido.id && t.fecha === diaElegido && !t.reservado
+  );
+
+  if (!turnosDisponibles.length) {
+    divTurnos.innerHTML = `<p class="text-muted text-center mt-3">No hay turnos disponibles para esta fecha.</p>`;
+    return;
+  }
+
+  turnosDisponibles.forEach(t => {
     const div = document.createElement("div");
     div.className = "col-6 col-md-3";
 
     const btn = document.createElement("button");
-    btn.textContent = hora;
+    btn.textContent = t.horario;
     btn.className = "btn btn-primary w-100";
-    btn.onclick = () => reservarTurno(hora);
+    btn.onclick = () => reservarTurno(t);
 
     div.appendChild(btn);
     divTurnos.appendChild(div);
   });
 }
 
+// 🩵 Mostrar "Mis Reservas"
+function mostrarMisReservas() {
+  const usuarioActual = obtenerUsuarioActual();
+  if (!usuarioActual || !tablaMisReservas) return;
 
-function reservarTurno(hora) {
-  const turno = {
-    medico: medicoElegido,
-    fecha: diaElegido,
-    hora: hora
-  };
-
-  let turnos = obtenerTurnos();
-
-
-  const existe = turnos.some(
-    t => t.medico === turno.medico && t.fecha === turno.fecha && t.hora === turno.hora
+  const turnos = JSON.parse(localStorage.getItem(CLAVE_TURNOS)) || [];
+  const misTurnos = turnos.filter(
+    t => t.usuario === usuarioActual.username // nombre de usuario dummyjson
   );
 
-  if (existe) {
-    alert(" Ese turno ya fue reservado.");
+  tablaMisReservas.innerHTML = "";
+
+  if (misTurnos.length === 0) {
+    tablaMisReservas.innerHTML = `<tr><td colspan="5" class="text-muted">No tienes reservas aún.</td></tr>`;
     return;
   }
 
-  turnos.push(turno);
-  guardarTurnos(turnos);
-  alert(` Turno reservado con ${turno.medico} el ${turno.fecha} a las ${turno.hora}`);
+  misTurnos.forEach(t => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${t.medicoNombre} ${t.medicoApellido}</td>
+      <td>${t.especialidad}</td>
+      <td>${t.fecha}</td>
+      <td>${t.horario}</td>
+      <td><button class="btn btn-danger btn-sm">Cancelar</button></td>
+    `;
+    tr.querySelector("button").addEventListener("click", () => cancelarReserva(t.id));
+    tablaMisReservas.appendChild(tr);
+  });
 }
 
+// ❌ Cancelar reserva
+function cancelarReserva(idTurno) {
+  const turnos = JSON.parse(localStorage.getItem(CLAVE_TURNOS)) || [];
+  const index = turnos.findIndex(t => t.id == idTurno);
+  if (index === -1) return;
+  if (!confirm("¿Seguro que desea cancelar este turno?")) return;
 
+  turnos[index].reservado = false;
+  turnos[index].usuario = null;
+  localStorage.setItem(CLAVE_TURNOS, JSON.stringify(turnos));
+
+  alert("❌ Turno cancelado correctamente.");
+  mostrarMisReservas();
+  mostrarTurnos();
+}
+
+// 🟢 Reservar turno
+function reservarTurno(turno) {
+  const usuarioActual = obtenerUsuarioActual();
+  if (!usuarioActual) {
+    alert("⚠️ Debes iniciar sesión para reservar un turno.");
+    window.location.href = "login.html";
+    return;
+  }
+
+  const turnos = JSON.parse(localStorage.getItem(CLAVE_TURNOS)) || [];
+  const index = turnos.findIndex(t => t.id === turno.id);
+
+  if (index === -1) {
+    alert("⚠️ El turno seleccionado no existe.");
+    return;
+  }
+  if (turnos[index].reservado) {
+    alert("⚠️ Este turno ya fue reservado por otro usuario.");
+    return;
+  }
+
+  // ✅ Reservar turno con username
+  turnos[index].reservado = true;
+  turnos[index].usuario = usuarioActual.username;
+  localStorage.setItem(CLAVE_TURNOS, JSON.stringify(turnos));
+
+  alert("✅ Turno reservado correctamente.");
+  mostrarTurnos();
+  mostrarMisReservas();
+}
+
+// 🚀 Inicialización
 (async () => {
-  await cargarMedicosSiFaltan();
+  await cargarTurnosIniciales();
+  await cargarEspecialidadesSiFaltan();
+  await cargarMedicos();
   mostrarMedicos();
   crearCalendario();
+  mostrarMisReservas();
 })();
