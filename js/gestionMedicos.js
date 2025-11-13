@@ -11,11 +11,36 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
 
-  const [medicosBase, especialidades, obrasSociales] = await Promise.all([
+  const [medicosBase, especialidadesJSON, obrasSocialesJSON] = await Promise.all([
     loadJSON("data/medicos.json"),
     loadJSON("data/especialidades.json"),
     loadJSON("data/obrasSociales.json"),
   ]);
+
+  const especialidadesLocales = JSON.parse(localStorage.getItem("especialidades")) || [];
+  const especialidadesEliminadas = (JSON.parse(localStorage.getItem("especialidadesEliminadas")) || []).map(Number);
+  
+  let especialidades = [...especialidadesJSON];
+  especialidadesLocales.forEach((esp) => {
+    if (!especialidades.some((e) => Number(e.id) === Number(esp.id))) {
+      especialidades.push(esp);
+    }
+  });
+  especialidades = especialidades.filter((e) => !especialidadesEliminadas.includes(Number(e.id)));
+
+  const obrasSocialesLocales = JSON.parse(localStorage.getItem("obrasSociales")) || [];
+  const obrasSocialesEliminadas = JSON.parse(localStorage.getItem("obrasSocialesEliminadas")) || [];
+  const obrasSocialesEliminadasIds = obrasSocialesEliminadas.map((e) =>
+    typeof e === "object" ? Number(e.id) : Number(e)
+  );
+  
+  let obrasSociales = [...obrasSocialesJSON];
+  obrasSocialesLocales.forEach((o) => {
+    if (!obrasSociales.some((x) => Number(x.id) === Number(o.id))) {
+      obrasSociales.push(o);
+    }
+  });
+  obrasSociales = obrasSociales.filter((o) => !obrasSocialesEliminadasIds.includes(Number(o.id)));
 
   const medicosLocales = JSON.parse(localStorage.getItem("medicos")) || [];
 

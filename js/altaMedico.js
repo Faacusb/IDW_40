@@ -31,7 +31,10 @@ async function cargarEspecialidades() {
     let combinadas = base.filter((e) => !eliminadas.includes(Number(e.id)));
     locales.forEach((esp) => {
       if (!combinadas.some((e) => Number(e.id) === Number(esp.id))) {
-        combinadas.push(esp);
+        combinadas.push({
+          id: Number(esp.id),
+          nombre: esp.nombre
+        });
       }
     });
 
@@ -73,13 +76,19 @@ async function cargarObrasSociales() {
 
     let combinadas = base.filter((o) => !eliminadasIds.includes(Number(o.id)));
     locales.forEach((o) => {
+      const idNum = Number(o.id);
+
       if (
-        !eliminadasIds.includes(Number(o.id)) &&
-        !combinadas.some((x) => Number(x.id) === Number(o.id))
+        !eliminadasIds.includes(idNum) &&
+        !combinadas.some((x) => Number(x.id) === idNum)
       ) {
-        combinadas.push(o);
+        combinadas.push({
+          id: idNum,
+          nombre: o.nombre
+        });
       }
     });
+
 
     const contenedor = document.getElementById("obrasSocialesChecks");
     if (!contenedor) return;
@@ -105,7 +114,7 @@ function cargarMedicoEditar() {
 
   inputNombre.value = medicoEditar.nombre || "";
   inputApellido.value = medicoEditar.apellido || "";
-  inputEspecialidad.value = medicoEditar.especialidad || "";
+  inputEspecialidad.value = Number(medicoEditar.especialidad);
   inputTelefono.value = medicoEditar.telefono || "";
   inputEmail.value = medicoEditar.email || "";
   inputMatricula.value = medicoEditar.matriculaProfesional || "";
@@ -146,7 +155,7 @@ function cargarMedicoEditar() {
         ...medicoEditar,
         nombre: inputNombre.value.trim(),
         apellido: inputApellido.value.trim(),
-        especialidad: inputEspecialidad.value.trim(),
+        especialidad: Number(inputEspecialidad.value),
         telefono: inputTelefono.value.trim(),
         email: inputEmail.value.trim(),
         matriculaProfesional: parseInt(inputMatricula.value) || 0,
@@ -262,7 +271,7 @@ function altaMedicos(event) {
 
   let nombreMed = inputNombre.value.trim();
   let apellido = inputApellido.value.trim();
-  let especialidad = inputEspecialidad.value.trim();
+  let especialidad = parseInt(inputEspecialidad.value);
   let telefono = inputTelefono.value.trim();
   let email = inputEmail.value.trim();
   let matricula = parseInt(inputMatricula.value) || 0;
@@ -279,19 +288,37 @@ function altaMedicos(event) {
     });
   }
 
-  if (
-    !nombreMed ||
-    !apellido ||
-    !especialidad ||
-    obrasSeleccionadas.length === 0 ||
-    !telefono ||
-    !email
-  ) {
-    alert(
-      "Por favor completa todos los campos y selecciona al menos una obra social."
-    );
+  // 🔧 FIX: Validación mejorada con mensajes específicos
+  if (!nombreMed) {
+    alert("Por favor completa el campo Nombre.");
     return;
   }
+  
+  if (!apellido) {
+    alert("Por favor completa el campo Apellido.");
+    return;
+  }
+  
+  if (isNaN(especialidad)) {
+    alert("Por favor selecciona una Especialidad.");
+    return;
+  }
+  
+  if (obrasSeleccionadas.length === 0) {
+    alert("Por favor selecciona al menos una Obra Social.");
+    return;
+  }
+  
+  if (!telefono) {
+    alert("Por favor completa el campo Teléfono.");
+    return;
+  }
+  
+  if (!email) {
+    alert("Por favor completa el campo Email.");
+    return;
+  }
+
 
   let medicos = JSON.parse(localStorage.getItem("medicos")) || [];
 

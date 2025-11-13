@@ -199,7 +199,7 @@
           console.error("No se pudo inicializar el modal:", e);
         }
 
-      function cargarLocalStorage() {
+        function cargarLocalStorage() {
           const raw = localStorage.getItem("especialidades");
           if (!raw) return [];
           try {
@@ -267,15 +267,16 @@
           if (!nombre) return alert("El nombre no puede estar vacío.");
 
           const index = especialidades.findIndex((e) => e.id === id);
-          if (index !== -1) {
-            const confirmar = confirm(
-              `El ID ${id} ya existe. ¿Desea sobrescribirlo?`
-            );
-            if (!confirmar) return;
-            especialidades[index] = { id, nombre };
-          } else {
-            especialidades.push({ id, nombre });
-          }
+        if (index !== -1) {
+  const confirmar = confirm(
+    `El ID ${id} ya existe. ¿Desea sobrescribirlo?`
+  );
+  if (!confirmar) return;
+  especialidades[index] = { id: Number(id), nombre };
+} else {
+  especialidades.push({ id: Number(id), nombre });
+}
+
           salvarYRefrescar();
           modal.hide();
         }
