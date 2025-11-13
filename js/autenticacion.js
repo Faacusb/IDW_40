@@ -10,7 +10,7 @@ const BASE_PATH = window.location.hostname.includes('github.io') ? '/IDW_40/' : 
 
 const PATHS = {
   [`${BASE_PATH}login.html`]: { public: true },
-  [`${BASE_PATH}`]: { public: true },
+  [`${BASE_PATH}institucional.html`]: { public: true },
   [`${BASE_PATH}index.html`]: { public: true },
   [`${BASE_PATH}turnos.html`]: { auth: true },
   [`${BASE_PATH}gestionMedicos.html`]: { auth: true, roles: ['admin'] },
