@@ -17,6 +17,7 @@ const PATHS = {
   [`${BASE_PATH}altaMedicos.html`]: { auth: true, roles: ['admin'] },
   [`${BASE_PATH}gestion_especialidades.html`]: { auth: true, roles: ['admin'] },
   [`${BASE_PATH}gestion_obrasocial.html`]: { auth: true, roles: ['admin'] },
+  [`${BASE_PATH}administracion-turnos.html`]: { auth: true, roles: ['admin'] },
   [`${BASE_PATH}usuarios.html`]: { auth: true, roles: ['admin'] },
 };
 

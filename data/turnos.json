@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1,
+    "medicoId": 1,
+    "medicoNombre": "Laura",
+    "medicoApellido": "Pérez",
+    "especialidad": "Clínica Médica",
+    "fecha": "2025-11-14",
+    "horario": "09:00",
+    "reservado": false,
+    "usuario": null
+  },
+  {
+    "id": 2,
+    "medicoId": 1,
+    "medicoNombre": "Laura",
+    "medicoApellido": "Pérez",
+    "especialidad": "Clínica Médica",
+    "fecha": "2025-11-14",
+    "horario": "09:30",
+    "reservado": false,
+    "usuario": null
+  },
+  {
+    "id": 3,
+    "medicoId": 2,
+    "medicoNombre": "Carlos",
+    "medicoApellido": "García",
+    "especialidad": "Cardiología",
+    "fecha": "2025-11-15",
+    "horario": "10:00",
+    "reservado": false,
+    "usuario": null
+  },
+  {
+    "id": 4,
+    "medicoId": 2,
+    "medicoNombre": "Carlos",
+    "medicoApellido": "García",
+    "especialidad": "Cardiología",
+    "fecha": "2025-11-15",
+    "horario": "10:30",
+    "reservado": false,
+    "usuario": null
+  },
+  {
+    "id": 5,
+    "medicoId": 3,
+    "medicoNombre": "Marina",
+    "medicoApellido": "Ramirez",
+    "especialidad": "Neurología",
+    "fecha": "2025-11-16",
+    "horario": "11:00",
+    "reservado": false,
+    "usuario": null
+  },
+  {
+    "id": 6,
+    "medicoId": 3,
+    "medicoNombre": "Marina",
+    "medicoApellido": "Ramirez",
+    "especialidad": "Neurología",
+    "fecha": "2025-11-16",
+    "horario": "11:30",
+    "reservado": false,
+    "usuario": null
+  }
+]
