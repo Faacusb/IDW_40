@@ -1,13 +1,11 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const contenedor = document.getElementById("listaMedicos");
 
-
   const fmtPeso = new Intl.NumberFormat("es-AR", {
     style: "currency",
     currency: "ARS",
     maximumFractionDigits: 0,
   });
-
 
   async function loadJSON(path) {
     try {
@@ -28,8 +26,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
       const [m, e, o] = await Promise.all([
         medicos.length ? medicos : loadJSON("data/medicos.json"),
-        especialidades.length ? especialidades : loadJSON("data/especialidades.json"),
-        obrasSociales.length ? obrasSociales : loadJSON("data/obrasSociales.json"),
+        especialidades.length
+          ? especialidades
+          : loadJSON("data/especialidades.json"),
+        obrasSociales.length
+          ? obrasSociales
+          : loadJSON("data/obrasSociales.json"),
       ]);
       medicos = m;
       especialidades = e;
@@ -46,18 +48,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-
   const medicosLocales = JSON.parse(localStorage.getItem("medicos")) || [];
-  const porId = new Map(medicos.map(m => [m.id, m]));
-  medicosLocales.forEach(m => {
+  const porId = new Map(medicos.map((m) => [m.id, m]));
+  medicosLocales.forEach((m) => {
     if (!porId.has(m.id)) porId.set(m.id, m);
   });
   medicos = Array.from(porId.values());
 
-
-  const mapEsp = Object.fromEntries(especialidades.map(e => [e.id, e.nombre]));
-  const mapObra = Object.fromEntries(obrasSociales.map(o => [o.id, o.nombre]));
-
+  const mapEsp = Object.fromEntries(
+    especialidades.map((e) => [e.id, e.nombre])
+  );
+  const mapObra = Object.fromEntries(
+    obrasSociales.map((o) => [o.id, o.nombre])
+  );
 
   render();
 
@@ -69,51 +72,54 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    medicos.forEach(med => {
+    medicos.forEach((med) => {
       const nombreCompleto =
         med.nombreCompleto ||
         [med.nombre, med.apellido].filter(Boolean).join(" ") ||
         "Sin nombre";
 
-  
       let especialidadTxt = "Sin asignar";
-      if (med.especialidad !== undefined && med.especialidad !== null && med.especialidad !== "") {
+      if (
+        med.especialidad !== undefined &&
+        med.especialidad !== null &&
+        med.especialidad !== ""
+      ) {
         const num = Number(med.especialidad);
-        especialidadTxt = !Number.isNaN(num) && mapEsp[num]
-          ? mapEsp[num]
-          : String(med.especialidad);
+        especialidadTxt =
+          !Number.isNaN(num) && mapEsp[num]
+            ? mapEsp[num]
+            : String(med.especialidad);
       }
 
-     
       let obrasTxt = "Sin cobertura";
       if (Array.isArray(med.obrasSociales) && med.obrasSociales.length) {
-        const nombres = med.obrasSociales.map(o => {
+        const nombres = med.obrasSociales.map((o) => {
           const n = Number(o);
           return !Number.isNaN(n) && mapObra[n] ? mapObra[n] : String(o);
         });
         obrasTxt = nombres.join(", ");
       } else if (med.obraSocial) {
         const n = Number(med.obraSocial);
-        obrasTxt = !Number.isNaN(n) && mapObra[n] ? mapObra[n] : String(med.obraSocial);
+        obrasTxt =
+          !Number.isNaN(n) && mapObra[n] ? mapObra[n] : String(med.obraSocial);
       } else if (med.obrasocial) {
-      
         const n = Number(med.obrasocial);
-        obrasTxt = !Number.isNaN(n) && mapObra[n] ? mapObra[n] : String(med.obrasocial);
+        obrasTxt =
+          !Number.isNaN(n) && mapObra[n] ? mapObra[n] : String(med.obrasocial);
       }
 
-  
       let imgSrc = "img/default-doctor.png";
       const foto = med.fotografia || med.imagen || "";
       if (foto) {
         imgSrc = foto.startsWith("data:image") ? foto : foto.replace("../", "");
       }
 
-     
       const matricula = med.matriculaProfesional ?? med.matricula ?? "—";
       const descripcion = med.descripcion || "—";
-      const valor = med.valorConsulta != null ? fmtPeso.format(med.valorConsulta) : "—";
+      const valor =
+        med.valorConsulta != null ? fmtPeso.format(med.valorConsulta) : "—";
       const col = document.createElement("div");
-      
+
       col.className = "col-12 col-md-6 col-lg-4";
 
       col.innerHTML = `
@@ -135,4 +141,3 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 });
-

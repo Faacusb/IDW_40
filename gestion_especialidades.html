@@ -63,7 +63,7 @@
                 <a
                   class="nav-link fw-bold text-dark active"
                   href="gestion_especialidades.html"
-                  >Gestión de Especiailidades</a
+                  >Gestión de Especialidades</a
                 >
               </li>
               <li class="nav-item">
@@ -74,8 +74,12 @@
                 >
               </li>
               <li class="nav-item">
-                <a class="nav-link fw-bold text-dark" href="administracion-turnos.html">Gestión de Turnos</a>
-              </li>                
+                <a
+                  class="nav-link fw-bold text-dark"
+                  href="administracion-turnos.html"
+                  >Gestión de Turnos</a
+                >
+              </li>
               <li class="nav-item">
                 <a class="nav-link fw-bold text-dark" href="usuarios.html"
                   >Gestión de Usuarios</a
@@ -281,7 +285,6 @@
           if (!esp) return;
 
           if (!confirm(`¿Eliminar "${esp.nombre}" (ID ${esp.id})?`)) return;
-
 
           especialidades = especialidades.filter((e) => e.id !== id);
           salvarYRefrescar();

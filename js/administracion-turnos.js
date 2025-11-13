@@ -9,41 +9,40 @@ document.addEventListener("DOMContentLoaded", () => {
   const medicos = JSON.parse(localStorage.getItem("medicos")) || [];
   let turnos = JSON.parse(localStorage.getItem(CLAVE_TURNOS)) || [];
 
-  // 🟢 Cargar lista de médicos
   function cargarMedicos() {
-  const selectFiltro = document.getElementById("filtroMedico");
-  const selectNuevo = document.getElementById("nuevoMedico"); // select del modal
+    const selectFiltro = document.getElementById("filtroMedico");
+    const selectNuevo = document.getElementById("nuevoMedico"); // select del modal
 
-  // Limpiar ambos selects
-  selectFiltro.innerHTML = `<option value="">Todos los médicos</option>`;
-  if (selectNuevo) selectNuevo.innerHTML = `<option value="">Seleccione un médico...</option>`;
+    selectFiltro.innerHTML = `<option value="">Todos los médicos</option>`;
+    if (selectNuevo)
+      selectNuevo.innerHTML = `<option value="">Seleccione un médico...</option>`;
 
-  medicos.forEach((m) => {
-    const texto = `${m.nombre} ${m.apellido} - ${obtenerEspecialidad(m.especialidad)}`;
-    
-    const optFiltro = document.createElement("option");
-    optFiltro.value = m.id;
-    optFiltro.textContent = texto;
-    selectFiltro.appendChild(optFiltro);
+    medicos.forEach((m) => {
+      const texto = `${m.nombre} ${m.apellido} - ${obtenerEspecialidad(
+        m.especialidad
+      )}`;
 
-    if (selectNuevo) {
-      const optNuevo = document.createElement("option");
-      optNuevo.value = m.id;
-      optNuevo.textContent = texto;
-      selectNuevo.appendChild(optNuevo);
-    }
-  });
-}
+      const optFiltro = document.createElement("option");
+      optFiltro.value = m.id;
+      optFiltro.textContent = texto;
+      selectFiltro.appendChild(optFiltro);
 
+      if (selectNuevo) {
+        const optNuevo = document.createElement("option");
+        optNuevo.value = m.id;
+        optNuevo.textContent = texto;
+        selectNuevo.appendChild(optNuevo);
+      }
+    });
+  }
 
-  // 🩺 Obtener nombre de especialidad
   function obtenerEspecialidad(id) {
-    const especialidades = JSON.parse(localStorage.getItem("especialidades")) || [];
+    const especialidades =
+      JSON.parse(localStorage.getItem("especialidades")) || [];
     const esp = especialidades.find((e) => e.id == id);
     return esp ? esp.nombre : "Sin especialidad";
   }
 
-  // 🧾 Mostrar turnos
   function mostrarTurnos() {
     tabla.innerHTML = "";
 
@@ -71,12 +70,13 @@ document.addEventListener("DOMContentLoaded", () => {
         </td>
       `;
 
-      fila.querySelector("button").addEventListener("click", () => eliminarTurno(t.id));
+      fila
+        .querySelector("button")
+        .addEventListener("click", () => eliminarTurno(t.id));
       tabla.appendChild(fila);
     });
   }
 
-  // ❌ Eliminar un turno individual
   function eliminarTurno(id) {
     if (!confirm("¿Eliminar este turno?")) return;
     turnos = turnos.filter((t) => t.id !== id);
@@ -84,7 +84,6 @@ document.addEventListener("DOMContentLoaded", () => {
     mostrarTurnos();
   }
 
-  // 🧹 Eliminar todos los turnos
   btnLimpiar.addEventListener("click", () => {
     if (!turnos.length) return alert("No hay turnos para eliminar.");
     if (!confirm("¿Eliminar TODOS los turnos?")) return;
@@ -93,78 +92,67 @@ document.addEventListener("DOMContentLoaded", () => {
     mostrarTurnos();
   });
 
-  // 💾 Guardar cambios
   function guardarTurnos() {
     localStorage.setItem(CLAVE_TURNOS, JSON.stringify(turnos));
   }
 
-  // 🔄 Actualizar al cambiar filtro
   filtroMedico.addEventListener("change", mostrarTurnos);
 
-  // 🟢 Crear nuevo turno desde el modal
-document.getElementById("btnGuardarTurno").addEventListener("click", () => {
-  const medicoId = parseInt(document.getElementById("nuevoMedico").value);
-  const fecha = document.getElementById("nuevaFecha").value;
-  const hora = document.getElementById("nuevaHora").value;
+  document.getElementById("btnGuardarTurno").addEventListener("click", () => {
+    const medicoId = parseInt(document.getElementById("nuevoMedico").value);
+    const fecha = document.getElementById("nuevaFecha").value;
+    const hora = document.getElementById("nuevaHora").value;
 
-  if (!medicoId || !fecha || !hora) {
-    alert("Por favor complete todos los campos.");
-    return;
-  }
+    if (!medicoId || !fecha || !hora) {
+      alert("Por favor complete todos los campos.");
+      return;
+    }
 
-  const medico = medicos.find(m => m.id === medicoId);
-  if (!medico) {
-    alert("Médico no encontrado.");
-    return;
-  }
+    const medico = medicos.find((m) => m.id === medicoId);
+    if (!medico) {
+      alert("Médico no encontrado.");
+      return;
+    }
 
-  // Crear objeto Turno
-  const nuevoTurno = new Turno(
-    Date.now(),
-    medico.id,
-    medico.nombre,
-    medico.apellido,
-    obtenerEspecialidad(medico.especialidad),
-    fecha,
-    hora,
-    false
-  );
+    const nuevoTurno = new Turno(
+      Date.now(),
+      medico.id,
+      medico.nombre,
+      medico.apellido,
+      obtenerEspecialidad(medico.especialidad),
+      fecha,
+      hora,
+      false
+    );
 
-  // 🔹 Recuperar turnos existentes guardados
-let turnosExistentes = JSON.parse(localStorage.getItem(CLAVE_TURNOS)) || [];
+    let turnosExistentes = JSON.parse(localStorage.getItem(CLAVE_TURNOS)) || [];
 
-// 🔹 Verificar que no exista un turno duplicado (mismo médico, fecha y hora)
-const duplicado = turnosExistentes.some(
-  t => t.medicoId === medico.id && t.fecha === fecha && t.hora === hora
-);
-if (duplicado) {
-  alert("⚠️ Ya existe un turno para ese médico en la misma fecha y hora.");
-  return;
-}
+    const duplicado = turnosExistentes.some(
+      (t) => t.medicoId === medico.id && t.fecha === fecha && t.hora === hora
+    );
+    if (duplicado) {
+      alert("⚠️ Ya existe un turno para ese médico en la misma fecha y hora.");
+      return;
+    }
 
-// 🔹 Agregar el nuevo turno
-turnosExistentes.push(nuevoTurno);
+    turnosExistentes.push(nuevoTurno);
 
-// 🔹 Guardar en localStorage
-localStorage.setItem(CLAVE_TURNOS, JSON.stringify(turnosExistentes));
+    localStorage.setItem(CLAVE_TURNOS, JSON.stringify(turnosExistentes));
 
-// 🔹 Actualizar variable local y recargar tabla
-turnos = turnosExistentes;
-mostrarTurnos();
+    turnos = turnosExistentes;
+    mostrarTurnos();
 
-alert("✅ Turno creado correctamente.");
+    alert("✅ Turno creado correctamente.");
 
+    document.getElementById("nuevaFecha").value = "";
+    document.getElementById("nuevaHora").value = "";
+    document.getElementById("nuevoMedico").value = "";
+    const modal = bootstrap.Modal.getInstance(
+      document.getElementById("modalTurno")
+    );
+    modal.hide();
+  });
 
-  // Limpiar modal
-  document.getElementById("nuevaFecha").value = "";
-  document.getElementById("nuevaHora").value = "";
-  document.getElementById("nuevoMedico").value = "";
-  const modal = bootstrap.Modal.getInstance(document.getElementById("modalTurno"));
-  modal.hide();
-});
-
-
-  // 🟠 Inicializar
   cargarMedicos();
   mostrarTurnos();
 });
