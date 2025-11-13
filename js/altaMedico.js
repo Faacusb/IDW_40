@@ -10,7 +10,6 @@ const inputMatricula = document.getElementById("matriculaProfesional");
 const inputDescripcion = document.getElementById("descripcion");
 const inputValorConsulta = document.getElementById("valorConsulta");
 
-// 🟢 Esperar al DOM antes de ejecutar todo
 document.addEventListener("DOMContentLoaded", async () => {
   await cargarEspecialidades();
   await cargarObrasSociales();
@@ -19,7 +18,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function cargarEspecialidades() {
   try {
-    // 🚫 Evitar cache del navegador (clave en GitHub Pages o al hacer F5)
     const res = await fetch("data/especialidades.json?v=" + Date.now(), {
       cache: "no-store",
     });
@@ -30,7 +28,6 @@ async function cargarEspecialidades() {
       JSON.parse(localStorage.getItem("especialidadesEliminadas")) || []
     ).map(Number);
 
-    // 🔹 Combinar JSON base + locales, filtrando eliminadas y duplicados
     let combinadas = base.filter((e) => !eliminadas.includes(Number(e.id)));
     locales.forEach((esp) => {
       if (!combinadas.some((e) => Number(e.id) === Number(esp.id))) {
@@ -38,7 +35,6 @@ async function cargarEspecialidades() {
       }
     });
 
-    // 🔹 Renderizar el select
     const select = document.getElementById("especialidad");
     if (!select) return;
     select.innerHTML = `<option value="">Seleccione Especialidad</option>`;
@@ -52,7 +48,6 @@ async function cargarEspecialidades() {
         select.appendChild(opt);
       });
 
-    // 🔄 🔹 REFRESCAR el estilo visual del select (Material Style)
     if (window.mdc && mdc.autoInit) {
       mdc.autoInit();
     }
@@ -61,7 +56,6 @@ async function cargarEspecialidades() {
   }
 }
 
-// 🔹 Cargar obras sociales (filtrando eliminadas)
 async function cargarObrasSociales() {
   try {
     const res = await fetch("data/obrasSociales.json?v=" + Date.now(), {
@@ -69,17 +63,14 @@ async function cargarObrasSociales() {
     });
     const base = res.ok ? await res.json() : [];
 
-    // ✅ Locales y eliminadas desde localStorage
     const locales = JSON.parse(localStorage.getItem("obrasSociales")) || [];
     const eliminadas =
       JSON.parse(localStorage.getItem("obrasSocialesEliminadas")) || [];
 
-    // 🧠 Asegurar que siempre sean números, incluso si se guardaron como objetos
     const eliminadasIds = eliminadas.map((e) =>
       typeof e === "object" ? Number(e.id) : Number(e)
     );
 
-    // 🔹 Combinar JSON base + locales filtrando eliminadas y duplicados
     let combinadas = base.filter((o) => !eliminadasIds.includes(Number(o.id)));
     locales.forEach((o) => {
       if (
@@ -90,7 +81,6 @@ async function cargarObrasSociales() {
       }
     });
 
-    // 🔹 Renderizar
     const contenedor = document.getElementById("obrasSocialesChecks");
     if (!contenedor) return;
 

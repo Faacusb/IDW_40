@@ -90,7 +90,6 @@ function clearSession() {
   sessionStorage.clear();
 }
 
-// --- UI AUXILIARES ---
 function toggleLoadingState(form, isLoading) {
   const btn = form.querySelector('button[type="submit"]');
   const spinner = form.querySelector('.spinner-border');
@@ -124,7 +123,6 @@ function showAccessDeniedModal(message, redirectToLogin) {
   }
 }
 
-// --- LOGIN ---
 async function handleLogin(e, form) {
   e.preventDefault();
 

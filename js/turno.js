@@ -1,14 +1,23 @@
 export class Turno {
-  constructor(id, medicoId, medicoNombre, medicoApellido, especialidad, fecha, horario, reservado = false) {
+  constructor(
+    id,
+    medicoId,
+    medicoNombre,
+    medicoApellido,
+    especialidad,
+    fecha,
+    horario,
+    reservado = false
+  ) {
     this.id = id;
     this.medicoId = medicoId;
     this.medicoNombre = medicoNombre;
     this.medicoApellido = medicoApellido;
     this.especialidad = especialidad;
     this.fecha = fecha;
-    this.horario = horario; // ✅ usamos "horario" para mantener coherencia
+    this.horario = horario;
     this.reservado = reservado;
-    this.usuario = null; // hasta que se reserve
+    this.usuario = null;
   }
 
   reservar(usuario) {
