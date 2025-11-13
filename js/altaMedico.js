@@ -10,6 +10,7 @@ const inputMatricula = document.getElementById("matriculaProfesional");
 const inputDescripcion = document.getElementById("descripcion");
 const inputValorConsulta = document.getElementById("valorConsulta");
 
+
 document.addEventListener("DOMContentLoaded", async () => {
   await cargarEspecialidades();
   await cargarObrasSociales();
