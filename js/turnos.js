@@ -1,18 +1,37 @@
 import { Turno } from "./turno.js";
 
+const CLAVE_TURNOS = "turnosReservados";
+const STORAGE_KEY_USER_DATA = "userData";
+
+// 🗂️ Cargar turnos de ejemplo si no existen en localStorage
+async function cargarTurnosIniciales() {
+  const existentes = JSON.parse(localStorage.getItem(CLAVE_TURNOS)) || [];
+  if (existentes.length > 0) return;
+
+  try {
+    const res = await fetch("data/turnos.json");
+    if (!res.ok) throw new Error("No se pudo cargar turnos.json");
+    const datos = await res.json();
+
+    localStorage.setItem(CLAVE_TURNOS, JSON.stringify(datos));
+    console.log("🩺 Turnos de ejemplo cargados desde JSON.");
+  } catch (error) {
+    console.error("❌ Error al cargar los turnos iniciales:", error);
+  }
+}
+
 const selectMedico = document.getElementById("medicoSelect");
 const divCalendario = document.getElementById("calendario");
 const divTurnos = document.getElementById("turnos");
 const tituloTurnos = document.getElementById("tituloDia");
+const tablaMisReservas = document.getElementById("tablaMisReservas");
 
-const CLAVE_TURNOS = "turnosReservados";
 let diaElegido = null;
 let medicoElegido = null;
 
-// 🩺 Cargar médicos combinando JSON + localStorage (sin duplicar)
+// 🩺 Cargar médicos (localStorage + JSON)
 async function cargarMedicos() {
   const medicosLocal = JSON.parse(localStorage.getItem("medicos")) || [];
-
   let medicosJson = [];
   try {
     const res = await fetch("data/medicos.json");
@@ -21,21 +40,18 @@ async function cargarMedicos() {
     console.error("Error cargando JSON de médicos:", error);
   }
 
-  // Combinar médicos del JSON con los locales (sin duplicar)
   const todos = [...medicosJson];
   medicosLocal.forEach(mLocal => {
-    const existe = todos.some(mJson => mJson.id === mLocal.id);
-    if (!existe) todos.push(mLocal);
+    if (!todos.some(mJson => mJson.id === mLocal.id)) todos.push(mLocal);
   });
 
-  // Guardar la lista final combinada
   localStorage.setItem("medicos", JSON.stringify(todos));
   return todos;
 }
-// 🧠 Cargar especialidades si faltan
+
+// 🧠 Cargar especialidades
 async function cargarEspecialidadesSiFaltan() {
   let especialidades = JSON.parse(localStorage.getItem("especialidades")) || [];
-
   if (especialidades.length === 0) {
     try {
       const res = await fetch("data/especialidades.json");
@@ -46,13 +62,10 @@ async function cargarEspecialidadesSiFaltan() {
       console.error("Error al cargar especialidades:", error);
     }
   }
-
   return especialidades;
 }
 
-
-
-
+// 👨‍⚕️ Mostrar médicos en el select
 function mostrarMedicos() {
   const medicos = JSON.parse(localStorage.getItem("medicos")) || [];
   const especialidades = JSON.parse(localStorage.getItem("especialidades")) || [];
@@ -60,17 +73,14 @@ function mostrarMedicos() {
   selectMedico.innerHTML = '<option value="">Seleccione un médico...</option>';
 
   medicos.forEach(medico => {
-    // Buscar el nombre de la especialidad según el id
     const esp = especialidades.find(e => e.id == medico.especialidad);
     const nombreEsp = esp ? esp.nombre : "Sin especialidad";
-
     const opcion = document.createElement("option");
     opcion.value = medico.id;
     opcion.textContent = `${medico.nombre} ${medico.apellido} - ${nombreEsp}`;
     selectMedico.appendChild(opcion);
   });
 }
-
 
 // 🟢 Al seleccionar un médico
 selectMedico.addEventListener("change", () => {
@@ -116,10 +126,21 @@ function crearCalendario() {
   }
 }
 
+// 🔐 Obtener usuario actual desde sessionStorage
+function obtenerUsuarioActual() {
+  const base64 = sessionStorage.getItem(STORAGE_KEY_USER_DATA);
+  if (!base64) return null;
+
+  try {
+    return JSON.parse(atob(base64)); // decodifica Base64
+  } catch {
+    return null;
+  }
+}
+
 // 🕒 Mostrar turnos disponibles
 function mostrarTurnos() {
   if (!diaElegido || !medicoElegido) return;
-
   const turnos = JSON.parse(localStorage.getItem(CLAVE_TURNOS)) || [];
 
   divTurnos.innerHTML = "";
@@ -148,11 +169,59 @@ function mostrarTurnos() {
   });
 }
 
+// 🩵 Mostrar "Mis Reservas"
+function mostrarMisReservas() {
+  const usuarioActual = obtenerUsuarioActual();
+  if (!usuarioActual || !tablaMisReservas) return;
 
+  const turnos = JSON.parse(localStorage.getItem(CLAVE_TURNOS)) || [];
+  const misTurnos = turnos.filter(
+    t => t.usuario === usuarioActual.username // nombre de usuario dummyjson
+  );
+
+  tablaMisReservas.innerHTML = "";
+
+  if (misTurnos.length === 0) {
+    tablaMisReservas.innerHTML = `<tr><td colspan="5" class="text-muted">No tienes reservas aún.</td></tr>`;
+    return;
+  }
+
+  misTurnos.forEach(t => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${t.medicoNombre} ${t.medicoApellido}</td>
+      <td>${t.especialidad}</td>
+      <td>${t.fecha}</td>
+      <td>${t.horario}</td>
+      <td><button class="btn btn-danger btn-sm">Cancelar</button></td>
+    `;
+    tr.querySelector("button").addEventListener("click", () => cancelarReserva(t.id));
+    tablaMisReservas.appendChild(tr);
+  });
+}
+
+// ❌ Cancelar reserva
+function cancelarReserva(idTurno) {
+  const turnos = JSON.parse(localStorage.getItem(CLAVE_TURNOS)) || [];
+  const index = turnos.findIndex(t => t.id == idTurno);
+  if (index === -1) return;
+  if (!confirm("¿Seguro que desea cancelar este turno?")) return;
+
+  turnos[index].reservado = false;
+  turnos[index].usuario = null;
+  localStorage.setItem(CLAVE_TURNOS, JSON.stringify(turnos));
+
+  alert("❌ Turno cancelado correctamente.");
+  mostrarMisReservas();
+  mostrarTurnos();
+}
+
+// 🟢 Reservar turno
 function reservarTurno(turno) {
-  const usuarioActual = JSON.parse(localStorage.getItem("usuarioActivo"));
+  const usuarioActual = obtenerUsuarioActual();
   if (!usuarioActual) {
     alert("⚠️ Debes iniciar sesión para reservar un turno.");
+    window.location.href = "login.html";
     return;
   }
 
@@ -163,33 +232,27 @@ function reservarTurno(turno) {
     alert("⚠️ El turno seleccionado no existe.");
     return;
   }
-
-  // 🟠 Nueva validación: evitar doble reserva
   if (turnos[index].reservado) {
     alert("⚠️ Este turno ya fue reservado por otro usuario.");
     return;
   }
 
-  // 🟢 Reservar turno
+  // ✅ Reservar turno con username
   turnos[index].reservado = true;
-  turnos[index].usuario = `${usuarioActual.nombre} ${usuarioActual.apellido}`;
+  turnos[index].usuario = usuarioActual.username;
   localStorage.setItem(CLAVE_TURNOS, JSON.stringify(turnos));
 
   alert("✅ Turno reservado correctamente.");
   mostrarTurnos();
+  mostrarMisReservas();
 }
 
-
+// 🚀 Inicialización
 (async () => {
-  await cargarEspecialidadesSiFaltan(); // 👈 primero carga las especialidades
-  await cargarMedicos();                // 👈 luego combina los médicos del JSON + localStorage
-  mostrarMedicos();                     // 👈 ahora sí los muestra con sus especialidades
-  crearCalendario();                    // 👈 y genera el calendario
+  await cargarTurnosIniciales();
+  await cargarEspecialidadesSiFaltan();
+  await cargarMedicos();
+  mostrarMedicos();
+  crearCalendario();
+  mostrarMisReservas();
 })();
-
-
-const turnosGuardados = JSON.parse(localStorage.getItem(CLAVE_TURNOS)) || [];
-let listaTurnos = turnosGuardados;
-
-console.log("📋 Todos los turnos cargados desde localStorage:");
-console.table(listaTurnos);

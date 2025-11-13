@@ -6,35 +6,71 @@
   <title>Reserva de Turnos - Medical Assistance</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="CSS/estilos.css" />
-  </style>
+  <link rel="icon" type="image/png" href="img/logo-mini.png" />
 </head>
+
 <body style="background-color: #e9f7fc;">
+
+  <!-- ====================== HEADER ====================== -->
   <header>
     <nav class="navbar navbar-expand-lg border-bottom border-dark p-0">
       <div class="container-fluid flex-column flex-lg-column p-0">
         <div class="w-100 bg-primary text-white px-3 py-2 border-bottom border-dark d-flex justify-content-between align-items-center">
-          <a class="navbar-brand fw-bold text-white m-0 mx-auto d-none d-lg-block" href="index.html">Medical Assistance</a>
-          <a class="navbar-brand fw-bold text-white m-0 d-lg-none" href="index.html">Medical Assistance</a>
+          <a class="navbar-brand fw-bold text-white m-0 mx-auto d-none d-lg-block d-flex align-items-center gap-2" href="index.html">
+            <img src="img/logo.svg" alt="Logo" height="40" />
+            <span>Medical Assistance</span>
+          </a>
+          <a class="navbar-brand fw-bold text-white m-0 d-lg-none d-flex align-items-center gap-2" href="index.html">
+            <img src="img/logo.svg" alt="Logo" height="30" />
+            <span>Medical Assistance</span>
+          </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
         </div>
+
         <div class="collapse navbar-collapse w-100 bg-white border-bottom border-dark" id="navbarNav">
           <ul class="navbar-nav mx-auto gap-3 py-2">
             <li class="nav-item"><a class="nav-link fw-bold text-dark" href="index.html">Inicio</a></li>
             <li class="nav-item"><a class="nav-link fw-bold text-dark" href="institucional.html">Institucional</a></li>
             <li class="nav-item"><a class="nav-link fw-bold text-dark" href="contacto.html">Contacto</a></li>
             <li class="nav-item"><a class="nav-link fw-bold text-dark active" href="turnos.html">Turnos</a></li>
+            <li class="nav-item"><a class="nav-link fw-bold text-dark" href="login.html">Login</a></li>
           </ul>
         </div>
       </div>
     </nav>
   </header>
+
+  <!-- ====================== MAIN ====================== -->
   <main class="container my-5">
     <section class="bg-white p-4 rounded shadow-sm">
+
       <h2 class="text-center mb-4 text-primary">Reserva de Turnos Médicos</h2>
 
+      <!-- 🩺 MIS RESERVAS -->
+      <section class="mb-5">
+        <h4 class="text-center text-secondary mb-3">🩺 Mis Reservas</h4>
+        <div class="table-responsive">
+          <table class="table table-bordered align-middle text-center">
+            <thead class="table-primary">
+              <tr>
+                <th>Médico</th>
+                <th>Especialidad</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody id="tablaMisReservas">
+              <tr><td colspan="5" class="text-muted">No tienes reservas aún.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SELECCIÓN DE MÉDICO -->
       <div class="mb-4">
         <label for="medicoSelect" class="form-label fw-semibold">Seleccione un médico:</label>
         <select id="medicoSelect" class="form-select">
@@ -42,56 +78,133 @@
         </select>
       </div>
 
-      <div id="calendario" class="row g-2 mb-4 text-center justify-content-center">
-       
-      </div>
+      <!-- CALENDARIO -->
+      <div id="calendario" class="row g-2 mb-4 text-center justify-content-center"></div>
 
-     
+      <!-- TURNOS DISPONIBLES -->
       <div>
         <h4 id="tituloDia" class="text-center mb-3">Seleccione un día del calendario</h4>
         <div id="turnos" class="row text-center g-3 justify-content-center">
           <!-- Los turnos se cargan dinámicamente -->
         </div>
       </div>
+    </section>
+  </main>
 
+  <!-- ====================== FOOTER ====================== -->
   <footer class="bg-info text-dark text-center py-3 border-top border-dark mt-5">
     <p class="mb-0">Copyright &copy; 2025 Centro Médico Medical Assistance</p>
   </footer>
 
+  <!-- ====================== SCRIPTS ====================== -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- ⚠️ Eliminar o comentar datosIniciales si no existe -->
-<!-- <script src="js/datosIniciales.js"></script> -->
+  <!-- Lógica principal -->
+  <script type="module" src="js/turnos.js"></script>
 
-<!-- ✅ turnos.js debe ser módulo -->
-<script type="module" src="js/turnos.js"></script>
+  <!-- Autenticación -->
+  <script src="js/autenticacion.js"></script>
 
-<!-- ✅ autenticación normal (no usa import/export) -->
-<script src="js/autenticacion.js"></script>
-
-  <!-- Bloquear turnos para que solo se pueda ingresar logueado -->
+  <!-- Verificación de sesión y navbar dinámico -->
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       const token = sessionStorage.getItem('accessToken');
+      const navList = document.querySelector('#navbarNav .navbar-nav');
+      let user = null;
+
+      // --- Si no hay token -> redirige a login
       if (!token) {
         alert('Debe iniciar sesión para acceder a los turnos.');
         window.location.href = 'login.html';
         return;
       }
+
       try {
-        const user = await validateAndFetchUserData();
+        user = await validateAndFetchUserData();
         if (!user) {
           clearSession();
           alert('Sesión expirada o inválida. Inicie sesión nuevamente.');
           window.location.href = 'login.html';
+          return;
         }
       } catch (err) {
         console.error('Error validando usuario:', err);
         clearSession();
         window.location.href = 'login.html';
+        return;
       }
+
+      // --- Construcción del navbar dinámico ---
+      const lastItem = navList.lastElementChild;
+      if (lastItem && lastItem.querySelector('a[href="login.html"]')) {
+        lastItem.remove();
+      }
+
+      const li = document.createElement('li');
+      li.classList.add('nav-item');
+
+      if (user) {
+        li.innerHTML = `
+          <a class="nav-link fw-bold text-dark" href="#" id="logoutLink">
+            Logout (${user.username})
+          </a>`;
+        navList.appendChild(li);
+
+        document.getElementById('logoutLink').addEventListener('click', (e) => {
+          e.preventDefault();
+          clearSession();
+          window.location.href = 'index.html';
+        });
+      } else {
+        li.innerHTML = `<a class="nav-link fw-bold text-dark" href="login.html">Login</a>`;
+        navList.appendChild(li);
+      }
+
+      // --- Carga de reservas personales ---
+      mostrarMisReservas(user);
     });
+
+    // Mostrar tabla de reservas del usuario actual
+    function mostrarMisReservas(usuario) {
+      const tbody = document.getElementById("tablaMisReservas");
+      const turnos = JSON.parse(localStorage.getItem("turnosReservados")) || [];
+      const misTurnos = turnos.filter(t => t.usuario === `${usuario.nombre} ${usuario.apellido}`);
+
+      tbody.innerHTML = "";
+
+      if (misTurnos.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="text-muted">No tienes reservas aún.</td></tr>`;
+        return;
+      }
+
+      misTurnos.forEach(t => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${t.medicoNombre} ${t.medicoApellido}</td>
+          <td>${t.especialidad}</td>
+          <td>${t.fecha}</td>
+          <td>${t.horario}</td>
+          <td><button class="btn btn-danger btn-sm" onclick="cancelarReserva('${t.id}')">Cancelar</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Cancelar reserva
+    function cancelarReserva(idTurno) {
+      const turnos = JSON.parse(localStorage.getItem("turnosReservados")) || [];
+      const index = turnos.findIndex(t => t.id == idTurno);
+
+      if (index === -1) return;
+      if (!confirm("¿Seguro que desea cancelar este turno?")) return;
+
+      turnos[index].reservado = false;
+      turnos[index].usuario = null;
+      localStorage.setItem("turnosReservados", JSON.stringify(turnos));
+
+      alert("❌ Turno cancelado correctamente.");
+      location.reload(); // refresca la tabla
+    }
   </script>
 </body>
 </html>
