@@ -59,9 +59,17 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/datosIniciales.js"></script>
-  <script src="js/turnos.js"></script>
-  <script src="js/autenticacion.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ⚠️ Eliminar o comentar datosIniciales si no existe -->
+<!-- <script src="js/datosIniciales.js"></script> -->
+
+<!-- ✅ turnos.js debe ser módulo -->
+<script type="module" src="js/turnos.js"></script>
+
+<!-- ✅ autenticación normal (no usa import/export) -->
+<script src="js/autenticacion.js"></script>
+
   <!-- Bloquear turnos para que solo se pueda ingresar logueado -->
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
