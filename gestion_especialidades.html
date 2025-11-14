@@ -312,7 +312,7 @@
         guardarBtn.addEventListener("click", guardarEspecialidad);
 
         if (!especialidades.length) {
-          fetch("especialidades.json")
+          fetch("data/especialidades.json")
             .then((r) => (r.ok ? r.json() : []))
             .then((data) => {
               if (Array.isArray(data)) {
