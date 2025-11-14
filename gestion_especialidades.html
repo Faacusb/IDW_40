@@ -182,156 +182,149 @@
     <script src="js/autenticacion.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@materialstyle/materialstyle@3.1.1/dist/js/materialstyle.min.js"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const tabla = document.getElementById("tablaEspecialidades");
-        const btnAgregar = document.getElementById("btnAgregar");
-        const idInput = document.getElementById("idEspecialidad");
-        const nombreInput = document.getElementById("nombreEspecialidad");
-        const tituloModal = document.getElementById("tituloModal");
-        const guardarBtn = document.getElementById("guardarBtn");
+    document.addEventListener("DOMContentLoaded", () => {
+      const tabla = document.getElementById("tablaEspecialidades");
+      const btnAgregar = document.getElementById("btnAgregar");
+      const idInput = document.getElementById("idEspecialidad");
+      const nombreInput = document.getElementById("nombreEspecialidad");
+      const tituloModal = document.getElementById("tituloModal");
+      const guardarBtn = document.getElementById("guardarBtn");
 
-        let modal;
+      let modal = new bootstrap.Modal(document.getElementById("modalEspecialidad"));
+
+      function cargarLocales() {
         try {
-          modal = new bootstrap.Modal(
-            document.getElementById("modalEspecialidad")
-          );
-        } catch (e) {
-          console.error("No se pudo inicializar el modal:", e);
+          const lista = JSON.parse(localStorage.getItem("especialidades"));
+          return Array.isArray(lista) ? lista : [];
+        } catch {
+          return [];
         }
+      }
 
-        function cargarLocalStorage() {
-          const raw = localStorage.getItem("especialidades");
-          if (!raw) return [];
-          try {
-            const parsed = JSON.parse(raw);
-            return Array.isArray(parsed) ? parsed : [];
-          } catch {
-            return [];
-          }
+      function cargarEliminadas() {
+        try {
+          const ids = JSON.parse(localStorage.getItem("especialidadesEliminadas"));
+          return Array.isArray(ids) ? ids.map(Number) : [];
+        } catch {
+          return [];
         }
+      }
 
-        let especialidades = cargarLocalStorage();
+      async function cargarCombinado() {
+        const res = await fetch("data/especialidades.json?v=" + Date.now(), { cache: "no-store" });
+        const base = res.ok ? await res.json() : [];
 
-        function renderizarTabla() {
-          tabla.innerHTML = "";
-          [...especialidades]
-            .sort((a, b) => a.id - b.id)
-            .forEach((esp) => {
-              const tr = document.createElement("tr");
-              tr.innerHTML = `
-              <td>${esp.id}</td>
-              <td>${esp.nombre}</td>
-              <td>
-                <button class="btn btn-sm btn-warning me-2">Editar</button>
-                <button class="btn btn-sm btn-danger">Eliminar</button>
-              </td>
-            `;
-              tr.querySelector(".btn-warning").addEventListener("click", () =>
-                abrirEditar(esp.id)
-              );
-              tr.querySelector(".btn-danger").addEventListener("click", () =>
-                eliminarEspecialidad(esp.id)
-              );
-              tabla.appendChild(tr);
-            });
-        }
+        const locales = cargarLocales();
+        const eliminadas = cargarEliminadas();
 
-        function sugerirId() {
-          return especialidades.length
-            ? Math.max(...especialidades.map((e) => e.id)) + 1
-            : 1;
-        }
+        let lista = base.filter(e => !eliminadas.includes(Number(e.id)));
 
-        function abrirNueva() {
-          idInput.value = sugerirId();
-          nombreInput.value = "";
-          tituloModal.textContent = "Agregar Especialidad";
-          modal.show();
-          idInput.focus();
-        }
+        locales.forEach(loc => {
+          const idx = lista.findIndex(e => Number(e.id) === Number(loc.id));
+          if (idx !== -1) lista[idx] = loc;
+          else lista.push(loc);
+        });
 
-        function abrirEditar(id) {
-          const esp = especialidades.find((e) => e.id === id);
-          if (!esp) return alert("Especialidad no encontrada.");
-          idInput.value = esp.id;
-          nombreInput.value = esp.nombre;
-          tituloModal.textContent = "Editar Especialidad";
-          modal.show();
-          nombreInput.focus();
-        }
+        return lista.sort((a, b) => a.id - b.id);
+      }
 
-        function guardarEspecialidad() {
-          const id = parseInt(idInput.value);
-          const nombre = nombreInput.value.trim();
-          if (!Number.isInteger(id) || id < 1) return alert("ID inválido.");
-          if (!nombre) return alert("El nombre no puede estar vacío.");
+      let especialidades = [];
 
-          const index = especialidades.findIndex((e) => e.id === id);
-          if (index !== -1) {
-            const confirmar = confirm(
-              `El ID ${id} ya existe. ¿Desea sobrescribirlo?`
-            );
-            if (!confirmar) return;
-            especialidades[index] = { id, nombre };
-          } else {
-            especialidades.push({ id, nombre });
-          }
-          salvarYRefrescar();
-          modal.hide();
-        }
+      async function inicializar() {
+        especialidades = await cargarCombinado();
 
-        function eliminarEspecialidad(id) {
-          const esp = especialidades.find((e) => e.id === id);
-          if (!esp) return;
+        localStorage.setItem("especialidades", JSON.stringify(especialidades));
+        renderizarTabla();
+      }
 
-          if (!confirm(`¿Eliminar "${esp.nombre}" (ID ${esp.id})?`)) return;
+      function renderizarTabla() {
+        tabla.innerHTML = "";
 
-          especialidades = especialidades.filter((e) => e.id !== id);
-          salvarYRefrescar();
+        especialidades.forEach(esp => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${esp.id}</td>
+            <td>${esp.nombre}</td>
+            <td>
+              <button class="btn btn-sm btn-warning me-2">Editar</button>
+              <button class="btn btn-sm btn-danger">Eliminar</button>
+            </td>
+          `;
 
-          const eliminadas =
-            JSON.parse(localStorage.getItem("especialidadesEliminadas")) || [];
-          if (!eliminadas.includes(id)) {
-            eliminadas.push(id);
-            localStorage.setItem(
-              "especialidadesEliminadas",
-              JSON.stringify(eliminadas)
-            );
-          }
-        }
+          tr.querySelector(".btn-warning").addEventListener("click", () => abrirEditar(esp.id));
+          tr.querySelector(".btn-danger").addEventListener("click", () => eliminarEspecialidad(esp.id));
+          tabla.appendChild(tr);
+        });
+      }
 
-        function salvarYRefrescar() {
-          localStorage.setItem(
-            "especialidades",
-            JSON.stringify(especialidades)
-          );
-          renderizarTabla();
-        }
+      function sugerirId() {
+        return especialidades.length
+          ? Math.max(...especialidades.map(e => Number(e.id))) + 1
+          : 1;
+      }
 
-        btnAgregar.addEventListener("click", abrirNueva);
-        guardarBtn.addEventListener("click", guardarEspecialidad);
+      function abrirNueva() {
+        idInput.value = sugerirId();
+        nombreInput.value = "";
+        tituloModal.textContent = "Agregar Especialidad";
+        modal.show();
+      }
 
-        if (!especialidades.length) {
-          fetch("data/especialidades.json")
-            .then((r) => (r.ok ? r.json() : []))
-            .then((data) => {
-              if (Array.isArray(data)) {
-                especialidades = data.map((d) => ({
-                  id: +d.id,
-                  nombre: String(d.nombre),
-                }));
-                localStorage.setItem(
-                  "especialidades",
-                  JSON.stringify(especialidades)
-                );
-              }
-              renderizarTabla();
-            })
-            .catch(renderizarTabla);
+      function abrirEditar(id) {
+        const esp = especialidades.find(e => Number(e.id) === Number(id));
+        if (!esp) return;
+
+        idInput.value = esp.id;
+        nombreInput.value = esp.nombre;
+        tituloModal.textContent = "Editar Especialidad";
+        modal.show();
+      }
+
+      function guardarEspecialidad() {
+        const id = Number(idInput.value);
+        const nombre = nombreInput.value.trim();
+
+        if (!id || !nombre) return;
+
+        const idx = especialidades.findIndex(e => Number(e.id) === id);
+
+        if (idx !== -1) {
+          especialidades[idx] = { id, nombre };
         } else {
-          renderizarTabla();
+          especialidades.push({ id, nombre });
         }
-      });
+
+        localStorage.setItem("especialidades", JSON.stringify(especialidades));
+        renderizarTabla();
+        modal.hide();
+      }
+
+      function eliminarEspecialidad(id) {
+        const esp = especialidades.find(e => Number(e.id) === Number(id));
+        if (!esp) return;
+
+        if (!confirm(`¿Eliminar "${esp.nombre}"?`)) return;
+
+        especialidades = especialidades.filter(e => Number(e.id) !== Number(id));
+
+        localStorage.setItem("especialidades", JSON.stringify(especialidades));
+
+        let eliminadas = cargarEliminadas();
+        if (!eliminadas.includes(id)) {
+          eliminadas.push(id);
+          localStorage.setItem("especialidadesEliminadas", JSON.stringify(eliminadas));
+        }
+
+        renderizarTabla();
+      }
+
+      btnAgregar.addEventListener("click", abrirNueva);
+      guardarBtn.addEventListener("click", guardarEspecialidad);
+
+      inicializar();
+    });
+    </script>
+
     </script>
   </body>
 </html>
