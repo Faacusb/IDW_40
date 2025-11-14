@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let turnos = JSON.parse(localStorage.getItem(CLAVE_TURNOS));
 
   async function cargarTurnosDesdeJSON() {
-    const res = await fetch("../data/turnos.json");
+    const res = await fetch("data/turnos.json");
     const datos = await res.json();
     localStorage.setItem(CLAVE_TURNOS, JSON.stringify(datos));
     return datos;
