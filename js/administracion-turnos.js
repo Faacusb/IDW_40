@@ -1,21 +1,33 @@
 import { Turno } from "./turno.js";
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const tabla = document.getElementById("tablaTurnos");
   const filtroMedico = document.getElementById("filtroMedico");
   const btnLimpiar = document.getElementById("btnLimpiarTurnos");
 
   const CLAVE_TURNOS = "turnosReservados";
   const medicos = JSON.parse(localStorage.getItem("medicos")) || [];
-  let turnos = JSON.parse(localStorage.getItem(CLAVE_TURNOS)) || [];
+  let turnos = JSON.parse(localStorage.getItem(CLAVE_TURNOS));
+
+  async function cargarTurnosDesdeJSON() {
+    const res = await fetch("../data/turnos.json");
+    const datos = await res.json();
+    localStorage.setItem(CLAVE_TURNOS, JSON.stringify(datos));
+    return datos;
+  }
+
+  async function inicializarTurnos() {
+    if (!turnos) {
+      turnos = await cargarTurnosDesdeJSON();
+    }
+  }
 
   function cargarMedicos() {
     const selectFiltro = document.getElementById("filtroMedico");
-    const selectNuevo = document.getElementById("nuevoMedico"); // select del modal
+    const selectNuevo = document.getElementById("nuevoMedico");
 
     selectFiltro.innerHTML = `<option value="">Todos los médicos</option>`;
-    if (selectNuevo)
-      selectNuevo.innerHTML = `<option value="">Seleccione un médico...</option>`;
+    selectNuevo.innerHTML = `<option value="">Seleccione un médico...</option>`;
 
     medicos.forEach((m) => {
       const texto = `${m.nombre} ${m.apellido} - ${obtenerEspecialidad(
@@ -27,12 +39,10 @@ document.addEventListener("DOMContentLoaded", () => {
       optFiltro.textContent = texto;
       selectFiltro.appendChild(optFiltro);
 
-      if (selectNuevo) {
-        const optNuevo = document.createElement("option");
-        optNuevo.value = m.id;
-        optNuevo.textContent = texto;
-        selectNuevo.appendChild(optNuevo);
-      }
+      const optNuevo = document.createElement("option");
+      optNuevo.value = m.id;
+      optNuevo.textContent = texto;
+      selectNuevo.appendChild(optNuevo);
     });
   }
 
@@ -60,19 +70,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const fila = document.createElement("tr");
       fila.innerHTML = `
         <td>${i + 1}</td>
-        <td>${t.medicoNombre}${t.medicoApellido}</td>
+        <td>${t.medicoNombre} ${t.medicoApellido}</td>
         <td>${t.especialidad}</td>
-        <td>${t.usuario}</td>
+        <td>${t.usuario ?? ""}</td>
         <td>${t.fecha}</td>
         <td>${t.horario}</td>
         <td>
           <button class="btn btn-sm btn-danger">Eliminar</button>
         </td>
       `;
-
-      fila
-        .querySelector("button")
-        .addEventListener("click", () => eliminarTurno(t.id));
+      fila.querySelector("button").addEventListener("click", () => eliminarTurno(t.id));
       tabla.appendChild(fila);
     });
   }
@@ -109,10 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const medico = medicos.find((m) => m.id === medicoId);
-    if (!medico) {
-      alert("Médico no encontrado.");
-      return;
-    }
+    if (!medico) return alert("Médico no encontrado.");
 
     const nuevoTurno = new Turno(
       Date.now(),
@@ -125,21 +129,16 @@ document.addEventListener("DOMContentLoaded", () => {
       false
     );
 
-    let turnosExistentes = JSON.parse(localStorage.getItem(CLAVE_TURNOS)) || [];
-
-    const duplicado = turnosExistentes.some(
-      (t) => t.medicoId === medico.id && t.fecha === fecha && t.hora === hora
+    const duplicado = turnos.some(
+      (t) => t.medicoId === medico.id && t.fecha === fecha && t.horario === hora
     );
     if (duplicado) {
       alert("⚠️ Ya existe un turno para ese médico en la misma fecha y hora.");
       return;
     }
 
-    turnosExistentes.push(nuevoTurno);
-
-    localStorage.setItem(CLAVE_TURNOS, JSON.stringify(turnosExistentes));
-
-    turnos = turnosExistentes;
+    turnos.push(nuevoTurno);
+    guardarTurnos();
     mostrarTurnos();
 
     alert("✅ Turno creado correctamente.");
@@ -147,12 +146,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("nuevaFecha").value = "";
     document.getElementById("nuevaHora").value = "";
     document.getElementById("nuevoMedico").value = "";
-    const modal = bootstrap.Modal.getInstance(
-      document.getElementById("modalTurno")
-    );
+    const modal = bootstrap.Modal.getInstance(document.getElementById("modalTurno"));
     modal.hide();
   });
 
+  await inicializarTurnos();
   cargarMedicos();
   mostrarTurnos();
 });
